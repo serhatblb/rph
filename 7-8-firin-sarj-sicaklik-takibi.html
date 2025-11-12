@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Fırın Şarj Tonaj ve Sıcaklık Takibi</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    
+  </style>
+</head>
+<body>
+  <!-- Sidebar -->
+  <div id="sidebar-placeholder"></div>
+
+  <!-- İçerik Alanı -->
+  <div class="content-wrapper">
+    <div class="header">
+      <div class="breadcrumbs">
+        <a href="index.html">Anasayfa</a> <span>›</span>
+        <span>Fırın Takibi</span>
+      </div>
+    </div>
+
+    <div class="main-report-area">
+      <h1 class="report-title">🔥 Fırın Şarj Tonaj ve Sıcaklık Takibi</h1>
+
+      <!-- Filtre Bölümü -->
+      <div class="filter-section">
+        <div class="filter-item">
+          <label for="tarih">Başlangıç Tarihi</label>
+          <input type="date" id="tarih" />
+          <label for="tarih">Bitiş Tarihi</label>
+          <input type="date" id="tarih" />
+        </div>
+        <div class="filter-item">
+        <label for="vardiya">Vardiya</label>
+        <select id="vardiya">
+          <option value="">Tümü</option>
+          <option>Vardiya 1</option>
+          <option>Vardiya 2</option>
+          <option>Vardiya 3</option>
+        </select>
+      </div>
+      <div class="filter-item">
+        <label for="vardiya">Sipariş No</label>
+        <select id="vardiya">
+          <option value="">Tümü</option>
+          <option>300003682</option>
+          <option>300003682</option>
+          <option>300003683</option>
+        </select>
+      </div>
+      <div class="filter-item">
+        <label for="vardiya">Yarı Mamül ID</label>
+        <select id="vardiya">
+          <option value="">Tümü</option>
+          <option>25123320405</option>
+          <option>25123370301</option>
+          <option>25123370203</option>
+        </select>
+      </div>
+      <div class="filter-item">
+        <label for="vardiya">Ürün Tipi</label>
+        <select id="vardiya">
+          <option value="">Tümü</option>
+          <option>Ray</option>
+          <option>Profil</option>
+          <option>Blum</option>
+        </select>
+      </div>
+
+        <div class="action-buttons">
+            <button style="background-color: green; color: white;">Excel Rapor</button>
+          <button class="active-filter">Filtrele</button>
+          <button>Temizle</button>
+        </div>
+      </div>
+
+
+      <!-- Tablo -->
+      <table class="data-table">
+        <thead>
+          <tr>
+          <th>Şarj <br> Başlangıç <br> Tarihi</th>
+          <th>Şarj Bitiş Tarihi</th>
+          <th>Sipariş No</th>
+          <th>Yarı Mamül ID</th>
+          <th>Tonaj</th>
+          <th>Giriş Sıcaklık (°C)</th>
+          <th>Çıkış Sıcaklık (°C)</th>
+          <th>Ürün Tipi</th>
+          <th>Sıcak Şarj Tipi</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>2025-06-17 08:00</td>
+          <td>2025-06-17 10:30</td>
+          <td>300003682</td>
+          <td>25123320405</td>
+          <td>14.3</td>
+          <td>540 (°C)</td>
+          <td>1160 (°C)</td>
+          <td>Ray</td>
+          <td>Direkt</td>
+          </tr>
+          <tr>
+            <td>2025-06-17 11:00</td>
+          <td>2025-06-17 13:15</td>
+          <td>300003683</td>
+          <td>25123370301</td>
+          <td>16.0</td>
+          <td>560 (°C)</td>
+          <td>1180 (°C)</td>
+          <td>Profil</td>
+          <td>Bekletilmiş</td>
+          </tr>
+          <tr>
+            <td>2025-06-17 18:00</td>
+          <td>2025-06-17 19:15</td>
+          <td>300003684</td>
+          <td>25123370301</td>
+          <td>16.0</td>
+          <td>560 (°C)</td>
+          <td>1180 (°C)</td>
+          <td>Profil</td>
+          <td>Bekletilmiş</td>
+          </tr>
+          <tfoot style="background-color: #e6f0ff">
+        <tr>
+          <td colspan="3"></td>
+          <td>2 <br>(Kütük Adedi)</td>
+          <td>30.3 <br>(Toplam Tonaj Bilgisi)</td>
+          <td>550 (°C)<br>(Ortalama Sıcaklık)</td>
+          <td>550 (°C)<br>(Ortalama Sıcaklık)</td>
+        <td></td>
+        <td></td>
+          
+        </tr>
+      </tfoot>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Sidebar yükle -->
+  <script>
+    fetch('sidebar.html')
+      .then((res) => res.text())
+      .then((html) => (document.getElementById('sidebar-placeholder').innerHTML = html));
+  </script>
+</body>
+</html>

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kardemir - Üretim Programı Görünümü</title>
+  <link href="style.css" rel="stylesheet" />
+  <style>
+    :root {
+      --sidebar-bg: #001540;
+      --content-bg: #f4f6fa;
+      --panel-bg: #ffffff;
+      --shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      --radius: 16px;
+    }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      margin: 0;
+      background: var(--content-bg);
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* Sidebar */
+    aside {
+      width: 250px;
+      background: var(--sidebar-bg);
+      color: #fff;
+      box-shadow: 4px 0 15px rgba(0, 0, 0, 0.2);
+      z-index: 10;
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+    }
+
+    .sidebar-container {
+      padding: 20px;
+      height: 100%;
+      overflow-y: auto;
+    }
+
+    /* İçerik Alanı */
+    .content-wrapper {
+      margin-left: 250px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: var(--content-bg);
+      padding: 20px;
+      box-sizing: border-box;
+    }
+
+    .panel {
+      background: var(--panel-bg);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .panel:hover {
+      transform: scale(1.01);
+      box-shadow: 0 14px 40px rgba(0, 0, 0, 0.18);
+    }
+
+    img {
+      max-width: 100%;
+      max-height: 85vh;
+      border-radius: 10px;
+      border: 1px solid #dfe3e8;
+      object-fit: contain;
+    }
+  </style>
+</head>
+<body>
+  <!-- Sidebar -->
+  <aside id="sidebar">
+    <div id="sidebar-container" class="sidebar-container"></div>
+    <script>
+      fetch("sidebar.html")
+        .then((res) => res.text())
+        .then((data) => (document.getElementById("sidebar-container").innerHTML = data));
+    </script>
+  </aside>
+
+  <!-- İçerik -->
+  <div class="content-wrapper">
+    <div><h1>Çubuk Kangal Haddehanesine Ait Örnek Ekran</h1></div>
+    <div class="panel">
+      <img src="resimler/uretim-programi.png" alt="Üretim Programı Ekranı">
+    </div>
+  </div>
+</body>
+</html>

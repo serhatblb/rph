@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Kardemir - Sipariş Bilgileri</title>
+    <link href="style.css" rel="stylesheet" />
+
+    <style>
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            table-layout: fixed;
+            /* Sütun genişliklerini sabitle */
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: 8px 10px;
+            /* Padding azaltıldı */
+            text-align: center;
+            border-bottom: 1px solid var(--border-color);
+            white-space: nowrap;
+            /* İçeriğin tek satırda kalmasını sağlar */
+            font-size: 13px;
+            overflow: hidden;
+            /* Hücre içeriği taşarsa gizle */
+            text-overflow: ellipsis;
+            /* Taşarsa üç nokta göster */
+        }
+
+        /* Sütun genişliklerini burada ayarlayarak daha iyi kontrol sağlayabiliriz */
+        .data-table th:nth-child(1),
+        .data-table td:nth-child(1) {
+            width: 10%;
+        }
+
+        /* Sipariş No */
+        .data-table th:nth-child(2),
+        .data-table td:nth-child(2) {
+            width: 18%;
+        }
+
+        /* Ürün Tanımı - Biraz daha daraltıldı */
+        .data-table th:nth-child(3),
+        .data-table td:nth-child(3) {
+            width: 12%;
+        }
+
+        /* Şartname Numarası */
+        .data-table th:nth-child(4),
+        .data-table td:nth-child(4) {
+            width: 8%;
+        }
+
+        /* Kalite */
+        .data-table th:nth-child(5),
+        .data-table td:nth-child(5) {
+            width: 10%;
+        }
+
+        /* Sipariş Miktarı */
+        .data-table th:nth-child(6),
+        .data-table td:nth-child(6) {
+            width: 10%;
+        }
+
+        /* Kalan Miktar */
+        .data-table th:nth-child(7),
+        .data-table td:nth-child(7) {
+            width: 10%;
+        }
+
+        /* Durum */
+        .data-table th:nth-child(8),
+        .data-table td:nth-child(8) {
+            width: 22%;
+        }
+
+        /* Detay - Genişlik artırıldı! */
+
+        /* Buton grupları için ek düzenleme */
+        .alt-button-group {
+            display: flex;
+            flex-wrap: wrap;
+            /* Butonlar sığmazsa alt satıra geçsin */
+            gap: 5px;
+            /* Butonlar arasında boşluk bırak */
+            margin-top: 5px;
+        }
+
+        .details-button,
+        .alt-detail-button {
+            padding: 5px 8px;
+            /* Buton padding'i azaltılabilir */
+            font-size: 12px;
+            /* Buton font boyutu küçültülebilir */
+            white-space: nowrap;
+            /* Buton metninin tek satırda kalmasını sağlar */
+            box-sizing: border-box;
+            /* Padding ve border genişliğe dahil */
+        }
+
+        .data-table thead th {
+            background-color: var(--main-bg-light);
+            font-weight: 700;
+            color: var(--text-color-dark);
+            text-transform: uppercase;
+            font-size: 13px;
+        }
+
+        .data-table tbody tr {
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .data-table tbody tr:hover {
+            background-color: #f8f8f8;
+        }
+
+        .data-table tbody tr.selected-row {
+            background-color: #e3f2fd;
+            border-left: 3px solid var(--kardemir-blue);
+        }
+
+        /* Added for the static version to mimic the active filter */
+        .action-buttons button.active-filter {
+            background-color: var(--kardemir-blue);
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <aside id="sidebar">
+        <div id="sidebar"></div>
+        <script>
+            // This script is retained to load the sidebar dynamically from sidebar.html
+            fetch("sidebar.html")
+                .then((res) => res.text())
+                .then((data) => document.getElementById("sidebar").innerHTML = data);
+        </script>
+    </aside>
+
+    <div class="content-wrapper" >
+        <header class="header" >
+            <div class="breadcrumbs">
+                <a href="#">Ana Sayfa</a> <span>&gt;</span>
+                <span>Sipariş Sayfası</span>
+            </div>
+        </header>
+
+        <div class="main-report-area" style="height: 600px">
+            <h1 class="report-title">Sipariş Bilgileri</h1>
+            <div class="filter-section">
+                <div class="action-buttons" style="margin-left: 0">
+                    <button id="allOrdersBtn" class="active-filter">Tümü</button>
+                    <button id="activeOrdersBtn">Aktif Siparişler</button>
+                    <button id="passiveOrdersBtn">Pasif Siparişler</button>
+                </div>
+            </div>
+
+            <div class="summary-container">
+                <div class="active-order-summary-card">
+                    <h3>Aktif Sipariş</h3>
+                    <div class="info-row">
+                        <div class="info-item">
+                            <span class="label">Aktif Sipariş Numarası:</span>
+                            <span class="value" id="summary-siparis-numarasi">300003661</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">Kalan Tonaj:</span>
+                            <span class="value" id="summary-kalan-tonaj">460 ton</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">Durum:</span>
+                            <span class="value"><span class="status üretimde" id="summary-durum">Üretimde</span></span>
+                        </div>
+                    </div>
+                    <div class="info-row product-description">
+                        <span class="label">Ürün Tanımı:</span>
+                        <span class="value product-description-content">
+                            <span id="summary-urun-tanimi">HEB 400 S275JR_00 12000 PROFIL</span>
+                            <img alt="Ürün Resmi" class="urun-resim" id="summary-urun-resim"
+                                src="resimler/resim (4).png" />
+                        </span>
+                    </div>
+                </div>
+
+                <div class="haddehane-info-card">
+                    <h3>Haddehane Bilgileri</h3>
+                    <div class="info-row">
+                        <span><strong>Planlanan Üretim Tonajı:</strong> <span id="planlanan-hiz">200 ton/saat
+                            </span></span>
+                        <span><strong>Anlık Üretim Tonajı:</strong> <span id="anlik-hiz">185 ton/saat </span></span>
+                    </div>
+                    <div class="info-row">
+                        <span><strong>Önceki Gün Üretim:</strong><span id="onceki-gun">120 ton</span></span>
+                        <span><strong>Bugün Üretim:</strong> <span id="bugun">30 ton</span></span>
+                    </div>
+                    <div class="info-row">
+                        <span><strong>Önceki Gün Duruş Süresi:</strong> <span id="onceki-gun-dk">180 dk</span></span>
+                        <span><strong>Bugün Duruş Süresi:</strong> <span id="bugun-dk">30 dk</span></span>
+                    </div>
+                    <div class="info-row">
+                        <div style="flex: 1;">
+                            <strong>Kok Tüketimi</strong>
+                            <div style="margin-top: 4px; font-size: 13px;">
+                                Günlük: <span id="gunluk-kok">65 m3</span><br>
+                                Aylık: <span id="aylik-kok">1950 m3</span>
+                            </div>
+                        </div>
+                        <div style="flex: 1;">
+                            <strong>Enerji Tüketimi</strong>
+                            <div style="margin-top: 4px; font-size: 13px;">
+                                Günlük: <span id="gunluk-enerji">210 MW</span><br>
+                                Aylık: <span id="aylik-enerji">6300 MW</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Sipariş No</th>
+                    <th>Ürün Tanımı</th>
+                    <th>Şartname<br>Numarası</th>
+                    <th>Kalite</th>
+                    <th>Sipariş <br> Miktarı</th>
+                    <th>Kalan Miktar</th>
+                    <th>Durum</th>
+                    <th>Detay</th>
+                </tr>
+            </thead>
+            <tbody id="main-table-body">
+                <tr class="selected-row" data-id="300003661">
+                    <td>300003661</td>
+                    <td>HEB 400 S275JR_00 12000 <br> PROFIL</td>
+                    <td class="sartname-numarasi-cell">ŞRT-001</td>
+                    <td>S275JR_00</td>
+                    <td>1000 ton</td>
+                    <td>460 ton</td>
+                    <td><span class="status üretimde">Üretimde</span></td>
+                    <td>
+                        <button class="details-button order-detail-btn" data-id="300003661">Sipariş Detay</button>
+                        <button class="details-button semi-product-detail-btn" data-id="300003661">Yarı Mamul
+                            Detay</button>
+                        <div class="alt-button-group"></div>
+                    </td>
+                </tr>
+                <tr data-id="300003662">
+                    <td>300003662</td>
+                    <td>HEA 320 S275JR_00 12000 <br> PROFIL</td>
+                    <td class="sartname-numarasi-cell">ŞRT-002</td>
+                    <td>275JR_00</td>
+                    <td>1800 ton</td>
+                    <td>500 ton</td>
+                    <td><span class="status beklemede">Beklemede</span></td>
+                    <td>
+                        <button class="details-button order-detail-btn" data-id="300003662">Sipariş Detay</button>
+                        <button class="details-button semi-product-detail-btn" data-id="300003662">Yarı Mamul
+                            Detay</button>
+                    </td>
+                </tr>
+                <tr data-id="300003663">
+                    <td>300003663</td>
+                    <td>IPE 500 S275JR_00 12000 <br> Profil Y</td>
+                    <td class="sartname-numarasi-cell">ŞRT-003</td>
+                    <td>275JR_00</td>
+                    <td>3000 ton</td>
+                    <td>0 ton</td>
+                    <td><span class="status tamamlandı">Tamamlandı</span></td>
+                    <td>
+                        <button class="details-button order-detail-btn" data-id="300003663">Sipariş Detay</button>
+                        <button class="details-button semi-product-detail-btn" data-id="300003663">Yarı Mamul
+                            Detay</button>
+                    </td>
+                </tr>
+                <tr data-id="300003567">
+                    <td>300003567</td>
+                    <td>60E2 R260_02 36000 <br> Ray Deliksiz</td>
+                    <td class="sartname-numarasi-cell">ŞRT-004</td>
+                    <td>R260_02</td>
+                    <td>4500 ton</td>
+                    <td>4500 ton</td>
+                    <td><span class="status planlandı">Planlandı</span></td>
+                    <td>
+                        <button class="details-button order-detail-btn" data-id="300003567">Sipariş Detay</button>
+                        <button class="details-button semi-product-detail-btn" data-id="300003567">Yarı Mamul
+                            Detay</button>
+                    </td>
+                </tr>
+                <tr data-id="300003568">
+                    <td>300003568</td>
+                    <td>60E2 R260_02 36000 <br> Ray Deliksiz</td>
+                    <td class="sartname-numarasi-cell">ŞRT-005</td>
+                    <td>R260_02</td>
+                    <td>1500 ton</td>
+                    <td>1500 ton</td>
+                    <td><span class="status planlandı">Planlandı</span></td>
+                    <td>
+                        <button class="details-button order-detail-btn" data-id="300003568">Sipariş Detay</button>
+                        <button class="details-button semi-product-detail-btn" data-id="300003568">Yarı Mamul
+                            Detay</button>
+                    </td>
+                </tr>
+                <tr data-id="300003261">
+                    <td>300003261</td>
+                    <td>P65(R65) R350HT_00 <br> 25000 Ray Deliksiz</td>
+                    <td class="sartname-numarasi-cell">ŞRT-006</td>
+                    <td>R350HT_00</td>
+                    <td>2200 ton</td>
+                    <td>800 ton</td>
+                    <td><span class="status beklemede">Beklemede</span></td>
+                    <td>
+                        <button class="details-button order-detail-btn" data-id="300003261">Sipariş Detay</button>
+                        <button class="details-button semi-product-detail-btn" data-id="300003261">Yarı Mamul
+                            Detay</button>
+                    </td>
+                </tr>
+                
+            </tbody>
+        </table>
+    </div>
+
+    <div id="satirModalOverlay" class="modal-overlay">
+        <div class="modal">
+            <button class="modal-close" id="modalCloseBtn">&times;</button>
+            <div class="modal-header">Şartname Bilgileri</div>
+            <div class="modal-body">
+                <p>• Şartname maddesi 1: Teknik koşul A...</p>
+                <p>• Şartname maddesi 2: Ölçüm toleransı B...</p>
+                <p>• Şartname maddesi 3: Malzeme kalitesi C...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const siparisResimMap = {
+    "300003661": "resimler/resim (4).png",
+    "300003662": "resimler/resim (4).png",
+    "300003663": "resimler/resim (4).png",
+    "300003567": "resimler/ray.png",
+    "300003568": "resimler/ray.png",
+    "300003261": "resimler/ray.png",
+    // Yeni sipariş numarası geldikçe buraya ekle
+};
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const tableBody = document.getElementById("main-table-body");
+            const allBtn = document.getElementById("allOrdersBtn");
+            const actBtn = document.getElementById("activeOrdersBtn");
+            const pasBtn = document.getElementById("passiveOrdersBtn");
+
+            // Event listeners for filter buttons
+            allBtn.addEventListener("click", () => applyFilter("all"));
+            actBtn.addEventListener("click", () => applyFilter("active"));
+            pasBtn.addEventListener("click", () => applyFilter("passive"));
+
+            function applyFilter(type) {
+                const rows = tableBody.querySelectorAll("tr");
+                let firstVisibleRow = null;
+
+                rows.forEach(row => {
+                    const statusCell = row.querySelector(".status");
+                    if (statusCell) {
+                        const statusText = statusCell.textContent.trim().toLowerCase();
+                        let isVisible = false;
+
+                        if (type === "all") {
+                            isVisible = true;
+                        } else if (type === "active") {
+                            isVisible = (statusText === "üretimde" || statusText === "beklemede");
+                        } else if (type === "passive") {
+                            isVisible = (statusText === "tamamlandı" || statusText === "planlandı");
+                        }
+
+                        row.style.display = isVisible ? "" : "none"; // Show/hide row
+                        if (isVisible && !firstVisibleRow) {
+                            firstVisibleRow = row; // Keep track of the first visible row
+                        }
+                    }
+                });
+
+                // Update summary card based on the first visible order
+                updateSummaryCardBasedOnRow(firstVisibleRow);
+
+                // Update button styles
+                updateButtonStyles(type);
+
+                // Highlight the first visible row if any
+                rows.forEach(r => r.classList.remove("selected-row"));
+                if (firstVisibleRow) {
+                    firstVisibleRow.classList.add("selected-row");
+                }
+            }
+
+            function updateSummaryCardBasedOnRow(row) {
+                const summaryNo = document.getElementById("summary-siparis-numarasi");
+                const summaryTonaj = document.getElementById("summary-kalan-tonaj");
+                const summaryDurum = document.getElementById("summary-durum");
+                const summaryUrun = document.getElementById("summary-urun-tanimi");
+                const summaryImg = document.getElementById("summary-urun-resim");
+
+                if (row) {
+                    const orderNo = row.children[0].textContent;
+                    const urunTanimi = row.children[1].textContent.replace(/<br>/g, ' ').trim();
+                    const kalanMiktar = row.children[5].textContent;
+                    const durumText = row.children[6].querySelector(".status").textContent;
+                    const durumClass = row.children[6].querySelector(".status").className.replace("status ", "");
+
+                    // Note: Since images are static, we need a way to map them.
+                    // For a static HTML approach, you might need a small helper array or map for images.
+                    // For now, let's assume images are still somewhat dynamic or manually set the primary one.
+                    // To keep it truly static and align with the first sample, we'll keep the image fixed for now.
+                    // If you need dynamic images for each row, we'd need a JS array to map order IDs to image paths.
+                    const orderId = row.dataset.id;
+const imagePath = siparisResimMap[orderId] || "resimler/resim (4).png";
+
+
+                    summaryNo.textContent = orderNo;
+                    summaryTonaj.textContent = kalanMiktar;
+                    summaryDurum.textContent = durumText;
+                    summaryDurum.className = `status ${durumClass}`;
+                    summaryUrun.textContent = urunTanimi;
+                    summaryImg.src = imagePath;
+
+                    summaryImg.alt = urunTanimi;
+                    summaryImg.style.display = "inline-block";
+                } else {
+                    // Reset summary if no rows are visible
+                    summaryNo.textContent = "-";
+                    summaryTonaj.textContent = "-";
+                    summaryDurum.textContent = "-";
+                    summaryDurum.className = "status";
+                    summaryUrun.textContent = "-";
+                    summaryImg.style.display = "none";
+                }
+            }
+
+            function updateButtonStyles(activeFilterType) {
+                [allBtn, actBtn, pasBtn].forEach(b => b.classList.remove("active-filter"));
+                if (activeFilterType === "all") {
+                    allBtn.classList.add("active-filter");
+                } else if (activeFilterType === "active") {
+                    actBtn.classList.add("active-filter");
+                } else if (activeFilterType === "passive") {
+                    pasBtn.classList.add("active-filter");
+                }
+            }
+
+            // Keep the modal functionality as it's a static display
+            function attachSartnameModal() {
+                // Ensure event listeners are not duplicated
+                document.querySelectorAll(".data-table tbody tr .sartname-numarasi-cell").forEach(td => {
+                    // Remove existing event listener if any to prevent duplicates
+                    const oldTd = td;
+                    const newTd = oldTd.cloneNode(true);
+                    oldTd.parentNode.replaceChild(newTd, oldTd);
+                    newTd.addEventListener("click", () => {
+                        document.getElementById("satirModalOverlay").style.display = "flex";
+                    });
+                });
+            }
+
+            // Event listeners for navigation buttons (these will still work)
+            tableBody.addEventListener("click", e => {
+                const targetRow = e.target.closest("tr"); // Find the closest parent row
+                if (targetRow) {
+                    // Remove selected-row from all rows
+                    document.querySelectorAll(".data-table tbody tr").forEach(r => r.classList.remove("selected-row"));
+                    // Add selected-row to the clicked row
+                    targetRow.classList.add("selected-row");
+
+                    // Update summary card with the clicked row's data
+                    updateSummaryCardBasedOnRow(targetRow);
+                }
+
+                if (e.target.classList.contains("order-detail-btn")) {
+                    localStorage.setItem("selectedOrderId", e.target.dataset.id);
+                    window.location.href = "siparis-detay2.html";
+                } else if (e.target.classList.contains("semi-product-detail-btn")) {
+                    localStorage.setItem("selectedOrderId", e.target.dataset.id);
+                    window.location.href = "yari-mamul-listesi.html";
+                }
+            });
+
+            // Modal close functionality
+            document.getElementById("modalCloseBtn").addEventListener("click", () => {
+                document.getElementById("satirModalOverlay").style.display = "none";
+            });
+            document.getElementById("satirModalOverlay").addEventListener("click", e => {
+                if (e.target === e.currentTarget) {
+                    document.getElementById("satirModalOverlay").style.display = "none";
+                }
+            });
+
+            // Initial load: Apply 'Tümü' filter and update summary
+            applyFilter("all");
+            attachSartnameModal();
+        });
+    </script>
+</body>
+
+</html>

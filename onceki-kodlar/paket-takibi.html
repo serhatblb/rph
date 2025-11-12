@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <title>Kardemir - Paket Takibi</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- <style>
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+      background-color: white;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .data-table th, .data-table td {
+      padding: 12px 16px;
+      border: 1px solid #ccc;
+      text-align: center;
+    }
+
+    .data-table thead {
+      background-color: #f2f5f7;
+      color: #1a202c;
+    }
+
+    .report-title {
+      font-size: 22px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      color: #003366;
+    }
+
+    .table-wrapper {
+      overflow-x: auto;
+      margin-top: 15px;
+    }
+  </style> -->
+</head>
+<body>
+
+  <div id="sidebar"></div>
+  <script>
+    fetch('sidebar.html')
+      .then(res => res.text())
+      .then(data => document.getElementById('sidebar').innerHTML = data);
+  </script>
+
+  <div class="content-wrapper">
+    <div class="breadcrumbs">
+      <a href="#">Ana Sayfa</a> <span>></span> <span>Paket Takibi</span>
+    </div>
+
+    <h1 class="report-title">Paket Takibi</h1>
+    <!-- Filtre Alanı -->
+<div class="filter-section">
+  <div class="filter-item">
+    <label for="baslangicTarih">Başlangıç Tarihi</label>
+    <input type="date" id="baslangicTarih" />
+    
+    <label for="bitisTarih">Bitiş Tarihi</label>
+    <input type="date" id="bitisTarih" />
+  </div>
+
+
+
+  <div class="action-buttons">
+            <button style="background-color: green; color: white;">Excel Rapor</button>
+          <button class="active-filter">Filtrele</button>
+          <button>Temizle</button>
+        </div>
+</div>
+    <div class="table-wrapper">
+      <table class="data-table">
+        <thead>
+  <tr>
+    <th><span>TARİH SAAT</span></th>
+    <th><span>RAY ID / PAKET ID</span></th>
+    <th><span>SİPARİŞ NO</span></th>
+    <th><span>DÖKÜM NO</span></th>
+    <th><span>SINIF</span></th>
+    <th><span>ÜRÜN TİPİ</span></th>
+    <th><span>KALİTE STANDARDI</span></th>
+    <th><span>KALİTE</span></th>
+    <th><span>AĞIRLIK (kg)</span></th>
+    <th><span>UZUNLUK (mm)</span></th>
+    <th><span>ÜRÜN ADEDİ</span></th>
+    <th><span>GÜNCELLE</span></th>
+  </tr>
+</thead>
+
+        <tbody id="paket-table-body"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const staticPackages = []; // İstersen demo kayıtlar koyarsın
+
+      const savedPackages = JSON.parse(localStorage.getItem('paketler') || '[]');
+      const allPackages = [...staticPackages, ...savedPackages];
+
+      const tableBody = document.getElementById('paket-table-body');
+
+      function populateTable(packages) {
+  tableBody.innerHTML = '';
+
+  packages.reverse().forEach(pkg => {
+    if (!pkg || !pkg.siparisNo) return;
+
+    const row = tableBody.insertRow();
+
+    row.insertCell().textContent = pkg.tarihSaat;
+    row.insertCell().textContent = pkg.rayOrPaketId;
+
+    const siparisCell = row.insertCell();
+    siparisCell.innerHTML = `<a href="siparis-detay2.html?siparisNo=${pkg.siparisNo}" style="color: var(--kardemir-blue); text-decoration: underline; font-weight: 500;">${pkg.siparisNo}</a>`;
+
+    row.insertCell().textContent = pkg.dokumNo;
+    row.insertCell().textContent = pkg.sinif;
+    row.insertCell().textContent = pkg.urunTipi;
+    row.insertCell().textContent = pkg.kaliteStandardi;
+    row.insertCell().textContent = pkg.kalite;
+    row.insertCell().textContent = pkg.agirlik;
+    row.insertCell().textContent = pkg.uzunluk;
+    row.insertCell().textContent = pkg.urunAdedi;
+
+    // Güncelle butonu
+    const updateCell = row.insertCell();
+    updateCell.innerHTML = `
+      <a href="paket-ekle.html?paketId=${pkg.rayOrPaketId}" class="update-btn">Güncelle</a>
+    `;
+  });
+}
+
+
+
+      populateTable(allPackages);
+    });
+  </script>
+
+</body>
+</html>

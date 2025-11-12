@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Raaporlar - Kardemir</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+        <div id="sidebar"></div>
+<script>
+  fetch('sidebar.html')
+    .then(res => res.text())
+    .then(data => document.getElementById('sidebar').innerHTML = data);
+</script>
+
+
+    <div class="content-wrapper">
+        <header class="header">
+            <div class="breadcrumbs">
+                <a href="#">Ana Sayfa</a> <span>></span>
+                <span>Raporlar</span>
+            </div>
+        </header>
+        <div class="main-report-area">
+            <h1>Raporlar</h1>
+            <p>Bu sayfa şu anda yapım aşamasındadır.</p>
+        </div>
+    </div>
+</body>
+</html>

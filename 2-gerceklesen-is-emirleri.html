@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>Kardemir - RPH Gerçekleşen İş Emri Bilgileri</title>
+  <link href="style.css" rel="stylesheet" />
+  <style>
+    .data-table{width:100%;border-collapse:collapse;margin-top:20px;table-layout:auto}
+    .data-table th,.data-table td{padding:8px 10px;text-align:center;border-bottom:1px solid var(--border-color,#ccc);font-size:12px;word-wrap:break-word;white-space:normal}
+    .data-table thead th{background:var(--main-bg-light,#f2f2f2);font-weight:700;color:var(--text-color-dark,#333);text-transform:uppercase;font-size:12px}
+ 
+    .filters{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;background:#fff;border:1px solid #ddd;border-radius:6px;padding:12px;margin-bottom:15px;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+    .field{display:flex;flex-direction:column;gap:4px;font-size:12px}
+    .field label{font-weight:bold;color:#444}
+    .field input,.field select{padding:6px;border:1px solid #ccc;border-radius:4px;font-size:13px}
+    .btn-filter{background:#1976d2;color:#fff;border:none;padding:8px 14px;border-radius:4px;cursor:pointer}
+    .badge-ckh{display:inline-block;padding:.15rem .4rem;border-radius:4px;background:#2e7d32;color:#fff;font-weight:600}
+  </style>
+</head>
+<body>
+  <!-- Sidebar -->
+  <aside id="sidebar">
+    <div id="sidebar-container"></div>
+    <script>
+      fetch("sidebar.html")
+        .then(res => res.text())
+        .then(html => document.getElementById("sidebar-container").innerHTML = html);
+    </script>
+  </aside>
+ 
+  <div class="content-wrapper">
+    <header class="header">
+      <div class="breadcrumbs">
+        <a href="#">Ana Sayfa</a> <span>&gt;</span>
+        <span>RPH İş Emirleri</span>
+      </div>
+    </header>
+ 
+    <!-- Filtreler (ÇKH odağında) -->
+    <div class="filters">
+      <div class="field">
+        <label>İş Emri No</label>
+        <input type="text" id="fSiparis" placeholder="4000…">
+      </div>
+      <div class="field">
+        <label>Malzeme No</label>
+        <input type="text" id="fMalzeme" placeholder="8003…">
+      </div>
+   
+      <div class="field">
+        <label>Başlangıç</label>
+        <input type="date" id="fStart">
+      </div>
+      <div class="field">
+        <label>Bitiş</label>
+        <input type="date" id="fEnd">
+      </div>
+      <button class="btn-filter" onclick="applyFilters()">Filtrele</button>
+    </div>
+ 
+    <div class="main-report-area">
+      <h2 class="report-title">RPH – Gerçekleşen İş Emirleri
+      </h2>
+<div style="overflow-x:auto; width:100%;">
+  <table class="data-table" style="min-width:2000px;">
+ 
+          <thead>
+            <tr>
+              <th>Kayıt tarihi</th>
+              <th>Ürün Tipi</th>
+              <th>İş Emri No</th>
+              <th>Yerli / İhraç</th>
+              <th>Malzeme</th>
+              <th>Tanım</th>
+              <th>Kalite</th>
+              <th>Ebat (mm)</th>
+              <th>Boy (m)</th>
+              <th>Döküm Tipi</th>
+              <th>Toplam miktar</th>
+              <th>Günlük Üretim</th>
+              <th>1. Sınıf Miktar</th>
+              <th>2. Sınıf Miktar</th>
+              <th>Hurda Dönüşüm</th>
+              <th>Diğer Dönüşüm</th>
+              <th>1. Sınıfa Diğer Dön.</th>
+              <th>2. Sınıfa Diğer Dön.</th>
+              <th>Şartname Dönüşüm Miktarı</th>
+              <th>Hold Mikt.</th>
+              <th>Hadde Boz.</th>
+              <th>Otomotiv</th>
+              <th>Ay</th>
+              <th>Yıl</th>
+              <th>Satış Açıklama</th>
+ 
+            </tr>
+          </thead>
+          <tbody id="detail-table-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+ 
+  <script>
+    // ÖRNEK RPH verileri (ekrandaki plana uygun sütun seti)
+    const ordersCKH = [
+      {
+        kayit:"01.10.2025",
+        urunTipi:"Ray",
+        siparis:"300003567",
+        yerliIhrac:"Y",
+        malzeme:"80039028",
+        tanim:"60E2 R260_02 36000",
+        kalite:"S275JR_02",
+        ebat:"52,50",
+        boy:"52,50",
+        dokumTipi:"K",
+        toplamMiktar:"175,000",
+        gunlukUretim:"58,542",
+        s1Miktar:"", s1Muhtelif:"",
+        s2Miktar:"", s2Muhtelif:"",
+        hurdaDon:"", digerDon:"",
+        s1DigerDon:"", s2DigerDon:"",
+        sartnameDon:"", hold:"58,842",
+        haddeBoz:"", otomotiv:"",
+        ay:"10,00", yil:"2025",
+        saticiAck:"akçelik",
+ 
+      },
+      {
+        kayit:"01.10.2025",
+        urunTipi:"Profil",
+        siparis:"300003568",
+        yerliIhrac:"Y",
+        malzeme:"80039028",
+        tanim:"IPE 500 S275JR_00 12000",
+        kalite:"S235JR_00",
+        ebat:"52,50",
+        boy:"52,50",
+        dokumTipi:"A",
+        toplamMiktar:"30,000",
+        gunlukUretim:"70,062",
+        s1Miktar:"", s1Muhtelif:"",
+        s2Miktar:"", s2Muhtelif:"",
+        hurdaDon:"", digerDon:"",
+        s1DigerDon:"", s2DigerDon:"",
+        sartnameDon:"", hold:"70,262",
+        haddeBoz:"2,844", otomotiv:"",
+        ay:"10,00", yil:"2025",
+        saticiAck:"akçelik",
+ 
+      }
+    ];
+ 
+    function toISO(dmy){ // "dd.MM.yyyy" -> "yyyy-MM-dd"
+      const [d,m,y]=dmy.split(".");
+      return `${y}-${m}-${d}`;
+    }
+ 
+    function renderTable(rows){
+      const tb = document.getElementById("detail-table-body");
+      tb.innerHTML = "";
+      rows.forEach(r=>{
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${r.kayit}</td>
+          <td>${r.urunTipi}</td>
+          <td><a href="is-emri-detay.html?no=${r.siparis}" style="color:#1976d2;font-weight:600;text-decoration:none">${r.siparis}</a></td>
+          <td>${r.yerliIhrac}</td>
+          <td>${r.malzeme}</td>
+          <td class="tanim">${r.tanim}</td>
+          <td>${r.kalite}</td>
+          <td>${r.cap}</td>
+          <td>${r.boy}</td>
+          <td>${r.dokumTipi}</td>
+          <td>${r.toplamMiktar}</td>
+          <td>${r.gunlukUretim}</td>
+          <td>${r.s1Miktar}</td>
+          <td>${r.s2Miktar}</td>
+          <td>${r.hurdaDon}</td>
+          <td>${r.digerDon}</td>
+          <td>${r.s1DigerDon}</td>
+          <td>${r.s2DigerDon}</td>
+          <td>${r.sartnameDon}</td>
+          <td>${r.hold}</td>
+          <td>${r.haddeBoz}</td>
+          <td>${r.otomotiv}</td>
+          <td>${r.ay}</td>
+          <td>${r.yil}</td>
+          <td>${r.saticiAck}</td>
+ 
+        `;
+        document.getElementById("detail-table-body").appendChild(tr);
+      });
+    }
+ 
+    function applyFilters(){
+      const qSip = document.getElementById("fSiparis").value.trim();
+      const qMal = document.getElementById("fMalzeme").value.trim();
+      const qYI  = document.getElementById("fYI").value;
+      const qS   = document.getElementById("fStart").value;
+      const qE   = document.getElementById("fEnd").value;
+ 
+      let out = ordersCKH.slice();
+ 
+      if(qSip) out = out.filter(r=> r.siparis.includes(qSip) || r.siparisYildiz.includes(qSip));
+      if(qMal) out = out.filter(r=> r.malzeme.includes(qMal));
+      if(qYI)  out = out.filter(r=> r.yerliIhrac === qYI);
+      if(qS)   out = out.filter(r=> new Date(toISO(r.kayit)) >= new Date(qS));
+      if(qE)   out = out.filter(r=> new Date(toISO(r.kayit)) <= new Date(qE));
+ 
+      renderTable(out);
+    }
+ 
+    document.addEventListener("DOMContentLoaded", ()=> renderTable(ordersCKH));
+  </script>
+</body>
+</html>

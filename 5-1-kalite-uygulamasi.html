@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Parti Verilerini Görüntüle | Toplu Kullanım Kararı</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+  <link href="style.css" rel="stylesheet" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #0a3d62 0%, #1e5f87 50%, #2c3e50 100%);
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      overflow-x: hidden;
+    }
+
+    #sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 250px;
+      height: 100vh;
+      background: #14233a;
+      z-index: 10;
+    }
+
+    .content-wrapper,
+    .container {
+      margin-left: 250px;
+      position: relative;
+      z-index: 1;
+      background: #fff;
+      min-height: 100vh;
+    }
+
+
+    .container {
+      margin-left: 250px;
+      background: #fff;
+      position: relative;
+      z-index: 1;
+      border-radius: 16px;
+      box-shadow: 0 25px 80px rgba(0, 0, 0, 0.4);
+      width: calc(100% - 250px);
+    }
+
+
+    .header {
+      background: linear-gradient(135deg, #0a3d62 0%, #1565c0 100%);
+      color: white;
+      padding: 28px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 4px solid #1976d2;
+    }
+
+    .header h1 {
+      font-size: 26px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .header-icon {
+      background: rgba(255, 255, 255, 0.2);
+      padding: 8px;
+      border-radius: 8px;
+    }
+
+    .filter-section {
+      background: #f7f9fc;
+      padding: 32px 40px;
+      border-bottom: 3px solid #e1e8ed;
+    }
+
+    .filter-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #2c3e50;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .filter-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      margin-bottom: 24px;
+    }
+
+    .filter-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .filter-group.span-2 {
+      grid-column: span 1;
+    }
+
+    .filter-group label {
+      font-size: 13px;
+      font-weight: 700;
+      color: #34495e;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .range-input-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: white;
+      padding: 4px;
+      border-radius: 8px;
+      border: 2px solid #cbd5e1;
+      transition: all 0.3s;
+    }
+
+    .range-input-wrapper:focus-within {
+      border-color: #1565c0;
+      box-shadow: 0 0 0 3px rgba(10, 61, 98, 0.1);
+    }
+
+    .range-input-wrapper input,
+    .range-input-wrapper select {
+      flex: 1;
+      padding: 10px 12px;
+      border: none;
+      border-radius: 6px;
+      font-size: 14px;
+      background: transparent;
+    }
+
+    .range-input-wrapper input:focus,
+    .range-input-wrapper select:focus {
+      outline: none;
+    }
+
+    .range-separator {
+      color: #64748b;
+      font-weight: 700;
+      font-size: 16px;
+    }
+
+    .filter-input {
+      padding: 12px 16px;
+      border: 2px solid #cbd5e1;
+      border-radius: 8px;
+      font-size: 14px;
+      transition: all 0.3s;
+      background: white;
+      width: 100%;
+      resize: vertical;
+    }
+
+    .filter-input:focus {
+      outline: none;
+      border-color: #1565c0;
+      box-shadow: 0 0 0 3px rgba(10, 61, 98, 0.1);
+    }
+
+    .filter-actions {
+      display: flex;
+      gap: 12px;
+      justify-content: flex-end;
+      padding-top: 24px;
+      border-top: 2px solid #e1e8ed;
+    }
+
+    .btn-filter {
+      background: linear-gradient(135deg, #0a3d62 0%, #1565c0 100%);
+      color: white;
+      border: none;
+      padding: 12px 32px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      transition: all 0.3s;
+      box-shadow: 0 4px 12px rgba(10, 61, 98, 0.3);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-filter:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(10, 61, 98, 0.4);
+    }
+
+    .btn-clear {
+      background: white;
+      color: #64748b;
+      border: 2px solid #cbd5e1;
+      padding: 12px 32px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-clear:hover {
+      background: #f8fafc;
+      border-color: #94a3b8;
+    }
+
+    .selection-options {
+      background: white;
+      padding: 20px 40px;
+      border-bottom: 2px solid #e1e8ed;
+    }
+
+    .selection-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #2c3e50;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .radio-group {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      background: #f0f9ff;
+      border: 2px solid #bae6fd;
+      border-radius: 8px;
+      padding: 16px;
+      max-width: 600px;
+    }
+
+    .radio-option {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px;
+      border-radius: 6px;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+
+    .radio-option:hover {
+      background: #e0f2fe;
+    }
+
+    .radio-option input[type="radio"] {
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+    }
+
+    .radio-option label {
+      font-size: 14px;
+      color: #475569;
+      cursor: pointer;
+      user-select: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .table-section {
+      padding: 0;
+    }
+
+    .table-header {
+      padding: 24px 40px;
+      background: white;
+      border-bottom: 2px solid #e1e8ed;
+    }
+
+    .table-header h3 {
+      font-size: 18px;
+      font-weight: 700;
+      color: #2c3e50;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .table-container {
+      overflow-x: auto;
+      max-height: 70vh;
+      padding: 0 40px 20px 40px;
+    }
+
+    table {
+      width: max-content;
+      min-width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      margin-top: 0;
+    }
+
+    thead {
+      background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    th {
+      padding: 16px 14px;
+      text-align: left;
+      font-size: 11px;
+      font-weight: 800;
+      color: white;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      border-right: 1px solid rgba(255, 255, 255, 0.1);
+      white-space: nowrap;
+    }
+
+    th:last-child {
+      border-right: none;
+    }
+
+    tbody tr {
+      transition: all 0.2s;
+      border-bottom: 1px solid #e2e8f0;
+      background: white;
+    }
+
+    tbody tr:nth-child(even) {
+      background: #f8fafc;
+    }
+
+    tbody tr:hover {
+      background: #e3f2fd;
+      transform: scale(1.001);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+
+    td {
+      padding: 16px 14px;
+      font-size: 13px;
+      color: #334155;
+      border-right: 1px solid #f1f5f9;
+      white-space: nowrap;
+    }
+
+    td:last-child {
+      border-right: none;
+    }
+
+    .siparis-link {
+      color: #1565c0;
+      font-weight: 600;
+      text-decoration: underline;
+      cursor: pointer;
+      position: relative;
+      transition: all 0.2s;
+    }
+
+    .siparis-link:hover {
+      color: #0a3d62;
+    }
+
+    .icon-status {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      display: inline-block;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .red {
+      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+      box-shadow: 0 0 8px rgba(239, 68, 68, 0.5);
+    }
+
+    .yellow {
+      background-color: transparent;
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;
+      border-bottom: 10px solid #f59e0b;
+      border-radius: 0;
+      height: 0;
+      width: 0;
+      box-shadow: 0 2px 4px rgba(245, 158, 11, 0.3);
+    }
+
+    .green {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      box-shadow: 0 0 8px rgba(16, 185, 129, 0.5);
+    }
+
+    .table-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+      padding: 24px 40px;
+      border-top: 2px solid #e2e8f0;
+      background: #f8fafc;
+    }
+
+    .btn-action {
+      padding: 12px 32px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-next {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      color: white;
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+    }
+
+    .btn-next:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+    }
+
+    .btn-undo {
+      background: linear-gradient(135deg, #c61919 0%, #9d0909 100%);
+      color: white;
+      box-shadow: 0 4px 12px rgba(204, 170, 170, 0.3);
+    }
+
+    .btn-undo:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
+    }
+
+    .btn-undo:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    /* Popup Styles */
+    .popup-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.6);
+      z-index: 999;
+      animation: fadeIn 0.2s ease;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    .popup {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      padding: 32px;
+      border-radius: 16px;
+      box-shadow: 0 25px 80px rgba(0, 0, 0, 0.4);
+      z-index: 1000;
+      min-width: 450px;
+      max-width: 600px;
+      animation: slideIn 0.3s ease;
+    }
+
+    @keyframes slideIn {
+      from {
+        transform: translate(-50%, -45%);
+        opacity: 0;
+      }
+
+      to {
+        transform: translate(-50%, -50%);
+        opacity: 1;
+      }
+    }
+
+    .popup h3 {
+      font-size: 22px;
+      font-weight: 700;
+      color: #2c3e50;
+      margin-bottom: 24px;
+      border-bottom: 3px solid #1565c0;
+      padding-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .popup-content {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .popup-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px;
+      background: #f8fafc;
+      border-radius: 8px;
+      border-left: 4px solid #1565c0;
+      transition: all 0.2s;
+    }
+
+    .popup-item:hover {
+      background: #e3f2fd;
+      transform: translateX(4px);
+    }
+
+    .popup-label {
+      font-weight: 700;
+      color: #475569;
+      font-size: 14px;
+    }
+
+    .popup-value {
+      font-weight: 600;
+      color: #1e293b;
+      font-size: 15px;
+    }
+
+    .btn-close-popup {
+      margin-top: 24px;
+      width: 100%;
+      justify-content: center;
+      background: linear-gradient(135deg, #0a3d62 0%, #1565c0 100%);
+      color: white;
+      border: none;
+      padding: 12px 32px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      transition: all 0.3s;
+      box-shadow: 0 4px 12px rgba(10, 61, 98, 0.3);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-close-popup:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(10, 61, 98, 0.4);
+    }
+
+    @media (max-width: 1400px) {
+      .filter-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    @media (max-width: 1024px) {
+      .filter-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .filter-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .header h1 {
+        font-size: 20px;
+      }
+
+      .filter-section,
+      .selection-options,
+      .table-header,
+      .table-actions {
+        padding: 20px;
+      }
+
+      .popup {
+        min-width: 90%;
+        max-width: 90%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Sidebar -->
+  <aside id="sidebar">
+    <div id="sidebar-container"></div>
+    <script>
+      fetch("sidebar.html")
+        .then(res => res.text())
+        .then(html => document.getElementById("sidebar-container").innerHTML = html);
+    </script>
+  </aside>
+
+  <div class="container">
+    <!-- Header -->
+    <div class="header">
+      <h1 style="color: white;">
+        <span class="header-icon" >📋</span>
+        Toplu Kullanım Kararı
+      </h1>
+    </div>
+
+    <!-- Filter Section -->
+    <div class="filter-section">
+      <div class="filter-title">
+        <i class="fa-solid fa-filter"></i> Filtreleme Seçenekleri
+      </div>
+
+      <form>
+        <div class="filter-grid">
+          <div class="filter-group">
+            <label><i class="fa-solid fa-calendar-days" style="color: #1565c0;"></i> Üretim Tarihi:</label>
+            <div class="range-input-wrapper">
+              <input type="date" id="tarih-baslangic" value="2020-09-14" />
+              <span class="range-separator">—</span>
+              <input type="date" id="tarih-bitis" value="2020-09-15" />
+            </div>
+          </div>
+
+          <div class="filter-group">
+            <label><i class="fa-solid fa-box" style="color: #1565c0;"></i> Parti:</label>
+            <div class="range-input-wrapper">
+              <input type="text" id="parti-baslangic" placeholder="Başlangıç" />
+              <span class="range-separator">—</span>
+              <input type="text" id="parti-bitis" placeholder="Bitiş" />
+            </div>
+          </div>
+
+          <div class="filter-group">
+            <label><i class="fa-solid fa-cube" style="color: #1565c0;"></i> Malzeme:</label>
+            <div class="range-input-wrapper">
+              <input type="text" id="malzeme-baslangic" placeholder="Başlangıç" />
+              <span class="range-separator">—</span>
+              <input type="text" id="malzeme-bitis" placeholder="Bitiş" />
+            </div>
+          </div>
+
+          <div class="filter-group">
+            <label><i class="fa-solid fa-id-card-clip" style="color: #1565c0;"></i> Ray/Profil ID:</label>
+            <textarea id="profil-id" rows="1" class="filter-input"
+              placeholder="Birden fazla Profil ID girebilirsiniz."></textarea>
+          </div>
+
+          <div class="filter-group">
+            <label><i class="fa-solid fa-file-lines" style="color: #1565c0;"></i> Döküm No:</label>
+            <textarea id="dokum-no" rows="1" class="filter-input"
+              placeholder="Birden fazla döküm numarası girilebilir."></textarea>
+          </div>
+
+          <div class="filter-group">
+            <label><i class="fa-solid fa-file-contract" style="color: #1565c0;"></i> Şartname:</label>
+            <input type="text" id="sartname" class="filter-input" />
+          </div>
+
+          <div class="filter-group">
+            <label><i class="fa-solid fa-cubes" style="color: #1565c0;"></i> Ürün Tipi:</label>
+            <select id="urun-tipi" class="filter-input">
+              <option value="">Seçiniz</option>
+              <option>AKS</option>
+              <option>PROFIL</option>
+              <option>RAY</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="filter-actions">
+          <button type="reset" class="btn-clear">
+            <i class="fa-solid fa-eraser"></i>
+            <span>Filtreleri Temizle</span>
+          </button>
+          <button type="button" class="btn-filter" onclick="document.getElementById('filtrele-btn').click()">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <span>Filtrele</span>
+          </button>
+          <button type="button" id="filtrele-btn" style="display: none;"></button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Selection Options -->
+    <div class="selection-options">
+      <div class="selection-title">
+        <i class="fa-solid fa-list-check"></i> Liste Görünüm Seçenekleri
+      </div>
+      <div class="radio-group">
+        <div class="radio-option">
+          <input type="radio" id="option1" name="kpsec" value="all">
+          <label for="option1">
+            <i class="fa-solid fa-list-check" style="color: #1565c0;"></i>
+            Tüm partileri göster
+          </label>
+        </div>
+        <div class="radio-option">
+          <input type="radio" id="option2" name="kpsec" value="unused" checked>
+          <label for="option2">
+            <i class="fa-regular fa-circle-xmark" style="color: #f59e0b;"></i>
+            <strong>Kullanım Kararı Olmayan Partileri Göster</strong>
+          </label>
+        </div>
+        <div class="radio-option">
+          <input type="radio" id="option3" name="kpsec" value="decision">
+          <label for="option3">
+            <i class="fa-regular fa-circle-check" style="color: #10b981;"></i>
+            Kullanım Kararı Olan Partileri Göster
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Table Section -->
+    <div class="table-section">
+      <div class="table-header">
+        <h3>
+          <i class="fa-solid fa-table"></i> Kullanım Kararı Tablosu
+        </h3>
+      </div>
+
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Seç</th>
+              <th>K.K. Durum</th>
+              <th>Test Sonucu</th>
+              <th>Üretim Sipariş No</th>
+              <th>Kontrol Türü</th>
+              <th>Malzeme No</th>
+              <th>Malzeme Kısa Metni</th>
+              <th>Parti No</th>
+              <th>Parti Yaratma Tarihi</th>
+              <th>Paket ID</th>
+              <th>Kütük ID</th>
+              <th>Adet</th>
+              <th>KRD No</th>
+              <th>Döküm No</th>
+              <th>SDM No</th>
+              <th>Tandiş No</th>
+              <th>Sınıf</th>
+              <th>Kalite</th>
+              <th>Şartname No</th>
+              <th>Ürün Tipi</th>
+              <th>Şartname Kısa Metni</th>
+              <th>Açıklama</th>
+              <th>1 Adetin T</th>
+              <th>Toplam Kütle</th>
+              <th>Boy</th>
+              <th>Toplam Ton</th>
+              <th>Birim Ağırlık</th>
+              <th>Muhtelif B</th>
+              <th>Tahditsiz</th>
+              <th>Kalite Stok</th>
+              <th>Bloke Stok</th>
+              <th>K.K. Grubu</th>
+              <th>K.K. Kod</th>
+              <th>K.K. Seçim Kümesi</th>
+              <th>K.K. Kısa Metni</th>
+              <th>K.K. Veren</th>
+            </tr>
+          </thead>
+          <tbody id="kontrol-table-body">
+          </tbody>
+        </table>
+      </div>
+
+      <div class="table-actions">
+        <button id="nextButton" class="btn-action btn-next" onclick="window.location.href='5-1-1-kullanim-karari-ekrani.html'">
+  <i class="fa-solid fa-arrow-right"></i> İleri
+</button>
+
+        <button id="undoButton" class="btn-action btn-undo" disabled>
+          <i class="fa-solid fa-rotate-left"></i> Kullanım Kararını Geri Al
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="popup-overlay" id="popupOverlay" onclick="closePopup()"></div>
+  <div id="popup" class="popup">
+    <h3><i class="fa-solid fa-info-circle" style="color: #1565c0;"></i> Sipariş Detayları</h3>
+    <div id="popupContent" class="popup-content"></div>
+    <button onclick="closePopup()" class="btn-close-popup">
+      <i class="fa-solid fa-times"></i> Kapat
+    </button>
+  </div>
+
+  <script>
+    // Örnek Kontrol Verileri
+    const kontrolVerileri = [
+      { durum: "kirmizi", testSonucu: "ok", siparisNo: "000000003661", siparisTonaj: "1000 ton", musteri: "ABC Demir", tamamlananTonaj: "600 ton", kalanTonaj: "400 ton", kontrolTuru: "8904-04", malzemeNo: "80000621", malzemeMetni: "60E1 R260_02 36000 RAY", partiNo: "00000000088", partiYaratmaTarihi: "25.01.2024", ürünId: "PKT-001", kütükNo: "25123321301", adet: "6", krdNo: "KRD100642616", dokumNo: "TESTDOKUM1", SdmNo: "2", TandisNo: "5", sinif: "1", kalite: "R260_02", sartnameNo: "0000000012", urunTipi: "RAY", sartnameMetni: "Şartname 80000621", aciklama: "Bu bir örnek açıklamadır.", ek: { adetT: "0,000", toplamKütle: "0", boy: "0,000", toplamTon: "6,000", birimAgirlik: "0,000000000", muhtelifB: "1", tahditsiz: "0,000", kaliteEk: "0,000", stoBloke: "0,000", stokKullanim: "Z08", k1: "Z01", k2: "Z08", k3: "", k4: "KULLANICI_1" } },
+      { durum: "sari", testSonucu: "fail", siparisNo: "000000003662", siparisTonaj: "800 ton", musteri: "XYZ Profil", tamamlananTonaj: "200 ton", kalanTonaj: "600 ton", kontrolTuru: "8904-04", malzemeNo: "80000867", malzemeMetni: "60E1 R260_02 36000 RAY", partiNo: "00000000081", partiYaratmaTarihi: "25.01.2024", ürünId: "PKT-002", kütükNo: "25123321301", adet: "6", krdNo: "KRD100642616", dokumNo: "TESTDOKUM2", SdmNo: "2", TandisNo: "5", sinif: "1", kalite: "R260_02", sartnameNo: "0000000011", urunTipi: "RAY", sartnameMetni: "Şartname 80000867", aciklama: "Açıklama 2", ek: { adetT: "5,000", toplamKütle: "100", boy: "12,000", toplamTon: "2,168", birimAgirlik: "15,000", muhtelifB: "0", tahditsiz: "5,000", kaliteEk: "2,000", stoBloke: "1,000", stokKullanim: "Z01", k1: "Z05", k2: "Z09", k3: "SET1", k4: "KULLANICI_2" } },
+      { durum: "yesil", testSonucu: "ok", siparisNo: "000000003663", siparisTonaj: "1200 ton", musteri: "LMN Çelik", tamamlananTonaj: "1200 ton", kalanTonaj: "0 ton", kontrolTuru: "8904-04", malzemeNo: "80000621", malzemeMetni: "HEB 260 S275JR_00 12000 PROFIL", partiNo: "00000000082", partiYaratmaTarihi: "25.01.2024", ürünId: "PKT-003", kütükNo: "25123321301", adet: "6", krdNo: "KRD100642616", dokumNo: "TESTDOKUM3", SdmNo: "2", TandisNo: "5", sinif: "1", kalite: "S275JR_00", sartnameNo: "0000000012", urunTipi: "PROFIL", sartnameMetni: "Şartname 80000867", aciklama: "Açıklama 3", ek: { adetT: "10,000", toplamKütle: "200", boy: "6,000", toplamTon: "6,000", birimAgirlik: "25,000", muhtelifB: "1", tahditsiz: "10,000", kaliteEk: "0,000", stoBloke: "0,000", stokKullanim: "Z08", k1: "Z01", k2: "Z08", k3: "", k4: "KULLANICI_3" } }
+    ];
+
+    function getDurumIcon(durum) {
+      if (durum === "kirmizi") return `<span class="icon-status red" title="Kullanım Kararı Olmayan"></span>`;
+      if (durum === "sari") return `<span class="icon-status yellow" title="Belirsiz/Beklemede"></span>`;
+      if (durum === "yesil") return `<span class="icon-status green" title="Kullanım Kararı Verilmiş"></span>`;
+      return "";
+    }
+
+    function getTestSonucuIcon(sonuc) {
+      if (sonuc === "ok") return '<i class="fa-solid fa-circle-check" style="color: #10b981; font-size: 18px;" title="Test Başarılı"></i>';
+      if (sonuc === "fail") return '<i class="fa-solid fa-circle-xmark" style="color: #ef4444; font-size: 18px;" title="Test Başarısız"></i>';
+      return "";
+    }
+
+    function showPopup(veri) {
+      const content = `
+
+            <div class="popup-item">
+                <span class="popup-label">Müşteri:</span>
+                <span class="popup-value">${veri.musteri}</span>
+            </div>
+            <div class="popup-item">
+                <span class="popup-label">Sipariş Tonajı:</span>
+                <span class="popup-value">${veri.siparisTonaj}</span>
+            </div>
+            <div class="popup-item">
+                <span class="popup-label">Tamamlanan Tonaj:</span>
+                <span class="popup-value">${veri.tamamlananTonaj}</span>
+            </div>
+            <div class="popup-item">
+                <span class="popup-label">Kalan Tonaj:</span>
+                <span class="popup-value">${veri.kalanTonaj}</span>
+            </div>
+        `;
+      document.getElementById("popupContent").innerHTML = content;
+      document.getElementById("popup").style.display = "block";
+      document.getElementById("popupOverlay").style.display = "block";
+    }
+
+    function closePopup() {
+      document.getElementById("popup").style.display = "none";
+      document.getElementById("popupOverlay").style.display = "none";
+    }
+
+    function populateKontrolTablosu(veriler) {
+      const tbody = document.getElementById('kontrol-table-body');
+      tbody.innerHTML = '';
+      veriler.forEach((veri, index) => {
+        const row = tbody.insertRow();
+
+        row.insertCell().textContent = index + 1;
+        row.insertCell().innerHTML = `<input type="checkbox" style="width: 18px; height: 18px; cursor: pointer;">`;
+        row.insertCell().innerHTML = getDurumIcon(veri.durum);
+        row.insertCell().innerHTML = getTestSonucuIcon(veri.testSonucu);
+
+        // Sipariş numarası - üzerine gelince popup göster
+        const siparisCell = row.insertCell();
+        siparisCell.innerHTML = `<span class="siparis-link">${veri.siparisNo}</span>`;
+        siparisCell.querySelector('.siparis-link').addEventListener('click', function () {
+          showPopup(veri);
+        });
+
+        row.insertCell().textContent = veri.kontrolTuru;
+        row.insertCell().textContent = veri.malzemeNo;
+        row.insertCell().textContent = veri.malzemeMetni;
+        row.insertCell().textContent = veri.partiNo;
+        row.insertCell().textContent = veri.partiYaratmaTarihi;
+        row.insertCell().textContent = veri.ürünId;
+        row.insertCell().textContent = veri.kütükNo;
+        row.insertCell().textContent = veri.adet;
+        row.insertCell().textContent = veri.krdNo;
+        row.insertCell().textContent = veri.dokumNo;
+        row.insertCell().textContent = veri.SdmNo;
+        row.insertCell().textContent = veri.TandisNo;
+        row.insertCell().textContent = veri.sinif;
+        row.insertCell().textContent = veri.kalite;
+        row.insertCell().textContent = veri.sartnameNo;
+        row.insertCell().textContent = veri.urunTipi;
+        row.insertCell().textContent = veri.sartnameMetni;
+        row.insertCell().innerHTML = `<i class="fa-solid fa-comment-dots" style="color: #64748b; cursor: pointer; font-size: 16px;" title="${veri.aciklama}" onclick="alert('Açıklama: ${veri.aciklama}')"></i>`;
+        row.insertCell().textContent = veri.ek.adetT;
+        row.insertCell().textContent = veri.ek.toplamKütle;
+        row.insertCell().textContent = veri.ek.boy;
+        row.insertCell().textContent = veri.ek.toplamTon;
+        row.insertCell().textContent = veri.ek.birimAgirlik;
+        row.insertCell().textContent = veri.ek.muhtelifB;
+        row.insertCell().textContent = veri.ek.tahditsiz;
+        row.insertCell().textContent = veri.ek.kaliteEk;
+        row.insertCell().textContent = veri.ek.stoBloke;
+        row.insertCell().textContent = veri.ek.stokKullanim;
+        row.insertCell().textContent = veri.ek.k1;
+        row.insertCell().textContent = veri.ek.k2;
+        row.insertCell().textContent = veri.ek.k3;
+        row.insertCell().textContent = veri.ek.k4;
+      });
+    }
+
+    // Klavye ile kapatma (ESC tuşu)
+    document.addEventListener('keydown', function (event) {
+      if (event.key === 'Escape') {
+        closePopup();
+      }
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+      populateKontrolTablosu(kontrolVerileri);
+    });
+  </script>
+</body>
+
+</html>

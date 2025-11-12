@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ray Üretim ve Kalite Kontrol Vardiya Raporu</title>
+    <link href="style.css" rel="stylesheet" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 20px;
+            background: linear-gradient(135deg, #1a1f3a 0%, #2d3561 50%, #1a1f3a 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 35px;
+            border-radius: 25px;
+            box-shadow: 0 25px 70px rgba(0,0,0,0.5);
+            margin-left: 250px;
+        }
+
+        .header {
+            text-align: center;
+            padding: 25px;
+            background: linear-gradient(135deg, #003366 0%, #0a4d8c 50%, #003366 100%);
+            color: white;
+            border-radius: 20px;
+            margin-bottom: 35px;
+            font-size: 24px;
+            font-weight: 700;
+            box-shadow: 0 15px 40px rgba(0, 51, 102, 0.5);
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            border: 3px solid #1e5a9e;
+        }
+
+        .filter-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+            padding: 28px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 18px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            border: 2px solid #003366;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .filter-group label {
+            font-weight: 700;
+            margin-bottom: 10px;
+            font-size: 14px;
+            color: #003366;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .filter-group input,
+        .filter-group select {
+            padding: 14px;
+            border: 2px solid #ddd;
+            border-radius: 12px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            background-color: white;
+            font-weight: 500;
+        }
+
+        .filter-group input:focus,
+        .filter-group select:focus {
+            outline: none;
+            border-color: #0a4d8c;
+            box-shadow: 0 0 0 4px rgba(10, 77, 140, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .filter-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+            padding: 0 20px;
+        }
+
+        .btn {
+            padding: 16px 50px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+            position: relative;
+            overflow: hidden;
+            min-width: 180px;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255,255,255,0.2);
+            transition: left 0.5s ease;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.35);
+        }
+
+        .btn:active {
+            transform: translateY(-2px);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #003366 0%, #0a4d8c 100%);
+            color: white;
+            border: 2px solid #1e5a9e;
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+            color: white;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 35px;
+            padding: 25px;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #28a745 0%, #218838 100%);
+            color: white;
+            border: 2px solid #1e7e34;
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+            color: white;
+            border: 2px solid #bd2130;
+        }
+
+        .btn-info {
+            background: linear-gradient(135deg, #003366 0%, #0a4d8c 100%);
+            color: white;
+            border: 2px solid #1e5a9e;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin-top: 25px;
+            border-radius: 18px;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+            border: 3px solid #003366;
+        }
+
+        table {
+            width: 100%;
+            min-width: 1400px;
+            border-collapse: collapse;
+            font-size: 11px;
+            background-color: white;
+            border: 3px solid #003366;
+        }
+
+        th, td {
+            border: 2px solid #003366;
+            padding: 8px 6px;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        th {
+            background: linear-gradient(135deg, #003366 0%, #0a4d8c 100%);
+            color: white;
+            font-weight: 700;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+            white-space: nowrap;
+            font-size: 11px;
+        }
+
+        .header-group {
+            background: linear-gradient(135deg, #003366 0%, #0a4d8c 100%);
+            border-bottom: 3px solid #1e5a9e;
+        }
+
+        .subheader {
+            background: linear-gradient(135deg, #0a4d8c 0%, #1e5a9e 100%);
+            font-size: 10px;
+        }
+
+        tbody tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+
+        tbody tr:hover {
+            background: linear-gradient(90deg, #fff 0%, #e3f2fd 100%);
+            transition: background 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0,51,102,0.1);
+        }
+
+        .size-cell {
+            font-weight: 700;
+            background: linear-gradient(135deg, #0a4d8c 0%, #1e5a9e 100%);
+            color: white;
+            font-size: 12px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+            min-width: 50px;
+        }
+
+        .input-cell {
+            min-width: 60px;
+            padding: 0;
+        }
+
+        .col-steel-quality, .col-casting-no, .col-charge { min-width: 75px; }
+        .col-weight, .col-length { min-width: 70px; }
+        .col-roll-defect, .col-control-given { min-width: 60px; }
+        .col-control-length { min-width: 50px; }
+        .col-date { min-width: 85px; }
+        .col-shift { min-width: 60px; }
+
+        input[type="text"].table-input {
+            width: 100%;
+            height: 100%;
+            padding: 6px;
+            border: none;
+            text-align: center;
+            font-size: 11px;
+            border-radius: 0;
+            box-sizing: border-box;
+            background-color: transparent;
+            font-weight: 500;
+        }
+
+        .input-cell:hover input[type="text"].table-input {
+            border: 1px solid #0a4d8c;
+            background-color: #e3f2fd;
+        }
+
+        input[type="text"].table-input:focus {
+            outline: none;
+            background-color: #fff;
+            box-shadow: inset 0 0 0 1px #0a4d8c;
+        }
+
+        .scrap-marked {
+            background-color: #ffebee !important;
+            font-weight: bold;
+            color: #c62828;
+        }
+
+        @media print {
+            .filter-section,
+            .filter-buttons,
+            .action-buttons {
+                display: none;
+            }
+
+            body {
+                background: white;
+            }
+
+            .container {
+                box-shadow: none;
+            }
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 18px 30px;
+            border-radius: 12px;
+            color: white;
+            font-weight: 700;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+            border: 2px solid rgba(255,255,255,0.3);
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification-success {
+            background: linear-gradient(135deg, #28a745 0%, #218838 100%);
+        }
+
+        .notification-info {
+            background: linear-gradient(135deg, #003366 0%, #0a4d8c 100%);
+        }
+
+        .notification-danger {
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+        }
+    </style>
+</head>
+<body>
+  <!-- Sidebar -->
+  <aside id="sidebar">
+    <div id="sidebar-container" class="sidebar-container"></div>
+    <script>
+      fetch("sidebar.html")
+        .then((res) => res.text())
+        .then((data) => (document.getElementById("sidebar-container").innerHTML = data));
+    </script>
+  </aside>
+<div class="container">
+    <div class="header">
+        RAY ÜRETİM VE KALİTE KONTROL VARDİYA RAPORU
+    </div>
+
+    <div class="filter-section">
+        <div class="filter-group">
+            <label for="startDate">Başlangıç Tarihi:</label>
+            <input type="date" id="startDate">
+        </div>
+
+        <div class="filter-group">
+            <label for="endDate">Bitiş Tarihi:</label>
+            <input type="date" id="endDate">
+        </div>
+
+        <div class="filter-group">
+            <label for="vardiya">Vardiya:</label>
+            <select id="vardiya">
+                <option value="">Tümü</option>
+                <option value="1">1. Vardiya</option>
+                <option value="2">2. Vardiya</option>
+                <option value="3">3. Vardiya</option>
+            </select>
+        </div>
+
+        <div class="filter-group">
+            <label for="rayTipi">Ray Tipi:</label>
+            <select id="rayTipi">
+                <option value="">Tümü</option>
+                <option value="oluklu">Oluklu Ray</option>
+                <option value="normal">Ray</option>
+            </select>
+        </div>
+
+        <div class="filter-group">
+            <label for="dokumNo">Döküm Numarası:</label>
+            <input type="text" id="dokumNo" placeholder="Döküm No">
+        </div>
+    </div>
+
+    <div class="filter-buttons">
+        <button class="btn btn-primary" onclick="applyFilters()">FİLTRELE</button>
+        <button class="btn btn-secondary" onclick="clearFilters()">TEMİZLE</button>
+    </div>
+
+    <div class="table-container">
+        <table>
+            <thead>
+            <tr class="header-group">
+                <th rowspan="2" class="col-date">TARİH</th>
+                <th rowspan="2" class="col-shift">VARDİYA</th>
+                <th rowspan="2" class="col-steel-quality">ÇELİK<br>KALİTESİ</th>
+                <th rowspan="2" class="col-casting-no">DÖKÜM<br>NO</th>
+                <th rowspan="2" class="col-charge">ŞARJ<br>(Adet)</th>
+                <th rowspan="2" class="col-weight">YARI MAMUL<br>BİRİM<br>AĞIRLIK</th>
+                <th rowspan="2" class="col-length">YARI MAMUL<br>BOYU</th>
+                <th rowspan="2" class="col-roll-defect">HADDE<br>BOZUĞU<br>ADET</th>
+                <th rowspan="2" class="col-control-given">KONTROLE<br>VERİLEN<br>ADET</th>
+                <th rowspan="2" class="col-control-length">KONTROLE<br>VERİLEN<br>BOY</th>
+                <th rowspan="2">I. KALİTE<br>ADET</th>
+                <th colspan="2">HOLD</th>
+                <th rowspan="2">HOLD<br>(KARAR<br>BEKLEYEN)</th>
+                <th rowspan="2">TOPLAM<br>HURDA<br>ADET</th>
+                <th colspan="9">HURDA DAĞILIMI</th>
+            </tr>
+            <tr class="subheader">
+                <th>MASTAR<br>EĞRİSİ</th>
+                <th>DOĞRULTMA<br>EĞRİSİ</th>
+                <th>Asimetri</th>
+                <th>Sertlik</th>
+                <th>Bobin İzi</th>
+                <th>Vinçten<br>Düşen</th>
+                <th>Doğrultma<br>Eğrisi</th>
+                <th>Buruk</th>
+                <th>Gövdesel<br>Buruk</th>
+                <th>Doğrultma<br>Kırığı</th>
+                <th>BOY TOL-H<br>(L-+)</th>
+            </tr>
+            </thead>
+            <tbody id="tableBody">
+            </tbody>
+        </table>
+    </div>
+
+    <div class="action-buttons">
+        <button class="btn btn-success" onclick="saveData()">
+            <span style="font-size: 18px; margin-right: 8px;">💾</span>
+            VERİLERİ KAYDET
+        </button>
+        <button class="btn btn-danger" onclick="exportExcel()">
+            <span style="font-size: 18px; margin-right: 8px;">📊</span>
+            EXCEL AKTAR
+        </button>
+        <button class="btn btn-info" onclick="exportPDF()">
+            <span style="font-size: 18px; margin-right: 8px;">📄</span>
+            PDF AKTAR
+        </button>
+    </div>
+</div>
+
+<div id="notification-container"></div>
+
+<script>
+    const sizeGroups = [
+        { size: 72, count: 2, date: '10.11.2025', shift: '1', casting: '2510836', steel: 'C45', charge: 18, weight: 8.2, length: 12000, rollDefect: 3, controlGiven: 13 },
+        { size: 60, count: 2, date: '10.11.2025', shift: '1', casting: '2508412', steel: 'S275JR', charge: 15, weight: 3.2, length: 10000, rollDefect: 1, controlGiven: 5 },
+        { size: 36, count: 2, date: '10.11.2025', shift: '2', casting: '2510836', steel: 'S235JR', charge: 10, weight: 4.1, length: 10000, rollDefect: 0, controlGiven: 13 },
+        { size: 25, count: 2, date: '10.11.2025', shift: '2', casting: '2509127', steel: 'C45', charge: 8, weight: 8.2, length: 10000, rollDefect: 1, controlGiven: 6 },
+        { size: 24, count: 2, date: '09.11.2025', shift: '3', casting: '2509127', steel: 'C45', charge: 10, weight: 8.2, length: 8000, rollDefect: 0, controlGiven: 5 },
+        { size: 18, count: 2, date: '09.11.2025', shift: '3', casting: '2511204', steel: 'C45', charge: 8, weight: 2.5, length: 8000, rollDefect: 1, controlGiven: 6 },
+        { size: 13, count: 2, date: '09.11.2025', shift: '1', casting: '2511204', steel: 'C45', charge: 8, weight: 3.2, length: 8000, rollDefect: 3, controlGiven: 7 },
+        { size: 12, count: 2, date: '08.11.2025', shift: '2', casting: '2507958', steel: 'S275JR', charge: 18, weight: 2.5, length: 12000, rollDefect: 0, controlGiven: 9 },
+        { size: 6, count: 2, date: '08.11.2025', shift: '2', casting: '2508635', steel: 'C45', charge: 10, weight: 3.2, length: 12000, rollDefect: 0, controlGiven: 7 },
+        { size: 1, count: 2, date: '08.11.2025', shift: '1', casting: '2506721', steel: 'S235JR', charge: 20, weight: 2.5, length: 8000, rollDefect: 2, controlGiven: 8 }
+    ];
+
+    const tableBody = document.getElementById('tableBody');
+
+    function getRandomScrapMarks() {
+        const scrapFields = [
+            'scrap-asymmetry', 'scrap-hardness', 'scrap-coil-mark',
+            'scrap-crane-drop', 'scrap-straightening-curve', 'scrap-twisted',
+            'scrap-body-twisted', 'scrap-straightening-break', 'scrap-length-tol'
+        ];
+
+        const numMarks = Math.floor(Math.random() * 4);
+        const marks = {};
+
+        for (let i = 0; i < numMarks; i++) {
+            const field = scrapFields[Math.floor(Math.random() * scrapFields.length)];
+            marks[field] = '✓';
+        }
+
+        return marks;
+    }
+
+    function createRows() {
+        sizeGroups.forEach(group => {
+            for (let i = 0; i < group.count; i++) {
+                const row = document.createElement('tr');
+                row.className = 'row-group';
+
+                const leftData = i === 0 ? {
+                    'date': group.date,
+                    'shift': group.shift,
+                    'steel-quality': group.steel,
+                    'casting-no': group.casting,
+                    'charge': group.charge.toString(),
+                    'weight': group.weight.toString(),
+                    'length': group.length.toString(),
+                    'roll-defect': group.rollDefect.toString(),
+                    'control-given': group.controlGiven.toString()
+                } : {};
+
+                const inputCols = [
+                    'col-date', 'col-shift', 'col-steel-quality', 'col-casting-no', 'col-charge',
+                    'col-weight', 'col-length', 'col-roll-defect',
+                    'col-control-given'
+                ];
+
+                inputCols.forEach(cls => {
+                    const fieldName = cls.replace('col-', '');
+                    const td = document.createElement('td');
+                    td.className = `input-cell ${cls}`;
+                    const value = leftData[fieldName] || '';
+                    td.innerHTML = `<input type="text" class="table-input" data-field="${fieldName}" data-size="${group.size}" value="${value}" />`;
+                    row.appendChild(td);
+                });
+
+                const sizeCell = document.createElement('td');
+                sizeCell.className = 'size-cell col-control-length';
+                sizeCell.textContent = group.size;
+                row.appendChild(sizeCell);
+
+                const scrapMarks = getRandomScrapMarks();
+
+                const rightData = {
+                    'i-quality': '',
+                    'hold-master': '',
+                    'hold-straightening': '',
+                    'hold-pending': '',
+                    'total-scrap': '',
+                    'scrap-asymmetry': scrapMarks['scrap-asymmetry'] || '',
+                    'scrap-hardness': scrapMarks['scrap-hardness'] || '',
+                    'scrap-coil-mark': scrapMarks['scrap-coil-mark'] || '',
+                    'scrap-crane-drop': scrapMarks['scrap-crane-drop'] || '',
+                    'scrap-straightening-curve': scrapMarks['scrap-straightening-curve'] || '',
+                    'scrap-twisted': scrapMarks['scrap-twisted'] || '',
+                    'scrap-body-twisted': scrapMarks['scrap-body-twisted'] || '',
+                    'scrap-straightening-break': scrapMarks['scrap-straightening-break'] || '',
+                    'scrap-length-tol': scrapMarks['scrap-length-tol'] || ''
+                };
+
+                const rightCols = [
+                    'i-quality', 'hold-master', 'hold-straightening',
+                    'hold-pending', 'total-scrap', 'scrap-asymmetry',
+                    'scrap-hardness', 'scrap-coil-mark', 'scrap-crane-drop',
+                    'scrap-straightening-curve', 'scrap-twisted',
+                    'scrap-body-twisted', 'scrap-straightening-break',
+                    'scrap-length-tol'
+                ];
+
+                rightCols.forEach(field => {
+                    const td = document.createElement('td');
+                    td.className = 'input-cell';
+                    const value = rightData[field] || '';
+
+                    if (field.startsWith('scrap-') && value === '✓') {
+                        td.classList.add('scrap-marked');
+                    }
+
+                    td.innerHTML = `<input type="text" class="table-input" data-field="${field}" data-size="${group.size}" value="${value}" />`;
+                    row.appendChild(td);
+                });
+
+                tableBody.appendChild(row);
+            }
+        });
+    }
+
+    createRows();
+
+    function applyFilters() {
+        const startDate = document.getElementById('startDate').value;
+        const endDate = document.getElementById('endDate').value;
+        const vardiya = document.getElementById('vardiya').value;
+        const rayTipi = document.getElementById('rayTipi').value;
+        const dokumNo = document.getElementById('dokumNo').value;
+
+        console.log('Filtreler uygulandı:', {
+            startDate,
+            endDate,
+            vardiya,
+            rayTipi,
+            dokumNo
+        });
+
+        showNotification('Filtreler başarıyla uygulandı ve veriler yüklendi!', 'success');
+    }
+
+    function clearFilters() {
+        document.getElementById('startDate').value = '';
+        document.getElementById('endDate').value = '';
+        document.getElementById('vardiya').value = '';
+        document.getElementById('rayTipi').value = '';
+        document.getElementById('dokumNo').value = '';
+
+        showNotification('Filtreler temizlendi', 'info');
+    }
+
+    function saveData() {
+        showNotification('Veriler kaydediliyor...', 'info');
+
+        const inputs = document.querySelectorAll('.table-input');
+        const data = {};
+
+        inputs.forEach(input => {
+            const field = input.getAttribute('data-field');
+            const size = input.getAttribute('data-size');
+            const value = input.value;
+
+            if (!data[size]) {
+                data[size] = [];
+            }
+
+            const lastEntry = data[size][data[size].length - 1];
+            if (!lastEntry || lastEntry[field] !== undefined) {
+                data[size].push({});
+            }
+
+            data[size][data[size].length - 1][field] = value;
+        });
+
+        console.log('Kaydedilen Veriler:', data);
+
+        setTimeout(() => {
+            showNotification('Veriler başarıyla kaydedildi!', 'success');
+        }, 1500);
+    }
+
+    function exportExcel() {
+        showNotification('Excel dosyası hazırlanıyor...', 'info');
+        setTimeout(() => {
+            showNotification('Excel dosyası başarıyla indirildi!', 'success');
+        }, 1500);
+    }
+
+    function exportPDF() {
+        showNotification('PDF dosyası hazırlanıyor...', 'info');
+        setTimeout(() => {
+            window.print();
+        }, 500);
+    }
+
+    function showNotification(message, type) {
+        const container = document.getElementById('notification-container');
+        container.innerHTML = '';
+
+        const notification = document.createElement('div');
+        notification.className = `notification notification-${type}`;
+        notification.textContent = message;
+        container.appendChild(notification);
+
+        setTimeout(() => {
+            notification.classList.add('show');
+        }, 100);
+
+        setTimeout(() => {
+            notification.classList.remove('show');
+            setTimeout(() => {
+                notification.remove();
+            }, 300);
+        }, 3000);
+    }
+
+    window.onload = function() {
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('endDate').value = today;
+    };
+</script>
+</body>
+</html>

@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RPH Rapor</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .table-scroll-wrapper {
+            overflow-x: auto;
+            width: 100%;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+        }
+
+        .data-table {
+            border-collapse: collapse;
+            width: max-content;
+            min-width: 100%;
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: 8px 12px;
+            text-align: center;
+            white-space: nowrap;
+            font-size: 13px;
+        }
+
+        .data-table thead {
+            background-color: #f4f6f9;
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+        }
+
+        .data-table tbody tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        /* Sipariş No kolonu hem th hem td için */
+        .data-table th:nth-child(2),
+        .data-table td:nth-child(2) {
+            min-width: 130px;
+            white-space: nowrap;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="sidebar"></div>
+    <script>
+        fetch('sidebar.html')
+            .then(res => res.text())
+            .then(data => document.getElementById('sidebar').innerHTML = data);
+    </script>
+
+
+    <div class="content-wrapper">
+        <header class="header">
+            <div class="breadcrumbs">
+                <a href="siparisler.html">Sipariş Sayfası</a> <span>></span>
+                <span>KÜTÜK DETAY LİSTESİ</span>
+            </div>
+        </header>
+
+        <div class="main-report-area">
+            <h1 class="report-title">KÜTÜK DETAY LİSTESİ </h1>
+
+            <div class="filter-section">
+                <div>
+                    <button class="primary-button">Liste Getir</button>
+                    <button class="excel-button">Excel Rapor</button>
+                </div>
+                <div>
+                    <label>Başlangıç Tarihi<br><input type="date"></label>
+                </div>
+                <div>
+                    <label>Bitiş Tarihi<br><input type="date"></label>
+                </div>
+
+            </div>
+
+            <div class="table-wrapper">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Sipariş No</th>
+                            <th>Kütük ID</th>
+                            <th>Fırın</th>
+                            <th>Descaler</th>
+                            <th>BD1</th>
+                            <th>BD2</th>
+                            <th>Tandem</th>
+                            <th>Lazer Ölçüm</th>
+                            <th>Damgalama</th>
+                            <th>Sıcak Testere</th>
+                            <th>Kalite Kontrol</th>
+                            <th>Soğutma Izgarası</th>
+                            <th>1. Doğrultma</th>
+                            <th>2. Doğrultma</th>
+                            <th>Test Center Ünitesi</th>
+                            <th>Delme Kesme</th>
+                            <th>Gag Press</th>
+                            <th>2. Delme</th>
+                            <th>Soğuk Testere</th>
+                            <th>Toplam Süre</th>
+                            <th>Detay</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>300003661</td>
+                            <td>25123321301</td>
+                            <td>10:00–10:15 - 15 dk</td>
+                            <td>10:15–10:18 - 3 dk</td>
+                            <td>10:18–10:21 - 3 dk</td>
+                            <td>10:21–10:25 - 4 dk</td>
+                            <td>10:25–10:29 - 4 dk</td>
+                            <td>10:29–10:32 - 3 dk</td>
+                            <td>10:32–10:35 - 3 dk</td>
+                            <td>10:35–10:38 - 3 dk</td>
+                            <td>10:38–10:41 - 3 dk</td>
+                            <td>10:41–10:44 - 3 dk</td>
+                            <td>10:44–10:46 - 2 dk</td>
+                            <td>10:46–10:48 - 2 dk</td>
+                            <td>10:48–10:57 - 9 dk</td>
+                            
+                            <td>10:57–11:00 - 3 dk</td>
+                            <td>11:00–11:03 - 3 dk</td>
+                            <td>11:03–11:05 - 2 dk</td>
+                            <td>11:05–11:08 - 3 dk</td>
+                            <td>01:08:00</td>
+                            <td><button class="details-button"
+                                    onclick="window.location.href='1-3-yari-mamul-detay.html'">RAPOR</button></td>
+                        </tr>
+                        <tr>
+                            <td>300003661</td>
+                            <td>25123321302</td>
+                            <td>11:00–11:18 - 18 dk</td>
+                            <td>11:18–11:22 - 4 dk</td>
+                            <td>11:22–11:25 - 3 dk</td>
+                            <td>11:25–11:29 - 4 dk</td>
+                            <td>11:29–11:34 - 5 dk</td>
+                            <td>11:34–11:38 - 4 dk</td>
+                            <td>11:38–11:41 - 3 dk</td>
+                            <td>11:41–11:44 - 3 dk</td>
+                            <td>11:44–11:48 - 4 dk</td>
+                            <td>11:48–11:51 - 3 dk</td>
+                            <td>11:51–11:53 - 2 dk</td>
+                            <td>11:53–11:55 - 2 dk</td>
+                            <td>11:55–12:04 - 9 dk</td>
+                            
+                            <td>12:04–12:07 - 3 dk</td>
+                            <td>12:07–12:10 - 3 dk</td>
+                            <td>12:10–12:12 - 2 dk</td>
+                            <td>12:12–12:15 - 3 dk</td>
+                            <td>01:15:00</td>
+                            <td><button class="details-button"
+                                    onclick="window.location.href='1-3-yari-mamul-detay.html'">RAPOR</button></td>
+                        </tr>
+                        <tr>
+                            <td>300003662</td>
+                            <td>25123321303</td>
+                            <td>12:30–12:45 - 15 dk</td>
+                            <td>12:45–12:48 - 3 dk</td>
+                            <td>12:48–12:51 - 3 dk</td>
+                            <td>12:51–12:55 - 4 dk</td>
+                            <td>12:55–12:59 - 4 dk</td>
+                            <td>12:59–13:02 - 3 dk</td>
+                            <td>13:02–13:05 - 3 dk</td>
+                            <td>13:05–13:08 - 3 dk</td>
+                            <td>13:08–13:11 - 3 dk</td>
+                            <td>13:11–13:14 - 3 dk</td>
+                            <td>13:14–13:16 - 2 dk</td>
+                            <td>13:16–13:18 - 2 dk</td>
+                            <td>13:18–13:27 - 9 dk</td>
+                            
+                            <td>13:27–13:30 - 3 dk</td>
+                            <td>13:30–13:33 - 3 dk</td>
+                            <td>13:33–13:35 - 2 dk</td>
+                            <td>13:35–13:38 - 3 dk</td>
+                            <td>01:08:00</td>
+                            <td><button class="details-button"
+                                    onclick="window.location.href='1-3-yari-mamul-detay.html'">RAPOR</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+
+
+            
+            <a href="1-1-rph-izleme-ekrani.html" class="back-button">&laquo; İş Emri Ekranına Geri Dön</a>
+      <a href="1-2-yari-mamul-listesi.html" class="back-button">&laquo; Yarı Mamul Listesi</a>
+
+        </div>
+    </div>
+</body>
+
+</html>

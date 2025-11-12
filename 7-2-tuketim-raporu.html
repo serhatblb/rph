@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>RPH – Tüketim Takip Raporu</title>
+  <link href="style.css" rel="stylesheet" />
+  <style>
+    body{font-family:Arial,Helvetica,sans-serif;margin:0;background:#f5f6f7;color:#2c3e50}
+    .content-wrapper{margin-left:250px;padding:20px}
+
+    .card{background:#fff;border:1px solid #e6e9ef;border-radius:12px;padding:16px;margin-bottom:20px;
+          box-shadow:0 1px 3px rgba(16,24,40,.06),0 1px 2px rgba(16,24,40,.03)}
+    .report-title{font-size:18px;font-weight:700;margin:0 0 12px}
+
+    .filters{display:flex;flex-wrap:wrap;gap:14px;align-items:flex-end}
+    .field{display:flex;flex-direction:column;gap:6px;min-width:160px}
+    .field label{font-size:12px;font-weight:600;color:#6b7a8c}
+    .field select,.field input{height:36px;padding:6px 10px;border:1px solid #d0d7e2;border-radius:8px}
+    .btn{border:none;border-radius:8px;cursor:pointer;padding:8px 14px;font-size:14px;font-weight:600}
+    .btn-blue{background:#1976d2;color:#fff}
+    .btn-ghost{background:#fff;border:1px solid #d0d7e2;color:#2c3e50}
+
+    .table-wrap{overflow-x:auto}
+    table{width:100%;border-collapse:collapse;font-size:14px}
+    th,td{padding:10px 8px;text-align:center;border-bottom:1px solid #e6e9ef;white-space:nowrap}
+    thead th{background:#f9fafb;font-size:12px;font-weight:700;color:#374151;text-transform:uppercase}
+    tbody tr:nth-child(even){background:#f9fbff}
+    tbody tr:hover{background:#eef5ff}
+
+    /* Etiketler (tag) - tablodaki küçük rozetler */
+    .tag{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:999px;
+         font-size:12px;font-weight:700;border:1px solid transparent}
+    .tag-blue{background:#e6f0ff;color:#1e60d0;border-color:#cfe0ff}
+    .tag-green{background:#e9f7ee;color:#2e7d32;border-color:#c8ead3}
+    .tag-gray{background:#eef2f7;color:#475569;border-color:#e2e8f0}
+
+    /* Detay görünümü – başlık şeridi (iyileştirilmiş) */
+    #detailView{display:none}
+
+    .detail-header{
+      display:flex; align-items:flex-start; gap:16px; margin-bottom:18px;
+    }
+    .back-btn{display:inline-flex;align-items:center;gap:8px}
+
+    .detail-title-wrap{display:flex; flex-direction:column; gap:6px; min-width:260px}
+    .detail-title{font-size:20px; font-weight:800; color:#0f172a; letter-spacing:.2px}
+    .detail-underline{width:140px; height:2px; background:#e2e8f0; border-radius:2px}
+
+    .badges{display:flex; gap:10px; row-gap:10px; flex-wrap:wrap; align-items:center}
+    .badge{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:8px 12px; border-radius:999px; font-size:13px; font-weight:700;
+      border:1px solid #e6e9ef; background:#f7fafc; color:#475569;
+      box-shadow:0 1px 0 rgba(16,24,40,.03) inset;
+    }
+    .badge .dot{width:8px; height:8px; border-radius:999px; background:#94a3b8}
+    .badge-blue  { background:#e8f2ff; color:#1e60d0; border-color:#cfe0ff }
+    .badge-green { background:#e9f7ee; color:#2e7d32; border-color:#c8ead3 }
+    .badge-gray  { background:#eef2f7; color:#475569; border-color:#e2e8f0 }
+
+    .chip-row{display:none} /* eski chip alanı gizlendi (artık .badges kullanılıyor) */
+
+    .detail-grid{
+      display:grid;gap:14px;
+      grid-template-columns:repeat(12,minmax(0,1fr));
+    }
+    /* Kartlar */
+    .kv-card{grid-column:span 3;background:#ffffff;border:1px solid #e6e9ef;border-radius:10px;padding:12px}
+    .kv-card.wide{grid-column:span 6}
+    .kv-key{font-size:11px;font-weight:800;color:#6b7a8c;text-transform:uppercase;letter-spacing:.02em}
+    .kv-val{font-size:15px;margin-top:6px;color:#0f172a;font-weight:700;word-break:break-word}
+
+    /* Küçük özet kutuları */
+    .metric{display:flex;align-items:center;justify-content:space-between;background:#f8fafc;border:1px solid #e6e9ef;border-radius:10px;padding:12px}
+    .metric .m-key{font-size:12px;color:#64748b;font-weight:700;text-transform:uppercase}
+    .metric .m-val{font-size:16px;color:#0f172a;font-weight:800}
+
+    /* Responsive */
+    @media (max-width:1200px){ .kv-card{grid-column:span 4} .kv-card.wide{grid-column:span 8} }
+    @media (max-width:900px){ .kv-card,.kv-card.wide{grid-column:span 12} .detail-title-wrap{min-width:unset} .detail-header{flex-direction:column; align-items:stretch} }
+  </style>
+</head>
+<body>
+  <!-- Sidebar -->
+  <aside id="sidebar">
+    <div id="sidebar-container"></div>
+    <script>
+      fetch('sidebar.html').then(r=>r.text()).then(html=>{document.getElementById('sidebar-container').innerHTML=html;});
+    </script>
+  </aside>
+
+  <div class="content-wrapper">
+    <div class="card">
+      <h1 class="report-title">RPH – Tüketim Takip Raporu</h1>
+      <div class="filters">
+        <div class="field">
+          <label>İş Yeri</label>
+          <select id="fPlant">
+            <option value="">Tümü</option>
+            <option selected>RPH</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>İş Emri No</label>
+          <select id="fOrder">
+            <option value="">Tümü</option>
+            <option>4XXXX662</option>
+            <option>4XXXX803</option>
+            <option>4XXXX804</option>
+            <option>4XXXX805</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>Başlangıç</label>
+          <input id="fStart" type="date" />
+        </div>
+        <div class="field">
+          <label>Bitiş</label>
+          <input id="fEnd" type="date" />
+        </div>
+        <button class="btn btn-blue" onclick="applyFilters()">Listele</button>
+      </div>
+    </div>
+
+    <!-- Ana tablo -->
+    <div id="mainTable" class="card">
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th></th>
+              <th>Döküm No</th>
+              <th>Malzeme No</th>
+              <th>Malzeme Tanımı</th>
+              <th>Kalite</th>
+              <th>Ürün Tipi</th>
+              <th>Çap (mm)</th>
+              <th>Boy (m)</th>
+              <th>Stok Yeri</th>
+              <th>Gerçekleşen Had. Sipariş No</th>
+              <th>Planlanan Sipariş No</th>
+              <th>Tonaj</th>
+              <th>Adet</th>
+              <th>Tüketim Başlangıç Tarihi</th>
+            </tr>
+          </thead>
+          <tbody id="mainBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Detay görünümü -->
+    <div id="detailView" class="card">
+      <div class="detail-header">
+        <button class="btn btn-ghost back-btn" onclick="backToMain()">← Geri Dön</button>
+
+        <div class="detail-title-wrap">
+          <div class="detail-title">Döküm Detayı</div>
+          <div class="detail-underline"></div>
+        </div>
+
+        <!-- Yeni rozet alanı -->
+        <div class="badges" id="chipRow"></div>
+      </div>
+
+      <!-- Üst özet metrikleri -->
+      <div class="detail-grid" style="margin-bottom:10px">
+        <div class="metric kv-card"><span class="m-key">Tonaj</span><span class="m-val" id="mTonaj">—</span></div>
+        <div class="metric kv-card"><span class="m-key">Adet</span><span class="m-val" id="mAdet">—</span></div>
+        <div class="metric kv-card"><span class="m-key">Çap (mm)</span><span class="m-val" id="mCap">—</span></div>
+        <div class="metric kv-card"><span class="m-key">Boy (m)</span><span class="m-val" id="mBoy">—</span></div>
+      </div>
+
+      <!-- Ana bilgi kartları -->
+      <div class="detail-grid" id="detailGrid"></div>
+
+      <h3 class="report-title" style="margin-top:18px">Kütük Hareketleri</h3>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Kütük Id</th>
+              <th>Tonaj</th>
+              <th>Fırın Giriş Saati</th>
+              <th>Fırın Çıkış Saati</th>
+              <th>Fiili Üretim Süresi</th>
+              <th>Hadde Çalışma Hızı</th>
+              <th>Hadde Bozuğu Yeri</th>
+            </tr>
+          </thead>
+          <tbody id="movesBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // RPH örnek veri seti
+    const rows = [
+      { cast:'2511234', mat:'80003909', desc:'PROFİL', kalite:'S275JR_02', urunTipi:'PROFİL', cap:52.5, boy:52.5, plant:'RPH',
+        actOrder:'4XXXX662', planOrder:'4XXXX803', tonaj:175, adet:70, start:'01.10.2025',
+        ymMat:'70000379', ymDesc:'170x170x12000 S275JR_02 Y'
+      },
+      { cast:'2511235', mat:'80003439', desc:'RAY', kalite:'S355JR_03', urunTipi:'RAY', cap:52.5, boy:52.5, plant:'RPH',
+        actOrder:'4XXXX662', planOrder:'4XXXX803', tonaj:58, adet:23, start:'01.10.2025',
+        ymMat:'70000390', ymDesc:'170x170x12000 S355JR_03 Y'
+      },
+      { cast:'2511238', mat:'80000666', desc:'PROFİL', kalite:'1008_00', urunTipi:'PROFİL', cap:9, boy:12, plant:'RPH',
+        actOrder:'4XXXX804', planOrder:'4XXXX805', tonaj:120, adet:60, start:'01.10.2025',
+        ymMat:'70000089', ymDesc:'150x150x12000 1008_00 Y'
+      }
+    ];
+
+    const mainBody = document.getElementById('mainBody');
+
+    function renderMain(list){
+      mainBody.innerHTML = list.map(r => `
+        <tr>
+          <td><button class="btn btn-ghost" onclick="showDetail('${r.cast}')">Detay</button></td>
+          <td><span class="tag tag-blue">${r.cast}</span></td>
+          <td>${r.mat}</td>
+          <td>${r.desc}</td>
+          <td>${r.kalite}</td>
+          <td>${r.urunTipi}</td>
+          <td>${r.cap}</td>
+          <td>${r.boy}</td>
+          <td><span class="tag tag-gray">${r.plant}</span></td>
+          <td><span class="tag tag-green">${r.actOrder}</span></td>
+          <td>${r.planOrder}</td>
+          <td>${r.tonaj}</td>
+          <td>${r.adet}</td>
+          <td>${r.start}</td>
+        </tr>
+      `).join('');
+    }
+
+    // Filtreler
+    function applyFilters(){
+      const plant = document.getElementById('fPlant').value;
+      const order = document.getElementById('fOrder').value;
+      const s = document.getElementById('fStart').value;
+      const e = document.getElementById('fEnd').value;
+      const toISO = d => { const [dd,mm,yy]=d.split('.'); return `${yy}-${mm}-${dd}`; };
+
+      let out = rows.slice();
+      if(plant) out = out.filter(r => r.plant === plant);
+      if(order) out = out.filter(r => r.actOrder === order || r.planOrder === order);
+      if(s) out = out.filter(r => new Date(toISO(r.start)) >= new Date(s));
+      if(e) out = out.filter(r => new Date(toISO(r.start)) <= new Date(e));
+
+      renderMain(out);
+    }
+
+    // Detay görünümü – başlık rozetleri yeni stil
+    function showDetail(docNo){
+      const rec = rows.find(r => r.cast === docNo);
+      if(!rec) return;
+
+      // Rozetler
+      const chipRow = document.getElementById('chipRow');
+      chipRow.innerHTML = `
+        <span class="badge badge-blue"><span class="dot"></span>Döküm: ${rec.cast}</span>
+        <span class="badge badge-green"><span class="dot" style="background:#22c55e"></span>Gerç. Sipariş: ${rec.actOrder}</span>
+        <span class="badge"><span class="dot"></span>Planlanan: ${rec.planOrder}</span>
+        <span class="badge badge-gray"><span class="dot"></span>İş Yeri: ${rec.plant}</span>
+      `;
+
+      // Özet metrikler
+      document.getElementById('mTonaj').textContent = `${rec.tonaj} t`;
+      document.getElementById('mAdet').textContent  = rec.adet;
+      document.getElementById('mCap').textContent   = rec.cap;
+      document.getElementById('mBoy').textContent   = rec.boy;
+
+      // Ana bilgi kartları
+      const grid = document.getElementById('detailGrid');
+      const items = [
+        {k:'Malzeme No', v:rec.mat},
+        {k:'Malzeme Tanımı', v:rec.desc, wide:true},
+        {k:'Kalite', v:rec.kalite},
+        {k:'Ürün Tipi', v:rec.urunTipi},
+        {k:'Tüketim Başlangıç', v:rec.start},
+        {k:'Yarımamul Malzeme', v:rec.ymMat || '—'},
+        {k:'Yarımamul Tanımı', v:rec.ymDesc || '—', wide:true}
+      ];
+      grid.innerHTML = items.map(it => `
+        <div class="kv-card ${it.wide?'wide':''}">
+          <div class="kv-key">${it.k}</div>
+          <div class="kv-val">${it.v}</div>
+        </div>
+      `).join('');
+
+      // Kütük hareketleri (temsili)
+      const moves = [
+        { id:`${rec.cast}_1`, ton: (rec.tonaj/rec.adet).toFixed(2), in:'08:10', out:'08:30', dur:'20 dk', speed:'—', fault:'—' },
+        { id:`${rec.cast}_2`, ton: (rec.tonaj/rec.adet).toFixed(2), in:'08:31', out:'08:51', dur:'20 dk', speed:'—', fault:'—' }
+      ];
+      document.getElementById('movesBody').innerHTML = moves.map(m => `
+        <tr><td>${m.id}</td><td>${m.ton}</td><td>${m.in}</td><td>${m.out}</td><td>${m.dur}</td><td>${m.speed}</td><td>${m.fault}</td></tr>
+      `).join('');
+
+      document.getElementById('mainTable').style.display = 'none';
+      document.getElementById('detailView').style.display = 'block';
+    }
+    function backToMain(){
+      document.getElementById('detailView').style.display = 'none';
+      document.getElementById('mainTable').style.display = 'block';
+    }
+
+    // İlk çizim
+    renderMain(rows);
+  </script>
+</body>
+</html>

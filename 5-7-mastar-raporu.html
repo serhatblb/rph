@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mastar Yönetim Sistemi</title>
+  <link href="style.css" rel="stylesheet" />
+  <style>
+    body {font-family:'Segoe UI',sans-serif;background:linear-gradient(135deg,#1f2d6d,#06012d);min-height:100vh;padding:20px;}
+    .container {max-width:1400px;margin:auto;background:white;border-radius:15px;box-shadow:0 20px 40px rgba(0,0,0,0.1);overflow:hidden;}
+    .header {background:linear-gradient(135deg,#2c3e50,#3498db);color:white;padding:25px;text-align:center;}
+    .header h1{margin:0;font-size:2em;}
+    .content {padding:30px;}
+    .section {margin-bottom:40px;background:#f8f9fa;border-radius:10px;padding:25px;border-left:5px solid #3498db; }
+    .section h2 {color:#2c3e50;margin-bottom:20px;}
+    .vardiya-container{display:flex;gap:15px;margin-top:10px;}
+    .vardiya-option{padding:12px 20px;border:2px solid #ccc;border-radius:8px;cursor:pointer;}
+    .vardiya-option.selected{background:#3498db;color:white;border-color:#2980b9;}
+    table {width:100%;border-collapse:collapse;margin-top:15px;background:white;box-shadow:0 5px 15px rgba(0,0,0,0.1);}
+    th,td {border:1px solid #ddd;padding:8px;text-align:center;}
+    th {background:#34495e;color:white;}
+    input[type="text"]{padding:6px;width:95%;border:1px solid #ccc;border-radius:4px;}
+    .btn {padding:10px 20px;border:none;border-radius:8px;font-weight:bold;cursor:pointer;margin:5px;}
+    .btn-primary{background:#3498db;color:white;}
+    .btn-success{background:#27ae60;color:white;}
+    .btn-warning{background:#f39c12;color:white;}
+    .btn-info{background:#17a2b8;color:white;}
+    .btn:hover{opacity:0.9;}
+    .alert{padding:10px;border-radius:6px;margin-top:15px;display:none;}
+    .success{background:#d4edda;color:#155724;}
+    .error{background:#f8d7da;color:#721c24;}
+    .mastar-img {width:60px;height:40px;background:#ecf0f1;border:1px solid #bdc3c7;border-radius:4px;display:flex;align-items:center;justify-content:center;margin:auto;margin-bottom:5px;color:#7f8c8d;font-size:12px;}
+  </style>
+</head>
+<body>
+    <!-- Sidebar -->
+  <aside id="sidebar">
+    <div id="sidebar-container" class="sidebar-container"></div>
+    <script>
+      fetch("sidebar.html")
+        .then((res) => res.text())
+        .then((data) => (document.getElementById("sidebar-container").innerHTML = data));
+    </script>
+  </aside>
+<div class="container" style="margin-left: 230px;">
+  <div class="header">
+    <h1 style="color: white;">🔧RAY MASTARLARI ARA KONTROL DOĞRULAMA</h1>
+  </div>
+
+  <div class="content">
+    <!-- Vardiya Seçimi -->
+    <div class="section">
+      <h2>Vardiya Seçimi</h2>
+      <div class="vardiya-container">
+        <div class="vardiya-option" onclick="selectVardiya(this,'08:00-16:00')">Vardiya 1 (08:00-16:00)</div>
+        <div class="vardiya-option" onclick="selectVardiya(this,'16:00-00:00')">Vardiya 2 (16:00-00:00)</div>
+        <div class="vardiya-option" onclick="selectVardiya(this,'00:00-08:00')">Vardiya 3 (00:00-08:00)</div>
+      </div>
+      <input type="hidden" id="selectedVardiya">
+    </div>
+
+    <!-- Envanter -->
+    <div class="section">
+      <h2>Envanter Girişi</h2>
+      <table id="envanterTable">
+        <thead>
+        <tr>
+          <th>Envanter No</th>
+          <th>Mastar</th>
+          <th>Pozisyon</th>
+          <th>Durum</th>
+          <th>Aksiyon</th>
+        </tr>
+        </thead>
+        <tbody id="envanterTableBody"></tbody>
+      </table>
+      <button class="btn btn-success" onclick="kaydet()">💾 Kaydet</button>
+    </div>
+
+    <!-- Raporlama -->
+    <div class="section">
+      <h2>Raporlama</h2>
+      <label>Başlangıç Tarihi: <input type="date" id="startDate"></label>
+      <label>Bitiş Tarihi: <input type="date" id="endDate"></label><br><br>
+      <button class="btn btn-warning" onclick="raporAl()">📋 Excele Aktar</button>
+      <button class="btn btn-info" onclick="emailGonder()">📧 Email Gönder</button>
+    </div>
+
+    <!-- Uyarılar -->
+    <div class="alert success" id="successAlert"></div>
+    <div class="alert error" id="errorAlert"></div>
+  </div>
+</div>
+
+<script>
+  const mastarlar = [
+    {name:'B1 OLUKLU RAY YÜKSEKLİK MASTARI'},
+    {name:'B3 OLUKLU RAY OLUK GENİŞLİĞİ MASTARI'},
+    {name:'B4 OLUKLU RAY OLUK DERİNLİĞİ MASTARI'},
+    {name:'B5 OLUKLU KAFANIN ÜST KENARI İLE ÇALIŞMA YÜZEYİ ARASINDAKİ YÜKSEKLİK FARKI MASTARI\n'},
+    {name:'B6 OLUKLU RAY MANTAR GENİŞLİĞİ MASTARI'},
+    {name:'B7 OLUKLU RAY OLUK KAFA GENİŞLİĞİ MASTARI'},
+    {name:'B8 OLUKLU RAY AYAK GENİŞLİĞİ MASTARI'},
+    {name:'B9 OLUKLU RAY WEB KALINLIĞI MASTARI'},
+    {name:'B10 OLUKLU RAY WEBE GÖRE ASİMETRİ MASTARI'},
+    {name:'B11 OLUKLU RAY AYAĞA GÖRE ASİMETRİ MASTARI'},
+    {name:'B13 OLUKLU RAY MANTARIN ÇALIŞMA YÜZEYİNİN RADİUSU MASTARI'},
+    {name:'B14 OLUKLU RAY MANTARIN DIŞ RADİUSU MASTARI'},
+    {name:'B15 OLUKLU RAY OLUKLU KAFA RADİUS MASTARI'},
+    {name:'B16 OLUKLU RAY AYAK KENARI RADİUS MASTARI'},
+    {name:'B17 OLUKLU RAY CEBİRE YÜKSEKLİĞİ MASTARI'},
+    {name:'B18 OLUKLU RAY WEB-AYAK KARELİĞİ MASTARI'},
+    {name:'B19 RAY BAŞINDAN DELİĞE OLAN UZAKLIK VE ÇAP KONTROLÜ MASTARI'},
+    {name:'B20 OLUKLU RAY  DELİK ÇAP KONTROLÜ MASTARI'},
+    {name:'B21 OLUKLU RAY AYAK TABANINDAN DELİKLERE OLAN UZAKLIK MASTARI'},
+    {name:'B22 OLUKLU RAY DELİKLER ARASI KONTROL MASTARIOLUKLU RAY DELİKLER ARASI KONTROL MASTARI'}
+  ];
+
+  let selectedVardiya="";
+
+  document.addEventListener("DOMContentLoaded",()=>{
+    loadEnvanter();
+    setDefaultDates();
+  });
+
+  function selectVardiya(el,vardiya){
+    document.querySelectorAll(".vardiya-option").forEach(opt=>opt.classList.remove("selected"));
+    el.classList.add("selected");
+    selectedVardiya=vardiya;
+    document.getElementById("selectedVardiya").value=vardiya;
+    showSuccess("Vardiya seçildi: "+vardiya);
+  }
+
+  function loadEnvanter(){
+    const tbody=document.getElementById("envanterTableBody");
+    tbody.innerHTML="";
+    mastarlar.forEach(m=>{
+      const tr=document.createElement("tr");
+      tr.innerHTML=`
+      <td><input type="text" placeholder="No giriniz"></td>
+      <td><div class="mastar-img">Mastar</div><small>${m.name}</small></td>
+      <td>
+        <label><input type="checkbox" value="pozitif"> + Pozisyon</label>
+        <label><input type="checkbox" value="negatif"> - Pozisyon</label>
+      </td>
+      <td>
+        <label><input type="checkbox" value="uygun"> Uygun</label>
+        <label><input type="checkbox" value="uygun_degil"> Uygun Değil</label>
+      </td>
+      <td><input type="text" placeholder="Aksiyon notları..."></td>
+    `;
+      tbody.appendChild(tr);
+    });
+  }
+
+  function kaydet(){
+    if(!selectedVardiya){showError("Lütfen vardiya seçiniz!");return;}
+    const rows=document.querySelectorAll("#envanterTableBody tr");
+    const data={vardiya:selectedVardiya,tarih:new Date().toISOString().split('T')[0],mastarlar:[]};
+    rows.forEach(r=>{
+      const inputs=r.querySelectorAll("input[type='text']");
+      const checks=r.querySelectorAll("input[type='checkbox']");
+      data.mastarlar.push({
+        no:inputs[0].value,
+        name:r.querySelector("small").textContent,
+        pozisyon:[...checks].filter(c=>c.checked && (c.value==="pozitif"||c.value==="negatif")).map(c=>c.value),
+        uygun:[...checks].some(c=>c.value==="uygun" && c.checked),
+        uygunDegil:[...checks].some(c=>c.value==="uygun_degil" && c.checked),
+        aksiyon:inputs[1].value
+      });
+    });
+    localStorage.setItem("envanterData",JSON.stringify(data));
+    showSuccess("Veriler kaydedildi!");
+  }
+
+  function raporAl(){
+    const data=JSON.parse(localStorage.getItem("envanterData")||"{}");
+    if(!data.vardiya){showError("Kayıt bulunamadı!");return;}
+    const win=window.open("","_blank");
+    let html="<h2>Mastar Raporu</h2><table border='1' cellpadding='5'><tr><th>Tarih</th><th>Vardiya</th><th>No</th><th>Mastar</th><th>Pozisyon</th><th>Durum</th><th>Aksiyon</th></tr>";
+    data.mastarlar.forEach(m=>{
+      const durum = m.uygun ? "Uygun" : (m.uygunDegil ? "Uygun Değil" : "-");
+      html+=`<tr><td>${data.tarih}</td><td>${data.vardiya}</td><td>${m.no}</td><td>${m.name}</td><td>${m.pozisyon.join(",")}</td><td>${durum}</td><td>${m.aksiyon}</td></tr>`;
+    });
+    html+="</table>";
+    win.document.write(html);
+  }
+
+  function emailGonder(){
+    const data=JSON.parse(localStorage.getItem("envanterData")||"{}");
+    if(!data.vardiya){showError("Kayıt bulunamadı!");return;}
+    let body="Mastar Kontrol Raporu%0A";
+    body+="Tarih: "+data.tarih+" Vardiya: "+data.vardiya+"%0A%0A";
+    data.mastarlar.forEach(m=>{
+      const durum=m.uygun?"Uygun":(m.uygunDegil?"Uygun Değil":"-");
+      body+=`No: ${m.no} | Mastar: ${m.name} | Pozisyon: ${m.pozisyon.join(",")} | Durum: ${durum} | Aksiyon: ${m.aksiyon}%0A`;
+    });
+    window.open(`mailto:?subject=Mastar Raporu&body=${body}`);
+  }
+
+  function setDefaultDates(){
+    const today=new Date();
+    const start=new Date(today.getFullYear(),today.getMonth(),1);
+    document.getElementById("startDate").value=start.toISOString().split("T")[0];
+    document.getElementById("endDate").value=today.toISOString().split("T")[0];
+  }
+
+  function showSuccess(msg){const a=document.getElementById("successAlert");a.textContent=msg;a.style.display="block";setTimeout(()=>a.style.display="none",3000);}
+  function showError(msg){const a=document.getElementById("errorAlert");a.textContent=msg;a.style.display="block";setTimeout(()=>a.style.display="none",3000);}
+</script>
+</body>
+</html>

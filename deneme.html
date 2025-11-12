@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Parti Verilerini Görüntüle | Toplu Kullanım Kararı</title>
+
+  <!-- Tailwind & Icons -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"/>
+
+  <!-- Harici stil (varsa) -->
+  <link href="style.css" rel="stylesheet" />
+
+  <style>
+    /* ---------- Genel Değişkenler ---------- */
+    :root{
+      --sidebar-width: 250px; /* İster 220/200 yaparak daraltabilirsin */
+      --bg: #f6f7fb;
+      --card: #fff;
+      --text: #2c3e50;
+      --muted: #6b7a8c;
+      --border: #e6e9ef;
+      --primary: #1976d2;
+
+      /* Ekran özel (kullanım-kararı tema) */
+      --primary-blue: #1a56db;
+      --light-blue-bg: #eef2ff;
+      --text-color: #374151;
+      --border-color: #d1d5db;
+    }
+
+    /* ---------- Temel Gövde ---------- */
+    html,body{height:100%}
+    body{
+      margin:0;
+      background:var(--bg);
+      color:var(--text);
+      font-family:Inter, Arial, Helvetica, sans-serif;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+    }
+
+    /* ---------- Layout / Sidebar uyumu ---------- */
+    /* content-wrapper: sidebar ile birlikte kullanılacak ana içerik alanı */
+    .content-wrapper{
+      margin-left:var(--sidebar-width);
+      min-height:100vh;
+      padding:24px;
+      box-sizing:border-box;
+    }
+
+    /* Responsive: küçük ekranlarda sidebar'ı üste al (ve margin'i kaldır) */
+    @media (max-width: 900px){
+      .content-wrapper{ margin-left: 0; padding: 16px; }
+    }
+
+    /* ---------- Kart / Bölüm Stilleri ---------- */
+    .section-card{
+      background:var(--card);
+      border-radius:0.75rem;
+      box-shadow:0 4px 12px rgba(0,0,0,0.05);
+      border:1px solid #e8eaef;
+      padding:1.5rem;
+      margin-bottom:1.5rem;
+    }
+    .header-bar{
+      background-color:var(--primary-blue);
+      color:#fff;
+      box-shadow:0 2px 4px rgba(0,0,0,0.08);
+    }
+
+    /* ---------- Filtre Grup Stilleri ---------- */
+    .filter-group{
+      display:flex;
+      align-items:center;
+      border:1px solid var(--border-color);
+      border-radius:0.5rem;
+      overflow:hidden;
+      background:#fff;
+      transition:border-color .18s, box-shadow .18s;
+    }
+    .filter-group:focus-within{
+      border-color:var(--primary-blue);
+      box-shadow:0 0 0 4px rgba(26,86,219,0.08);
+    }
+    .filter-group input[type="text"],
+    .filter-group input[type="date"],
+    .filter-group textarea,
+    .filter-group select{
+      border:none;
+      padding:.55rem .75rem;
+      outline:none;
+      background:transparent;
+      flex:1 1 auto;
+      min-width:0; /* flex içindeyken overflow kontrolü için */
+    }
+    .filter-group span.separator{ padding:0 .5rem; color:#6b7280; }
+
+    /* Tarih ikonunun input ile çakışmaması için wrapper */
+    .date-input-wrapper{ position:relative; display:flex; align-items:center; }
+    .date-input-wrapper .fa-calendar-days{
+      position:absolute; right:.75rem; color:#9ca3af; pointer-events:none; z-index:5;
+    }
+    .date-input-wrapper input[type="date"]{ padding-right:2.25rem !important; }
+
+    /* ---------- Tablo Stilleri ---------- */
+    .table-wrapper{
+      overflow:auto;
+      max-height:72vh;
+      border-radius:0.75rem;
+      border:1px solid #e5e7eb;
+      background:#fff;
+    }
+    .data-table{
+      width:max-content;
+      min-width:100%;
+      border-collapse:collapse;
+      font-size:.8125rem;
+    }
+    .data-table th, .data-table td{
+      padding:.75rem 1rem;
+      border-right:1px solid #f3f4f6;
+      border-bottom:1px solid #f3f4f6;
+      text-align:left;
+      white-space:nowrap;
+      vertical-align:middle;
+    }
+    .data-table thead th{
+      background:var(--light-blue-bg);
+      color:var(--primary-blue);
+      font-weight:600;
+      text-transform:uppercase;
+      position:sticky;
+      top:0;
+      z-index:10;
+    }
+    /* satır hover ile okunabilirlik artışı */
+    .data-table tbody tr:hover{ background:#fbfdff; }
+
+    /* Durum ikonları */
+    .icon-status{ width:.625rem; height:.625rem; border-radius:50%; display:inline-block; box-shadow:0 0 3px rgba(0,0,0,0.12); }
+    .icon-status.red{ background:#ef4444; }
+    .icon-status.yellow{
+      /* üçgen benzeri görünüm için CSS transform yerine basit arka plan bırakıldı */
+      width:.625rem; height:.625rem; background:#f59e0b; border-radius:3px;
+      transform: rotate(45deg);
+    }
+    .icon-status.green{ background:#22c55e; }
+
+    /* yorum / açıklama ikonları */
+    .comment-icon{ cursor:pointer; color:#6b7280; transition:color .12s; }
+    .comment-icon:hover{ color:var(--primary-blue); }
+
+    /* ---------- Popup (detay) ---------- */
+    .popup{
+      display:none;
+      position:fixed;
+      z-index:60;
+      left:50%; top:50%;
+      transform:translate(-50%,-50%);
+      background:#fff;
+      padding:1.25rem;
+      border-radius:0.75rem;
+      box-shadow:0 10px 30px rgba(2,6,23,0.2);
+      width:320px;
+      max-width:92vw;
+    }
+    .popup h3{ margin:0 0 .5rem; font-size:1rem; color:var(--text); }
+    .popup .popup-close{ margin-top:.75rem; display:block; text-align:right; }
+
+    /* ---------- Alt işlem butonlarının görünürlüğü (sticky) ---------- */
+    .action-row{
+      position:sticky;
+      bottom:0;
+      background:linear-gradient(180deg, rgba(255,255,255,0), #fff 30%);
+      padding-top:.75rem;
+      margin-top:.75rem;
+      z-index:20;
+    }
+    .action-row .btn{
+      padding:.6rem .9rem;
+      border-radius:.5rem;
+    }
+
+    /* küçük ekranlarda tablo satırları saracak şekilde daha okuyan hale getir */
+    @media (max-width: 640px){
+      .data-table th, .data-table td{ padding:.5rem .6rem; font-size:.72rem; }
+    }
+  </style>
+</head>
+
+<body class="p-0">
+    <!-- Sidebar -->
+  <aside id="sidebar">
+    <div id="sidebar-container"></div>
+    <script>
+      fetch("sidebar.html")
+        .then(r=>r.text())
+        .then(html=>{document.getElementById("sidebar-container").innerHTML=html});
+    </script>
+  </aside>
+
+<div class="header-bar sticky top-0 z-20 px-6 py-4 flex justify-between items-center">
+    <h1 class="text-xl font-semibold">Toplu Kullanım Kararı</h1>
+</div>
+
+<div class="p-6">
+
+    <div class="section-card">
+        <h2 class="text-xl font-bold text-gray-800 mb-5 border-b border-gray-200 pb-3 flex items-center">
+            <i class="fa-solid fa-filter text-blue-600 mr-3"></i> Filtreleme Seçenekleri
+        </h2>
+
+        <form>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-6">
+
+                <div>
+                    <label class="block text-gray-700 font-medium mb-1" for="tarih-aralik">Parti Yaratma Tarihi:</label>
+                    <div class="filter-group">
+                        <div class="date-input-wrapper">
+                            <input type="date" id="tarih-baslangic" value="2020-09-14" />
+                            <i class="fa-solid fa-calendar-days"></i>
+                        </div>
+                        <span class="separator">—</span>
+                        <div class="date-input-wrapper">
+                            <input type="date" id="tarih-bitis" value="2020-09-15" />
+                            <i class="fa-solid fa-calendar-days"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-gray-700 font-medium mb-1" for="parti-aralik">Parti:</label>
+                    <div class="filter-group">
+                        <input type="text" id="parti-baslangic" placeholder="Başlangıç" />
+                        <span class="separator">—</span>
+                        <input type="text" id="parti-bitis" placeholder="Bitiş" />
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-gray-700 font-medium mb-1" for="malzeme-aralik">Malzeme:</label>
+                    <div class="filter-group">
+                        <input type="text" id="malzeme-baslangic" placeholder="Başlangıç" />
+                        <span class="separator">—</span>
+                        <input type="text" id="malzeme-bitis" placeholder="Bitiş" />
+                    </div>
+                </div>
+
+
+                <div class="col-span-1 md:col-span-2 lg:col-span-1">
+                    <label class="block text-gray-700 font-medium mb-1 flex items-center" for="profil-id">
+                        <i class="fa-solid fa-id-card-clip text-blue-500 mr-2"></i> Profil ID:
+                    </label>
+                    <textarea id="profil-id" rows="1" class="border border-gray-300 rounded-lg px-3 py-2 w-full resize-y focus:ring-blue-500 focus:border-blue-500" placeholder="Birden fazla Profil ID girebilirsiniz."></textarea>
+                </div>
+
+                <div class="col-span-1 md:col-span-2 lg:col-span-1">
+                    <label class="block text-gray-700 font-medium mb-1 flex items-center" for="dokum-no">
+                        <i class="fa-solid fa-file-lines text-blue-500 mr-2"></i> Döküm No:
+                    </label>
+                    <textarea id="dokum-no" rows="1" class="border border-gray-300 rounded-lg px-3 py-2 w-full resize-y focus:ring-blue-500 focus:border-blue-500" placeholder="Birden fazla döküm numarası girilebilir."></textarea>
+                </div>
+
+                <div>
+                    <label class="block text-gray-700 font-medium mb-1 flex items-center" for="sartname">
+                        <i class="fa-solid fa-file-contract text-blue-500 mr-2"></i> Şartname:
+                    </label>
+                    <input type="text" id="sartname" class="border border-gray-300 rounded-lg px-3 py-2 w-full focus:ring-blue-500 focus:border-blue-500" />
+                </div>
+                <div>
+                    <label class="block text-gray-700 font-medium mb-1 flex items-center" for="urun-tipi">
+                        <i class="fa-solid fa-cubes text-blue-500 mr-2"></i> Ürün Tipi:
+                    </label>
+                    <select id="urun-tipi" class="border border-gray-300 rounded-lg px-3 py-2 w-full bg-white focus:ring-blue-500 focus:border-blue-500">
+                        <option value="">Seçiniz</option>
+                        <option>AKS</option>
+                        <option>PROFIL</option>
+                        <option>RAY</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="flex justify-end space-x-3 pt-4 border-t border-gray-100">
+                <button type="reset" class="bg-white hover:bg-gray-50 text-gray-700 px-4 py-2 rounded-lg font-medium border border-gray-300 transition-colors flex items-center gap-2">
+                    <i class="fa-solid fa-eraser"></i>
+                    <span>Filtreleri Temizle</span>
+                </button>
+                <button type="button" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-semibold shadow transition-colors flex items-center gap-2" onclick="document.getElementById('filtrele-btn').click()">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <span>Filtrele</span>
+                </button>
+                <button type="button" id="filtrele-btn" class="hidden"></button>
+            </div>
+        </form>
+    </div>
+
+    <div class="section-card">
+        <h3 class="text-xl font-bold text-gray-800 mb-5 border-b border-gray-200 pb-3 flex items-center">
+            <i class="fa-solid fa-list-check text-blue-600 mr-3"></i> Liste Görünüm Seçenekleri
+        </h3>
+        <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 space-y-3 max-w-lg">
+            <label class="inline-flex items-center gap-3 cursor-pointer">
+                <input type="radio" name="kpsec" class="form-radio h-4 w-4 text-blue-600 border-gray-300" />
+                <i class="fa-solid fa-list-check text-blue-600"></i>
+                <span class="text-gray-800">Tüm partileri göster</span>
+            </label>
+            <label class="inline-flex items-center gap-3 cursor-pointer">
+                <input type="radio" name="kpsec" class="form-radio h-4 w-4 text-blue-600 border-gray-300" checked />
+                <i class="fa-regular fa-circle-xmark text-yellow-600"></i>
+                <span class="text-gray-800 font-medium">Kullanım Kararı Olmayan Partileri Göster</span>
+            </label>
+            <label class="inline-flex items-center gap-3 cursor-pointer">
+                <input type="radio" name="kpsec" class="form-radio h-4 w-4 text-blue-600 border-gray-300" />
+                <i class="fa-regular fa-circle-check text-green-600"></i>
+                <span class="text-gray-800">Kullanım Kararı Olan Partileri Göster</span>
+            </label>
+        </div>
+    </div>
+
+    <div class="section-card p-0">
+        <div class="p-6 border-b border-gray-200">
+            <h3 class="text-xl font-bold text-gray-800 flex items-center">
+                <i class="fa-solid fa-table text-blue-600 mr-3"></i> Kullanım Kararı Tablosu
+            </h3>
+        </div>
+        <div class="table-wrapper">
+            <table class="data-table">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Seç</th>
+                    <th>K.K. Durum</th>
+                    <th>Test Sonucu</th>
+                    <th>Üretim Sipariş No</th>
+                    <th>Kontrol Türü</th>
+                    <th>Malzeme No</th>
+                    <th>Malzeme Kısa Metni</th>
+                    <th>Parti No</th>
+                    <th>Parti Yaratma Tarihi</th>
+                    <th>Profil ID</th>
+                    <th>Kütük ID</th>
+                    <th>Adet</th>
+                    <th>KRD No</th>
+                    <th>Döküm No</th>
+                    <th>SDM No</th>
+                    <th>Tandiş No</th>
+                    <th>Sınıf</th>
+                    <th>Kalite</th>
+                    <th>Şartname No</th>
+                    <th>Ürün Tipi</th>
+                    <th>Şartname Kısa Metni</th>
+                    <th>Açıklama</th>
+                    <th>1 Adetin T</th>
+                    <th>Toplam Kütle</th>
+                    <th>Boy</th>
+                    <th>Toplam Ton</th>
+                    <th>Birim Ağırlık</th>
+                    <th>Muhtelif B</th>
+                    <th>Tahditsiz</th>
+                    <th>Kalite Stok</th>
+                    <th>Bloke Stok</th>
+                    <th>K.K. Grubu</th>
+                    <th>K.K. Kod</th>
+                    <th>K.K. Seçim Kümesi</th>
+                    <th>K.K. Kısa Metni</th>
+                    <th>K.K. Veren</th>
+                </tr>
+                </thead>
+                <tbody id="kontrol-table-body">
+                </tbody>
+            </table>
+        </div>
+        <div class="flex justify-end space-x-3 pt-6 pb-4 pr-6 border-t border-gray-200">
+            <button id="nextButton" class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg font-semibold transition-colors flex items-center gap-2">
+                <i class="fa-solid fa-arrow-right"></i> İleri
+            </button>
+            <button id="undoButton" class="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg font-semibold transition-colors flex items-center gap-2" disabled="true">
+                <i class="fa-solid fa-rotate-left"></i> Kullanım Kararını Geri Al
+            </button>
+        </div>
+    </div>
+</div>
+
+<div id="popup" class="popup">
+    <h3>Sipariş Detayı</h3>
+    <div id="popupContent" class="text-sm space-y-2 text-gray-700"></div>
+    <button onclick="closePopup()" class="mt-5 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors">Kapat</button>
+</div>
+
+<script>
+    // Örnek Kontrol Verileri (Verdiğiniz önceki koddan alınmıştır)
+    const kontrolVerileri = [
+        { durum: "kirmizi", testSonucu: "ok", siparisNo: "000000003661", siparisTonaj: "1000 ton", musteri: "ABC Demir", tamamlananTonaj: "600 ton", kalanTonaj: "400 ton", kontrolTuru: "8904-04", malzemeNo: "80000621", malzemeMetni: "60E1 R260_02 36000 RAY", partiNo: "00000000088", partiYaratmaTarihi: "25.01.2024", ürünId: "PROFILID", kütükNo: "25123321301", adet: "6", krdNo: "KRD100642616", dokumNo: "TESTDOKUM1", SdmNo: "2", TandisNo: "5", sinif: "1", kalite: "R260_02", sartnameNo: "0000000012", urunTipi: "RAY", sartnameMetni: "Şartname 80000621", aciklama: "Bu bir örnek açıklamadır.", ek: { adetT: "0,000", toplamKütle: "0", boy: "0,000", toplamTon: "6,000", birimAgirlik: "0,000000000", muhtelifB: "1", tahditsiz: "0,000", kaliteEk: "0,000", stoBloke: "0,000", stokKullanim: "Z08", k1: "Z01", k2: "Z08", k3: "", k4: "KULLANICI_1" } },
+        { durum: "sari", testSonucu: "fail", siparisNo: "000000003662", siparisTonaj: "800 ton", musteri: "XYZ Profil", tamamlananTonaj: "200 ton", kalanTonaj: "600 ton", kontrolTuru: "8904-04", malzemeNo: "80000867", malzemeMetni: "60E1 R260_02 36000 RAY", partiNo: "00000000081", partiYaratmaTarihi: "25.01.2024", ürünId: "PROFILID", kütükNo: "25123321301", adet: "6", krdNo: "KRD100642616", dokumNo: "TESTDOKUM2", SdmNo: "2", TandisNo: "5", sinif: "1", kalite: "R260_02", sartnameNo: "0000000011", urunTipi: "RAY", sartnameMetni: "Şartname 80000867", aciklama: "Açıklama 2", ek: { adetT: "5,000", toplamKütle: "100", boy: "12,000", toplamTon: "2,168", birimAgirlik: "15,000", muhtelifB: "0", tahditsiz: "5,000", kaliteEk: "2,000", stoBloke: "1,000", stokKullanim: "Z01", k1: "Z05", k2: "Z09", k3: "SET1", k4: "KULLANICI_2" } },
+        { durum: "yesil", testSonucu: "ok", siparisNo: "000000003663", siparisTonaj: "1200 ton", musteri: "LMN Çelik", tamamlananTonaj: "1200 ton", kalanTonaj: "0 ton", kontrolTuru: "8904-04", malzemeNo: "80000621", malzemeMetni: "HEB 260 S275JR_00 12000 PROFIL", partiNo: "00000000082", partiYaratmaTarihi: "25.01.2024", ürünId: "PROFILID", kütükNo: "25123321301", adet: "6", krdNo: "KRD100642616", dokumNo: "TESTDOKUM3", SdmNo: "2", TandisNo: "5", sinif: "1", kalite: "S275JR_00", sartnameNo: "0000000012", urunTipi: "PROFIL", sartnameMetni: "Şartname 80000867", aciklama: "Açıklama 3", ek: { adetT: "10,000", toplamKütle: "200", boy: "6,000", toplamTon: "6,000", birimAgirlik: "25,000", muhtelifB: "1", tahditsiz: "10,000", kaliteEk: "0,000", stoBloke: "0,000", stokKullanim: "Z08", k1: "Z01", k2: "Z08", k3: "", k4: "KULLANICI_3" } }
+    ];
+
+    function getDurumIcon(durum) {
+        if (durum === "kirmizi") return `<span class="icon-status red" title="Kullanım Kararı Olmayan"></span>`;
+        if (durum === "sari") return `<span class="icon-status yellow" title="Belirsiz/Beklemede"></span>`;
+        if (durum === "yesil") return `<span class="icon-status green" title="Kullanım Kararı Verilmiş"></span>`;
+        return "";
+    }
+
+    function getTestSonucuIcon(sonuc) {
+        if (sonuc === "ok") return '<i class="fa-solid fa-circle-check text-green-600" title="Test Başarılı"></i>';
+        if (sonuc === "fail") return '<i class="fa-solid fa-circle-xmark text-red-600" title="Test Başarısız"></i>';
+        return "";
+    }
+
+    function showPopup(content) {
+        document.getElementById("popupContent").innerHTML = content;
+        document.getElementById("popup").style.display = "block";
+    }
+
+    function closePopup() {
+        document.getElementById("popup").style.display = "none";
+    }
+
+    function populateKontrolTablosu(veriler) {
+        const tbody = document.getElementById('kontrol-table-body');
+        tbody.innerHTML = '';
+        veriler.forEach((veri, index) => {
+            const row = tbody.insertRow();
+
+            row.insertCell().textContent = index + 1;
+            row.insertCell().innerHTML = `<input type="checkbox" class="form-checkbox text-blue-600 h-4 w-4 rounded">`;
+            row.insertCell().innerHTML = getDurumIcon(veri.durum);
+            row.insertCell().innerHTML = getTestSonucuIcon(veri.testSonucu);
+            const detailContent = `
+                <p><strong>Müşteri:</strong> ${veri.musteri}</p>
+                <p><strong>Sipariş Tonajı:</strong> ${veri.siparisTonaj}</p>
+                <p><strong>Tamamlanan Tonaj:</strong> ${veri.tamamlananTonaj}</p>
+                <p><strong>Kalan Tonaj:</strong> ${veri.kalanTonaj}</p>
+            `;
+            row.insertCell().innerHTML = `<a href="javascript:void(0)" onclick="showPopup('${detailContent.replace(/'/g, "\\'")}')">${veri.siparisNo}</a>`;
+
+            row.insertCell().textContent = veri.kontrolTuru;
+            row.insertCell().textContent = veri.malzemeNo;
+            row.insertCell().textContent = veri.malzemeMetni;
+            row.insertCell().textContent = veri.partiNo;
+            row.insertCell().textContent = veri.partiYaratmaTarihi;
+            row.insertCell().textContent = veri.ürünId;
+            row.insertCell().textContent = veri.kütükNo;
+            row.insertCell().textContent = veri.adet;
+            row.insertCell().textContent = veri.krdNo;
+            row.insertCell().textContent = veri.dokumNo;
+            row.insertCell().textContent = veri.SdmNo;
+            row.insertCell().textContent = veri.TandisNo;
+            row.insertCell().textContent = veri.sinif;
+            row.insertCell().textContent = veri.kalite;
+            row.insertCell().textContent = veri.sartnameNo;
+            row.insertCell().textContent = veri.urunTipi;
+            row.insertCell().textContent = veri.sartnameMetni;
+            row.insertCell().innerHTML = `<i class="fa-solid fa-comment-dots text-gray-500 hover:text-blue-600 cursor-pointer" title="${veri.aciklama}" onclick="alert('Açıklama: ${veri.aciklama}')"></i>`;
+            row.insertCell().textContent = veri.ek.adetT;
+            row.insertCell().textContent = veri.ek.toplamKütle;
+            row.insertCell().textContent = veri.ek.boy;
+            row.insertCell().textContent = veri.ek.toplamTon;
+            row.insertCell().textContent = veri.ek.birimAgirlik;
+            row.insertCell().textContent = veri.ek.muhtelifB;
+            row.insertCell().textContent = veri.ek.tahditsiz;
+            row.insertCell().textContent = veri.ek.kaliteEk;
+            row.insertCell().textContent = veri.ek.stoBloke;
+            row.insertCell().textContent = veri.ek.stokKullanim;
+            row.insertCell().textContent = veri.ek.k1;
+            row.insertCell().textContent = veri.ek.k2;
+            row.insertCell().textContent = veri.ek.k3;
+            row.insertCell().textContent = veri.ek.k4;
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        populateKontrolTablosu(kontrolVerileri);
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Ray - Günlük Duruş ve Tonaj Raporu</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+    <div id="sidebar-placeholder"></div>
+    <div class="content-wrapper">
+        <div class="report-container">
+            <h2 style="color: red;">  Yalın Dönüşüm Koordinatörlüğü Tarafından Revize Edilecektir.</h2>
+            <div class="report-title">RAY - PROFİL HADDEHANESİ GÜNLÜK DURUŞ VE TONAJ RAPORU</div>
+
+            <div class="filter-section">
+                <div>
+                    <label for="startDate">Başlangıç Tarihi:</label>
+                    <input type="date" id="startDate" />
+                </div>
+                <div>
+                    <label for="endDate">Bitiş Tarihi:</label>
+                    <input type="date" id="endDate" />
+                </div>
+                <div class="filter-section">
+                    <label><input type="checkbox" class="vardiya-checkbox" value="1"> Vardiya 1</label>
+                    <label><input type="checkbox" class="vardiya-checkbox" value="2"> Vardiya 2</label>
+                    <label><input type="checkbox" class="vardiya-checkbox" value="3"> Vardiya 3</label>
+                    <button onclick="filtrele()">Rapor Getir</button>
+                </div>
+
+                <div class="vardiya-container">
+
+                    <!-- Vardiya 1 -->
+                    <div id="vardiya-1" class="vardiya-box">
+                        <h3>Vardiya 1 Bilgisi</h3>
+                        <table class="report-table">
+                            <thead>
+                                <tr>
+                                    <TH>TARİH</TH>
+                                    <th>SAATİ</th>
+                                    <th>SÜRE</th>
+                                    <th>Kategori</th>
+                                    <th>Alt Kategori</th>
+                                    <th>ÜNİTE</th>
+                                    <th>Ana Ekipman</th>
+                                    <th>Alt Ekipman</th>
+                                    <th>AÇIKLAMA</th>
+                                    <th>KISIM KODU</th>
+                                    <th>ARIZA KODU</th>
+                                    <th>ARIZA</th>
+                                    <th>KOD AÇIKLAMA</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>19.06.2025</td>
+                                    <td>01:15</td>
+                                    <td>6</td>
+                                    <td>Plansız Duruşlar</td>
+                                    <td>Hidrolik Arıza</td>
+                                    <td>Kesme</td>
+                                    <td>Makas</td>
+                                    <td>Pompa</td>
+                                    <td>Hidrolik pompa basınç kaybı nedeniyle duruş yapıldı.</td>
+                                    <td>MK</td>
+                                    <td>HDR</td>
+                                    <td>MK-HDR</td>
+                                    <td>Makas Hidrolik Problemi</td>
+                                </tr>
+                                <tr>
+                                    <td>19.06.2025</td>
+                                    <td>02:20</td>
+                                    <td>2</td>
+                                    <td>Planlı Duruşlar</td>
+                                    <td>Yağ Kontrol</td>
+                                    <td>Redüktör</td>
+                                    <td>Redüktör</td>
+                                    <td>Gözlem</td>
+                                    <td>Dönüş redüktöründe yağ sızıntısı kontrol edildi.</td>
+                                    <td>RED</td>
+                                    <td>YK</td>
+                                    <td>RED-YK</td>
+                                    <td>Yağ Seviye Kontrolü</td>
+                                </tr>
+                                <tr>
+                                    <td>19.06.2025</td>
+                                    <td>03:45</td>
+                                    <td>1</td>
+                                    <td>Plansız Duruşlar</td>
+                                    <td>Güvenlik</td>
+                                    <td>Soğutma</td>
+                                    <td>Fan</td>
+                                    <td>Koruma</td>
+                                    <td>Emniyet sensörü devreye girdi, üretim geçici olarak durduruldu.</td>
+                                    <td>FAN</td>
+                                    <td>EMN</td>
+                                    <td>FAN-EMN</td>
+                                    <td>Emniyet Sensör Aktivasyonu</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="summary-section">
+                            <table class="summary-table">
+                                <thead>
+                                    <tr>
+                                        <th rowspan="2">Hadde Bozuğu</th>
+                                        <th colspan="2">İsim Soyisim: FERDİ</th>
+                                        <th colspan="2">ÜRETİLEN EBAD</th>
+                                        <th rowspan="2">HADDE DURUŞU</th>
+                                        <th rowspan="2">Mamul Üretim (ton)</th>
+                                    </tr>
+                                    <tr>
+                                        <th>BD2</th>
+                                        <th>TM</th>
+                                        <th>IPE 300</th>
+                                        <th>IPE 240</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <th>BD1</th>
+                                        <td>1</td>
+                                        <td>2</td>
+                                        <td><span class="highlight-red">50</span></td>
+                                        <td><span class="highlight-red">30</span></td>
+                                        <td class="highlight-red">180</td>
+                                        <td class="highlight-red">280</td>
+                                    </tr>
+                                    <tr>
+                                        <th>İŞL. MALZ. ADEDİ</th>
+                                        <td colspan="2">Izgara: 20<br><strong class="highlight-red">TOPLAM: 100</strong>
+                                        </td>
+                                        <td colspan="2">Malz. işl. süresi: <strong>120</strong></td>
+                                        <td colspan="2"><em>Saniye/Adet: 6.0</em></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+
+                    <!-- Vardiya 2 -->
+                    <div id="vardiya-2" class="vardiya-box">
+                        <h3>Vardiya 2 Bilgisi</h3>
+                        <table class="report-table">
+                            <thead>
+                                <tr>
+                                    <th>TARİH</th>
+                                    <th>SAATİ</th>
+                                    <th>SÜRE</th>
+                                    <th>Kategori</th>
+                                    <th>Alt Kategori</th>
+                                    <th>ÜNİTE</th>
+                                    <th>Ana Ekipman</th>
+                                    <th>Alt Ekipman</th>
+                                    <th>AÇIKLAMA</th>
+                                    <th>KISIM KODU</th>
+                                    <th>ARIZA KODU</th>
+                                    <th>ARIZA</th>
+                                    <th>KOD AÇIKLAMA</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>10.06.2025</td>
+                                    <td>07:30</td>
+                                    <td>4</td>
+                                    <td>Plansız Duruşlar</td>
+                                    <td>Elektrik Arızası</td>
+                                    <td>Kumanda</td>
+                                    <td>Panel</td>
+                                    <td>Sigorta</td>
+                                    <td>Sigorta atması nedeniyle pano enerji veremedi.</td>
+                                    <td>KUM</td>
+                                    <td>SIG</td>
+                                    <td>KUM-SIG</td>
+                                    <td>Panel Sigorta Sorunu</td>
+                                </tr>
+                                <tr>
+                                    <td>10.06.2025</td>
+                                    <td>08:50</td>
+                                    <td>3</td>
+                                    <td>Plansız Duruşlar</td>
+                                    <td>Sensör Hatası</td>
+                                    <td>Hadde</td>
+                                    <td>Roll</td>
+                                    <td>Sayacı</td>
+                                    <td>Sayım sensörü hatalı okuma yaptı, sistem hata verdi.</td>
+                                    <td>HD</td>
+                                    <td>SEN</td>
+                                    <td>HD-SEN</td>
+                                    <td>Sensör Okuma Sorunu</td>
+                                </tr>
+                                <tr>
+                                    <td>10.06.2025</td>
+                                    <td>10:10</td>
+                                    <td>2</td>
+                                    <td>Planlı Duruşlar</td>
+                                    <td>Temizlik</td>
+                                    <td>Hadde</td>
+                                    <td>Stant</td>
+                                    <td>Rulman</td>
+                                    <td>Rulmanlar temizlendi ve gres yağlandı.</td>
+                                    <td>STD</td>
+                                    <td>TEM</td>
+                                    <td>STD-TEM</td>
+                                    <td>Bakım Temizliği</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="summary-section">
+                            <table class="summary-table">
+                                <thead>
+                                    <tr>
+                                        <th rowspan="2">Hadde Bozuğu</th>
+                                        <th colspan="2">İsim Soyisim: MEHMET YILMAZ</th>
+                                        <th colspan="2">ÜRETİLEN EBAD</th>
+                                        <th rowspan="2">HADDE DURUŞU</th>
+                                        <th rowspan="2">Mamul Üretim (ton)</th>
+                                    </tr>
+                                    <tr>
+                                        <th>BD2</th>
+                                        <th>TM</th>
+                                        <th>IPE 160</th>
+                                        <th>IPE 100</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <th>BD1</th>
+                                        <td>0</td>
+                                        <td>3</td>
+                                        <td><span class="highlight-red">60</span></td>
+                                        <td><span class="highlight-red">25</span></td>
+                                        <td class="highlight-red">220</td>
+                                        <td class="highlight-red">310</td>
+                                    </tr>
+                                    <tr>
+                                        <th>İŞL. MALZ. ADEDİ</th>
+                                        <td colspan="2">Izgara: 15<br><strong class="highlight-red">TOPLAM: 85</strong>
+                                        </td>
+                                        <td colspan="2">Malz. işl. süresi: <strong>105</strong></td>
+                                        <td colspan="2"><em>Saniye/Adet: 7.4</em></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+
+                    <!-- Vardiya 3 -->
+                    <div id="vardiya-3" class="vardiya-box">
+                        <h3>Vardiya 3 Bilgisi</h3>
+                        <table class="report-table">
+                            <thead>
+                                <tr>
+                                    <TH>TARİH</TH>
+                                    <th>SAATİ</th>
+                                    <th>SÜRE</th>
+                                    <th>Kategori</th>
+                                    <th>Alt Kategori</th>
+                                    <th>ÜNİTE</th>
+                                    <th>Ana Ekipman</th>
+                                    <th>Alt Ekipman</th>
+                                    <th>AÇIKLAMA</th>
+                                    <th>KISIM KODU</th>
+                                    <th>ARIZA KODU</th>
+                                    <th>ARIZA</th>
+                                    <th>KOD AÇIKLAMA</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>20.06.2025</td>
+                                    <td>00:10</td>
+                                    <td>7</td>
+                                    <td>Plansız Duruşlar</td>
+                                    <td>Yazılım Hatası</td>
+                                    <td>SCADA</td>
+                                    <td>HMI</td>
+                                    <td>Arayüz</td>
+                                    <td>HMI ekranı donduğu için operatör müdahalesi gerekli oldu.</td>
+                                    <td>SC</td>
+                                    <td>YAZ</td>
+                                    <td>SC-YAZ</td>
+                                    <td>HMI Donma Sorunu</td>
+                                </tr>
+                                <tr>
+                                    <td>20.06.2025</td>
+                                    <td>01:55</td>
+                                    <td>3</td>
+                                    <td>Plansız Duruşlar</td>
+                                    <td>Malzeme Gecikmesi</td>
+                                    <td>Besleme</td>
+                                    <td>Konveyör</td>
+                                    <td>Bant</td>
+                                    <td>Hammadde geç gelişi nedeniyle üretim aksadı.</td>
+                                    <td>BES</td>
+                                    <td>GEC</td>
+                                    <td>BES-GEC</td>
+                                    <td>Malzeme Gecikmesi</td>
+                                </tr>
+                                <tr>
+                                    <td>20.06.2025</td>
+                                    <td>03:30</td>
+                                    <td>1</td>
+                                    <td>Planlı Duruşlar</td>
+                                    <td>Vardiya Toplantısı</td>
+                                    <td>Ofis</td>
+                                    <td>Toplantı</td>
+                                    <td>Hazırlık</td>
+                                    <td>Gece vardiyası öncesi bilgilendirme toplantısı yapıldı.</td>
+                                    <td>OFS</td>
+                                    <td>TOP</td>
+                                    <td>OFS-TOP</td>
+                                    <td>Görüşme / Bilgilendirme</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="summary-section">
+                            <table class="summary-table">
+                                <thead>
+                                    <tr>
+                                        <th rowspan="2">Hadde Bozuğu</th>
+                                        <th colspan="2">İsim Soyisim: AHMET DEMİR</th>
+                                        <th colspan="2">ÜRETİLEN EBAD</th>
+                                        <th rowspan="2">HADDE DURUŞU</th>
+                                        <th rowspan="2">Mamul Üretim (ton)</th>
+                                    </tr>
+                                    <tr>
+                                        <th>BD2</th>
+                                        <th>TM</th>
+                                        <th>IPE 220</th>
+                                        <th>IPE 160</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <th>BD1</th>
+                                        <td>2</td>
+                                        <td>1</td>
+                                        <td><span class="highlight-red">70</span></td>
+                                        <td><span class="highlight-red">20</span></td>
+                                        <td class="highlight-red">195</td>
+                                        <td class="highlight-red">275</td>
+                                    </tr>
+                                    <tr>
+                                        <th>İŞL. MALZ. ADEDİ</th>
+                                        <td colspan="2">Izgara: 30<br><strong class="highlight-red">TOPLAM: 110</strong>
+                                        </td>
+                                        <td colspan="2">Malz. işl. süresi: <strong>140</strong></td>
+                                        <td colspan="2"><em>Saniye/Adet: 5.1</em></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+        <script>
+            function filtrele() {
+                const boxes = document.querySelectorAll('.vardiya-box');
+                boxes.forEach(box => box.style.display = 'none');
+
+                document.querySelectorAll('.vardiya-checkbox').forEach(cb => {
+                    if (cb.checked) {
+                        const box = document.getElementById(`vardiya-${cb.value}`);
+                        if (box) box.style.display = 'block';
+                    }
+                });
+            }
+
+
+            // Sayfa ilk yüklendiğinde Vardiya 1 açık kalsın
+            document.addEventListener('DOMContentLoaded', () => {
+                document.querySelector('#vardiya-1').style.display = 'block';
+                document.querySelector('.vardiya-checkbox[value="1"]').checked = true;
+            });
+
+            fetch('sidebar.html')
+                .then(res => res.text())
+                .then(html => document.getElementById('sidebar-placeholder').innerHTML = html);
+        </script>
+
+</body>
+
+</html>

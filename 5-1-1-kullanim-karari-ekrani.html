@@ -1,0 +1,3875 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Haddehane - Kullanım Kararı Verme</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"/>
+    <link href="style.css" rel="stylesheet" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #1565c0;
+            --primary-dark: #0a3d62;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+            background: linear-gradient(135deg, #fdfdfe 0%, #fdfcfe 100%);
+            min-height: 100vh;
+            padding: 30px;
+        }
+
+        .main-container {
+            max-width: 1600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+            animation: slideUp 0.5s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Header */
+        .page-header {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+            color: white;
+            padding: 36px 48px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 5px solid #1976d2;
+        }
+
+        .page-header h1 {
+            font-size: 32px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .header-icon {
+            background: rgba(255,255,255,0.2);
+            padding: 14px;
+            border-radius: 14px;
+            font-size: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .datetime-display {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 6px;
+        }
+
+        .datetime-display .date {
+            font-size: 16px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            opacity: 0.95;
+        }
+
+        .datetime-display .time {
+            font-size: 26px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            letter-spacing: 1px;
+        }
+
+        /* Content Section */
+        .content-section {
+            padding: 48px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .form-group.full-width {
+            grid-column: span 3;
+        }
+
+        .form-group.span-2 {
+            grid-column: span 2;
+        }
+
+        .form-label {
+            font-size: 12px;
+            font-weight: 700;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .form-label i {
+            color: var(--primary);
+            font-size: 13px;
+        }
+
+        .form-input {
+            padding: 18px 24px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 15px;
+            transition: all 0.3s;
+            background: #f8fafc;
+            font-weight: 500;
+            color: #1e293b;
+            min-height: 56px;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: white;
+            box-shadow: 0 0 0 4px rgba(21, 101, 192, 0.1);
+        }
+
+        .form-input:disabled {
+            background: #f1f5f9;
+            color: #64748b;
+            cursor: not-allowed;
+        }
+
+        /* Section Divider */
+        .section-divider {
+            margin: 48px 0;
+            border: none;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #e2e8f0, transparent);
+        }
+
+        .section-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 28px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 18px 24px;
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            border-radius: 12px;
+            border-left: 5px solid var(--primary);
+        }
+
+        .section-title i {
+            color: var(--primary);
+            font-size: 24px;
+        }
+
+        /* Functions Grid */
+        .functions-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .function-card {
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            border: 2px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 32px;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .function-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: var(--primary);
+            transform: scaleY(0);
+            transition: transform 0.3s;
+        }
+
+        .function-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 28px rgba(0,0,0,0.12);
+            border-color: var(--primary);
+        }
+
+        .function-card:hover::before {
+            transform: scaleY(1);
+        }
+
+        .function-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .function-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: #334155;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .function-title i {
+            color: var(--primary);
+            font-size: 20px;
+        }
+
+        .btn-change {
+            padding: 12px 26px;
+            background: linear-gradient(135deg, var(--primary) 0%, #1976d2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(21, 101, 192, 0.3);
+            white-space: nowrap;
+        }
+
+        .btn-change:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(21, 101, 192, 0.4);
+        }
+
+        .btn-change i {
+            font-size: 13px;
+        }
+
+        .function-input {
+            padding: 18px 24px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 15px;
+            transition: all 0.3s;
+            background: #f8fafc;
+            font-weight: 500;
+            color: #1e293b;
+            width: 100%;
+            min-height: 56px;
+        }
+
+        .function-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: white;
+            box-shadow: 0 0 0 4px rgba(21, 101, 192, 0.1);
+        }
+
+        /* KK Card */
+        .kk-card {
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            border: 2px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 32px;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .kk-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: var(--primary);
+            transform: scaleY(0);
+            transition: transform 0.3s;
+        }
+
+        .kk-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 28px rgba(0,0,0,0.12);
+            border-color: var(--primary);
+        }
+
+        .kk-card:hover::before {
+            transform: scaleY(1);
+        }
+
+        .kk-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .kk-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: #334155;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .kk-title i {
+            color: var(--primary);
+            font-size: 20px;
+        }
+
+        .btn-select {
+            padding: 12px 26px;
+            background: linear-gradient(135deg, var(--primary) 0%, #1976d2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(21, 101, 192, 0.3);
+        }
+
+        .btn-select:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(21, 101, 192, 0.4);
+        }
+
+        .selected-value {
+            padding: 18px 24px;
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            color: #1e293b;
+            text-align: center;
+            min-height: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .selected-value.empty {
+            color: #94a3b8;
+            font-style: italic;
+            font-weight: 500;
+        }
+
+        .selected-value:not(.empty) {
+            background: white;
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        /* Checkbox Section */
+        .checkbox-section {
+            background: linear-gradient(135deg, #dadff5 0%, #f7f8fb 100%);
+            border: 2px solid #f5f4f1;
+            border-radius: 16px;
+            padding: 28px 36px;
+            margin-bottom: 32px;
+        }
+
+        .checkbox-group {
+            display: flex;
+            gap: 48px;
+            justify-content: center;
+        }
+
+        .checkbox-option {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .checkbox-option:hover {
+            transform: scale(1.05);
+        }
+
+        .checkbox-option input[type="checkbox"] {
+            width: 22px;
+            height: 22px;
+            cursor: pointer;
+            accent-color: var(--primary);
+        }
+
+        .checkbox-option label {
+            font-size: 18px;
+            font-weight: 700;
+            color: #030a29;
+            cursor: pointer;
+            user-select: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Açıklama Section */
+        .explanation-section {
+            margin-top: 32px;
+        }
+
+        .explanation-label {
+            font-size: 13px;
+            font-weight: 700;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .explanation-label i {
+            color: var(--primary);
+            font-size: 16px;
+        }
+
+        .explanation-textarea {
+            width: 100%;
+            padding: 20px 24px;
+            border: 2px solid #e2e8f0;
+            border-radius: 14px;
+            font-size: 15px;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            resize: vertical;
+            min-height: 160px;
+            transition: all 0.3s;
+            background: #f8fafc;
+            line-height: 1.6;
+        }
+
+        .explanation-textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: white;
+            box-shadow: 0 0 0 4px rgba(21, 101, 192, 0.1);
+        }
+
+        /* Footer Actions */
+        .footer-actions {
+            padding: 36px 48px;
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            border-top: 3px solid #e2e8f0;
+            display: flex;
+            justify-content: flex-end;
+            gap: 16px;
+        }
+
+        .btn-action {
+            padding: 18px 52px;
+            border: none;
+            border-radius: 14px;
+            cursor: pointer;
+            font-size: 17px;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .btn-confirm {
+            background: linear-gradient(135deg, var(--success) 0%, #059669 100%);
+            color: white;
+            box-shadow: 0 6px 16px rgba(16, 185, 129, 0.35);
+        }
+
+        .btn-confirm:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 24px rgba(16, 185, 129, 0.45);
+        }
+
+        .btn-confirm i {
+            font-size: 18px;
+        }
+
+        /* Modal Overlay */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 999;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Modal Container */
+        .modal {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 25px 80px rgba(0,0,0,0.4);
+            width: 90%;
+            max-width: 900px;
+            max-height: 85vh;
+            overflow: hidden;
+            animation: modalSlideIn 0.4s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                transform: scale(0.9) translateY(-20px);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1) translateY(0);
+                opacity: 1;
+            }
+        }
+
+        /* Confirmation Modal - Küçük */
+        .modal.small-modal {
+            max-width: 450px;
+        }
+
+        /* Modal Header */
+        .modal-header {
+            background: linear-gradient(135deg, var(--primary) 0%, #1976d2 100%);
+            color: white;
+            padding: 24px 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 3px solid #0d47a1;
+        }
+
+        .modal-header h3 {
+            font-size: 18px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .modal-header i {
+            font-size: 20px;
+        }
+
+        .btn-close-modal {
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 5px;
+            transition: all 0.3s;
+            opacity: 0.8;
+        }
+
+        .btn-close-modal:hover {
+            opacity: 1;
+            transform: rotate(90deg);
+        }
+
+        /* Modal Body */
+        .modal-body {
+            padding: 32px;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        /* Confirmation Modal Content */
+        .confirmation-content {
+            text-align: center;
+        }
+
+        .confirmation-content p {
+            font-size: 15px;
+            color: #475569;
+            margin-bottom: 24px;
+            line-height: 1.6;
+        }
+
+        .radio-group {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .radio-option {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .radio-option:hover {
+            background: #f8fafc;
+            border-color: var(--primary);
+        }
+
+        .radio-option input[type="radio"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            accent-color: var(--primary);
+        }
+
+        .radio-option label {
+            font-size: 15px;
+            font-weight: 600;
+            color: #334155;
+            cursor: pointer;
+            flex: 1;
+        }
+
+        /* Sinif Tipi Dropdown */
+        .sinif-tipi-group {
+            margin-bottom: 24px;
+        }
+
+        .sinif-tipi-label {
+            font-size: 13px;
+            font-weight: 700;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .sinif-tipi-label i {
+            color: var(--primary);
+        }
+
+        .sinif-tipi-select {
+            width: 100%;
+            padding: 14px 18px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 500;
+            color: #1e293b;
+            background: #f8fafc;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .sinif-tipi-select:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: white;
+            box-shadow: 0 0 0 3px rgba(21, 101, 192, 0.1);
+        }
+
+        /* Hata Türleri Table */
+        .hata-table-wrapper {
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 16px;
+        }
+
+        .hata-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+
+        .hata-table thead {
+            background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+        }
+
+        .hata-table th {
+            padding: 12px 16px;
+            text-align: left;
+            font-size: 11px;
+            font-weight: 700;
+            color: #475569;
+            text-transform: uppercase;
+            border-bottom: 2px solid #cbd5e1;
+        }
+
+        .hata-table tbody tr {
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .hata-table td {
+            padding: 14px 16px;
+            font-size: 14px;
+            color: #334155;
+        }
+
+        .hata-table td input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: var(--primary);
+        }
+
+        .hata-table td input[type="text"],
+        .hata-table td input[type="number"] {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            font-size: 13px;
+        }
+
+        .hata-table .dots-cell {
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 20px;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .hata-table .code-cell {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .btn-add-row, .btn-delete-row-bottom {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.3s;
+            margin-bottom: 12px;
+        }
+
+        .btn-add-row {
+            background: linear-gradient(135deg, var(--primary) 0%, #1976d2 100%);
+            color: white;
+            box-shadow: 0 2px 8px rgba(21, 101, 192, 0.3);
+        }
+
+        .btn-add-row:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(21, 101, 192, 0.4);
+        }
+
+        .btn-delete-row-bottom {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+            box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
+        }
+
+        .btn-delete-row-bottom:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+        }
+
+        .btn-delete-icon {
+            color: var(--danger);
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            transition: all 0.3s;
+        }
+
+        .btn-delete-icon:hover {
+            transform: scale(1.2);
+        }
+
+        /* Catalog Table */
+        .catalog-table-wrapper {
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            overflow: hidden;
+            max-height: 450px;
+            overflow-y: auto;
+        }
+
+        .catalog-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .catalog-table tbody tr {
+            border-bottom: 1px solid #f1f5f9;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .catalog-table tbody tr:hover {
+            background: #f8fafc;
+        }
+
+        .catalog-table td {
+            padding: 16px;
+            font-size: 14px;
+            color: #334155;
+        }
+
+        .catalog-table .code-cell {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .btn-select-catalog {
+            padding: 8px 18px;
+            background: linear-gradient(135deg, var(--primary) 0%, #1976d2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.3s;
+            box-shadow: 0 2px 8px rgba(21, 101, 192, 0.3);
+        }
+
+        .btn-select-catalog:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(21, 101, 192, 0.4);
+        }
+
+        .expandable-row {
+            background: #f8fafc !important;
+        }
+
+        .sub-row {
+            background: white !important;
+        }
+
+        .sub-row td {
+            padding-left: 48px;
+        }
+
+        /* Modal Footer */
+        .modal-footer {
+            padding: 24px 32px;
+            background: #f8fafc;
+            border-top: 2px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .btn-modal {
+            padding: 12px 28px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-modal-back {
+            background: white;
+            color: #64748b;
+            border: 2px solid #cbd5e1;
+        }
+
+        .btn-modal-back:hover {
+            background: #f8fafc;
+            border-color: #94a3b8;
+        }
+
+        .btn-modal-next {
+            background: linear-gradient(135deg, var(--primary) 0%, #1976d2 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(21, 101, 192, 0.3);
+        }
+
+        .btn-modal-next:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(21, 101, 192, 0.4);
+        }
+
+        /* Success Modal */
+        .success-content {
+            text-align: center;
+            padding: 40px;
+        }
+
+        .success-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--success) 0%, #059669 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+            animation: successPop 0.5s ease;
+        }
+
+        @keyframes successPop {
+            0% { transform: scale(0); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .success-icon i {
+            color: white;
+            font-size: 40px;
+        }
+
+        .success-content h4 {
+            font-size: 22px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 12px;
+        }
+
+        .success-content p {
+            font-size: 15px;
+            color: #64748b;
+            line-height: 1.6;
+            margin-bottom: 8px;
+        }
+
+        .success-detail {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 14px;
+            color: #475569;
+            margin-top: 16px;
+        }
+
+        .success-detail i {
+            color: var(--success);
+        }
+
+        .btn-continue {
+            margin-top: 24px;
+            padding: 14px 36px;
+            background: linear-gradient(135deg, var(--primary) 0%, #1976d2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s;
+        }
+
+        .btn-continue:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(21, 101, 192, 0.4);
+        }
+
+        /* Hold Modal Styles */
+        .hold-section {
+            margin-bottom: 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            overflow: hidden;
+            background: white;
+        }
+
+        .hold-section-header {
+            padding: 16px 20px;
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s;
+            user-select: none;
+        }
+
+        .hold-section-header:hover {
+            background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+        }
+
+        .hold-section-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: #334155;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .hold-section-title i {
+            color: var(--primary);
+            font-size: 16px;
+        }
+
+        .hold-section-header i.fa-chevron-down,
+        .hold-section-header i.fa-chevron-up {
+            color: #64748b;
+            font-size: 14px;
+            transition: transform 0.3s;
+        }
+
+        .hold-section.expanded .hold-section-header i.fa-chevron-down {
+            transform: rotate(180deg);
+        }
+
+        .hold-section-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .hold-section.expanded .hold-section-content {
+            max-height: 800px;
+        }
+
+        .hold-options {
+            padding: 20px;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .hold-radio-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: white;
+        }
+
+        .hold-radio-option:hover {
+            border-color: var(--primary);
+            background: #f8fafc;
+        }
+
+        .hold-radio-option input[type="radio"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: var(--primary);
+        }
+
+        .hold-radio-option span {
+            font-size: 14px;
+            color: #334155;
+            font-weight: 500;
+        }
+
+        .hold-radio-option input[type="radio"]:checked ~ span {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        /* Kalite Dropdown Styles */
+        .kalite-dropdown {
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 12px;
+        }
+
+        .kalite-dropdown-header {
+            padding: 14px 18px;
+            background: #f8fafc;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            color: #334155;
+            transition: all 0.3s;
+        }
+
+        .kalite-dropdown-header:hover {
+            background: #f1f5f9;
+        }
+
+        .kalite-dropdown-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            background: white;
+        }
+
+        .kalite-dropdown.expanded .kalite-dropdown-content {
+            max-height: 200px;
+        }
+
+        .kalite-dropdown.expanded .kalite-dropdown-header i {
+            transform: rotate(180deg);
+        }
+
+        .kalite-option {
+            padding: 12px 18px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .kalite-option:last-child {
+            border-bottom: none;
+        }
+
+        .kalite-option:hover {
+            background: #f8fafc;
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .kalite-option.selected {
+            background: #eff6ff;
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        /* Kullanım Kararı List Styles */
+        .kullanim-karari-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .kullanim-karari-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 18px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: white;
+        }
+
+        .kullanim-karari-item:hover {
+            border-color: var(--primary);
+            background: #f8fafc;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(21, 101, 192, 0.15);
+        }
+
+        .kullanim-karari-item.highlighted {
+            border-color: #ef4444;
+            background: #fef2f2;
+        }
+
+        .kullanim-karari-item.highlighted:hover {
+            border-color: #dc2626;
+            background: #fee2e2;
+        }
+
+        .kullanim-karari-item .kk-kod {
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 15px;
+            min-width: 50px;
+        }
+
+        .kullanim-karari-item.highlighted .kk-kod {
+            color: #ef4444;
+        }
+
+        .kullanim-karari-item .kk-aciklama {
+            flex: 1;
+            color: #334155;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .kullanim-karari-item .btn-select-catalog {
+            margin-left: auto;
+        }
+
+        /* Hurda Malzeme Button */
+        .btn-hurda-header {
+            padding: 12px 24px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--primary) 0%, #1976d2 100%);
+            color: white;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-hurda-header:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(21, 101, 192, 0.4);
+        }
+
+        .btn-hurda-header:disabled {
+            background: #f1f5f9;
+            color: #64748b;
+            cursor: not-allowed;
+            border-color: #cbd5e1;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .form-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .form-group.full-width {
+                grid-column: span 2;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+
+            .page-header {
+                flex-direction: column;
+                gap: 20px;
+                padding: 28px 32px;
+            }
+
+            .page-header h1 {
+                font-size: 24px;
+            }
+
+            .datetime-display {
+                align-items: center;
+            }
+
+            .content-section {
+                padding: 32px 24px;
+            }
+
+            .info-grid,
+            .form-grid,
+            .functions-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-group.full-width,
+            .form-group.span-2 {
+                grid-column: span 1;
+            }
+
+            .checkbox-group {
+                flex-direction: column;
+                gap: 20px;
+                align-items: flex-start;
+            }
+
+            .footer-actions {
+                padding: 24px;
+                justify-content: center;
+            }
+
+            .modal {
+                width: 95%;
+                max-height: 90vh;
+            }
+
+            .modal-body {
+                padding: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+<!-- Sidebar -->
+  <aside id="sidebar">
+    <div id="sidebar-container" class="sidebar-container"></div>
+    <script>
+      fetch("sidebar.html")
+        .then((res) => res.text())
+        .then((data) => (document.getElementById("sidebar-container").innerHTML = data));
+    </script>
+  </aside>
+<div class="main-container" style="width: 1500px; margin-left: 250px;">
+    <!-- Header -->
+    <div class="page-header">
+        <h1 style="color: white;">
+            <span class="header-icon"><i class="fa-solid fa-industry"></i></span>
+            Haddehane - Kullanım Kararı Verme
+        </h1>
+        <div class="datetime-display">
+            <div class="date">
+                <i class="fa-solid fa-calendar-days"></i>
+                <span id="current-date">03 Kasım 2025</span>
+            </div>
+            <div class="time">
+                <i class="fa-solid fa-clock"></i>
+                <span id="current-time">14:30:45</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Content Section -->
+    <div class="content-section">
+        <!-- Malzeme Bilgileri -->
+        <div class="info-grid">
+            <div class="form-group">
+                <label class="form-label">
+                    <i class="fa-solid fa-barcode"></i>
+                    Malzeme Kodu
+                </label>
+                <input type="text" class="form-input" value="80000621" disabled>
+            </div>
+            <div class="form-group">
+                <label class="form-label">
+                    <i class="fa-solid fa-file-lines"></i>
+                    Malzeme Kısa Metni
+                </label>
+                <input type="text" class="form-input"  value="HEB 260 S275JR_00 12000 P." disabled >
+            </div>
+        </div>
+
+        <!-- Diğer Bilgiler -->
+        <div class="form-grid">
+            <div class="form-group">
+                <label class="form-label">
+                    <i class="fa-solid fa-cube"></i>
+                    Döküm No
+                </label>
+                <input type="text" class="form-input" value="TESTDOKUM4" disabled>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">
+                    <i class="fa-solid fa-cubes-stacked"></i>
+                    Kütük No
+                </label>
+                <input type="text" class="form-input" value="25123321301" disabled>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">
+                    <i class="fa-solid fa-box"></i>
+                    Parti No
+                </label>
+                <input type="text" class="form-input" value="00000000088" disabled>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">
+                    <i class="fa-solid fa-calendar-check"></i>
+                    Parti Yaratma Tarihi
+                </label>
+                <input type="text" class="form-input" value="25.01.2024" disabled>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">
+                    <i class="fa-solid fa-id-card"></i>
+                    Profil/Ray/Paket ID
+                </label>
+                <input type="text" class="form-input" value="PROFILID12345" disabled>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">
+                    <i class="fa-solid fa-diagram-project"></i>
+                    Muhteliflik Bilgisi
+                </label>
+                <input type="text" class="form-input" >
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">
+                    <i class="fa-solid fa-weight-scale"></i>
+                    Toplam Miktar
+                </label>
+                <input type="text" class="form-input" value="0,000 Ton" disabled>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">
+                    <i class="fa-solid fa-weight-hanging"></i>
+                    Birim Ağırlık
+                </label>
+                <input type="text" class="form-input" value="68.2 kg/m" disabled>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">
+                    <i class="fa-solid fa-ruler-combined"></i>
+                    Ebat
+                </label>
+                <input type="text" class="form-input" d>
+            </div>
+        </div>
+
+        <hr class="section-divider">
+
+        <!-- Fonksiyonlar Bölümü -->
+        <div class="section-title">
+            <i class="fa-solid fa-sliders"></i>
+            Fonksiyonlar
+        </div>
+
+        <div class="functions-grid">
+            <!-- Sınıf Değiştir -->
+            <div class="function-card">
+                <div class="function-header">
+                    <div class="function-title">
+                        <i class="fa-solid fa-layer-group"></i>
+                        Sınıf
+                    </div>
+                    <button class="btn-change" onclick="openSinifDegisimOnay()">
+                        <i class="fa-solid fa-pen-to-square"></i>
+                        Sınıf Değiştir
+                    </button>
+                </div>
+                <input type="text" class="function-input" id="sinif-value" value="1. Sınıf" readonly>
+            </div>
+
+            <!-- Şartname Değiştir -->
+            <div class="function-card">
+                <div class="function-header">
+                    <div class="function-title">
+                        <i class="fa-solid fa-file-contract"></i>
+                        Şartname
+                    </div>
+                    <button class="btn-change" onclick="openSartnameDegistirModal()">
+                        <i class="fa-solid fa-pen-to-square"></i>
+                        Şartname Değiştir
+                    </button>
+                </div>
+                <input type="text" class="function-input" id="sartname-value" value="0000000012">
+            </div>
+
+            <!-- Kalite Değiştir -->
+            <div class="function-card">
+                <div class="function-header">
+                    <div class="function-title">
+                        <i class="fa-solid fa-medal"></i>
+                        Kalite
+                    </div>
+                    <button class="btn-change" onclick="openKaliteModal()">
+                        <i class="fa-solid fa-pen-to-square"></i>
+                        Kalite Değiştir
+                    </button>
+                </div>
+                <input type="text" class="function-input" id="kalite-value" value="S275JR_00">
+            </div>
+
+            <!-- Kullanım Kararı Seç -->
+            <div class="kk-card">
+                <div class="kk-header">
+                    <div class="kk-title">
+                        <i class="fa-solid fa-code"></i>
+                        Klnm.kr.kodu
+                    </div>
+                    <button class="btn-select" onclick="openKullanimKarariModal()">
+                        <i class="fa-solid fa-list-check"></i>
+                        Kullanım Kararı Seç
+                    </button>
+                </div>
+                <div class="selected-value empty" id="selected-kk-value">
+                    Seçim yapılmadı
+                </div>
+            </div>
+        </div>
+
+        <!-- Rework ve Hold Checkboxlar -->
+        <div class="checkbox-section">
+            <div class="checkbox-group">
+                <div class="checkbox-option">
+                    <input type="checkbox" id="rework">
+                    <label for="rework">
+                        <i class="fa-solid fa-rotate-right" style="color: #f59e0b;"></i>
+                        Rework
+                    </label>
+                </div>
+                <div class="checkbox-option">
+                    <input type="checkbox" id="hold">
+                    <label for="hold">
+                        <i class="fa-solid fa-hand" style="color: #ef4444;"></i>
+                        Hold
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Açıklama -->
+        <div class="explanation-section">
+            <div class="explanation-label">
+                <i class="fa-solid fa-comment-dots"></i>
+                Açıklama
+            </div>
+            <textarea class="explanation-textarea" id="aciklama" placeholder="Kullanım kararı ile ilgili detaylı açıklama giriniz..."></textarea>
+        </div>
+    </div>
+
+    <!-- Footer Actions -->
+    <div class="footer-actions">
+        <button class="btn-action btn-confirm" onclick="showFinalConfirmation()">
+            <i class="fa-solid fa-check"></i>
+            Onayla
+        </button>
+    </div>
+</div>
+
+<!-- Modal 0: Sınıf Değişim Onayı -->
+<div class="modal-overlay" id="sinifDegisimOnayModal">
+    <div class="modal small-modal">
+        <div class="modal-header">
+            <h3>
+                <i class="fa-solid fa-layer-group"></i>
+                Sınıf/Hurda Değişimi
+            </h3>
+            <button class="btn-close-modal" onclick="closeSinifDegisimOnay()">
+                <i class="fa-solid fa-times"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="confirmation-content">
+                <div class="radio-group">
+                    <div class="radio-option">
+                        <input type="radio" id="sinif-degisimi" name="degisim-tipi" value="sinif" checked>
+                        <label for="sinif-degisimi">Sınıf Değişimi</label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" id="hurda-degisimi" name="degisim-tipi" value="hurda">
+                        <label for="hurda-degisimi">Hurda Değişimi</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-modal btn-modal-back" onclick="closeSinifDegisimOnay()">
+                Geri
+            </button>
+            <button class="btn-modal btn-modal-next" onclick="confirmDegisimTipi()">
+                İleri
+                <i class="fa-solid fa-arrow-right"></i>
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal 1: Sınıf Tipi ve Boş Tablo -->
+<div class="modal-overlay" id="sinifModal1">
+    <div class="modal">
+        <div class="modal-header">
+            <h3>
+                <i class="fa-solid fa-table"></i>
+                Sınıf Tipi ve Hata Türleri
+            </h3>
+            <button class="btn-close-modal" onclick="closeSinifModal()">
+                <i class="fa-solid fa-times"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="sinif-tipi-group">
+                <div class="sinif-tipi-label">
+                    <i class="fa-solid fa-list-check"></i>
+                    Sınıf Tipi:
+                </div>
+                <select class="sinif-tipi-select" id="sinif-tipi">
+                    <option value="1">1. Sınıf</option>
+                    <option value="2">2. Sınıf</option>
+                </select>
+            </div>
+
+            <div class="hata-table-wrapper">
+                <table class="hata-table">
+                    <thead>
+                    <tr>
+                        <th style="width: 40px;"></th>
+                        <th style="width: 120px;">Üst Kod</th>
+                        <th style="width: 80px;">Alt Kod</th>
+                        <th style="width: 80px;"></th>
+                        <th>Alt Kod Tanımı</th>
+                        <th style="width: 110px;">Hata Sayısı</th>
+                        <th style="width: 60px;"></th>
+                    </tr>
+                    </thead>
+                    <tbody id="hataTableBody">
+                    <tr>
+                        <td><input type="checkbox"></td>
+                        <td></td>
+                        <td class="dots-cell" onclick="openCatalogModal()">•••</td>
+                        <td></td>
+                        <td></td>
+                        <td><input type="number" value="" min="1" style="width: 100%;"></td>
+                        <td style="text-align: center;">
+                            <button class="btn-delete-icon" onclick="deleteHataRow(this)">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <button class="btn-add-row" onclick="addHataRow()">
+                <i class="fa-solid fa-plus"></i>
+                Satır Ekle
+            </button>
+
+            <button class="btn-delete-row-bottom" onclick="deleteSelectedRows()">
+                <i class="fa-solid fa-minus"></i>
+                Satır Sil
+            </button>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-modal btn-modal-back" onclick="closeSinifModal()">
+                Geri
+            </button>
+            <button class="btn-modal btn-modal-next" onclick="goToSuccess()">
+                İleri
+                <i class="fa-solid fa-arrow-right"></i>
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal 2: Katalog Seçimi -->
+<div class="modal-overlay" id="sinifModal2">
+    <div class="modal">
+        <div class="modal-header">
+            <h3>
+                <i class="fa-solid fa-book"></i>
+                Katalog Seçimi
+            </h3>
+            <button class="btn-close-modal" onclick="closeKatalogModal()">
+                <i class="fa-solid fa-times"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="catalog-table-wrapper">
+                <table class="catalog-table">
+                    <tbody>
+                    <tr onclick="toggleExpand(this)">
+                        <td class="code-cell">ZHHT14</td>
+                        <td>PROFIL 2.SNF ŞEKİL KUSURU</td>
+                        <td style="text-align: right; width: 40px;">
+                            <i class="fa-solid fa-chevron-down" style="color: #64748b;"></i>
+                        </td>
+                    </tr>
+                    <tr onclick="toggleExpand(this)">
+                        <td class="code-cell">ZHHT15</td>
+                        <td>PROFIL 2.SNF YÜZEY KUSURU</td>
+                        <td style="text-align: right; width: 40px;">
+                            <i class="fa-solid fa-chevron-down" style="color: #64748b;"></i>
+                        </td>
+                    </tr>
+                    <tr onclick="toggleExpand(this)" class="expanded">
+                        <td class="code-cell">ZHHT16</td>
+                        <td>PROFIL 2SNF MEKANİK TEST</td>
+                        <td style="text-align: right; width: 40px;">
+                            <i class="fa-solid fa-chevron-up" style="color: #64748b;"></i>
+                        </td>
+                    </tr>
+                    <tr class="sub-row">
+                        <td class="code-cell">001</td>
+                        <td>Çekme Mukavemeti</td>
+                        <td style="text-align: right;">
+                            <button class="btn-select-catalog" onclick="selectCatalog('ZHHT16', '001', 'Çekme Mukavemeti')">Seç</button>
+                        </td>
+                    </tr>
+                    <tr class="sub-row">
+                        <td class="code-cell">002</td>
+                        <td>Akma Mukavemeti</td>
+                        <td style="text-align: right;">
+                            <button class="btn-select-catalog" onclick="selectCatalog('ZHHT16', '002', 'Akma Mukavemeti')">Seç</button>
+                        </td>
+                    </tr>
+                    <tr class="sub-row">
+                        <td class="code-cell">003</td>
+                        <td>Uzama</td>
+                        <td style="text-align: right;">
+                            <button class="btn-select-catalog" onclick="selectCatalog('ZHHT16', '003', 'Uzama')">Seç</button>
+                        </td>
+                    </tr>
+                    <tr class="sub-row">
+                        <td class="code-cell">004</td>
+                        <td>Bükme</td>
+                        <td style="text-align: right;">
+                            <button class="btn-select-catalog" onclick="selectCatalog('ZHHT16', '004', 'Bükme')">Seç</button>
+                        </td>
+                    </tr>
+                    <tr class="sub-row">
+                        <td class="code-cell">005</td>
+                        <td>Vurma Dayanımı, KV, +20°C, Ortalama</td>
+                        <td style="text-align: right;">
+                            <button class="btn-select-catalog" onclick="selectCatalog('ZHHT16', '005', 'Vurma Dayanımı, KV, +20°C, Ortalama')">Seç</button>
+                        </td>
+                    </tr>
+                    <tr class="sub-row">
+                        <td class="code-cell">006</td>
+                        <td>Vurma Dayanımı, KV, -20°C, Ortalama</td>
+                        <td style="text-align: right;">
+                            <button class="btn-select-catalog" onclick="selectCatalog('ZHHT16', '006', 'Vurma Dayanımı, KV, -20°C, Ortalama')">Seç</button>
+                        </td>
+                    </tr>
+                    <tr class="sub-row">
+                        <td class="code-cell">007</td>
+                        <td>Vurma Dayanımı, KV, +0°C, Ortalama</td>
+                        <td style="text-align: right;">
+                            <button class="btn-select-catalog" onclick="selectCatalog('ZHHT16', '007', 'Vurma Dayanımı, KV, +0°C, Ortalama')">Seç</button>
+                        </td>
+                    </tr>
+                    <tr onclick="toggleExpand(this)">
+                        <td class="code-cell">ZHHT39</td>
+                        <td>PROFIL 2.SNF KÜTLE KUSURU</td>
+                        <td style="text-align: right; width: 40px;">
+                            <i class="fa-solid fa-chevron-down" style="color: #64748b;"></i>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-modal btn-modal-back" onclick="closeKatalogModal()">
+                Geri
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal 3: Success Modal -->
+<div class="modal-overlay" id="successModal">
+    <div class="modal" style="max-width: 500px;">
+        <div class="modal-header" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+            <h3>
+                <i class="fa-solid fa-circle-check"></i>
+                Başarılı
+            </h3>
+            <button class="btn-close-modal" onclick="closeSuccessModal()">
+                <i class="fa-solid fa-times"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="success-content">
+                <div class="success-icon">
+                    <i class="fa-solid fa-check"></i>
+                </div>
+                <h4>Başarılı</h4>
+                <p>Partisi 89000000364 için kullanım kararı verildi</p>
+                <button class="btn-continue" onclick="closeSuccessModal()">
+                    <i class="fa-solid fa-arrow-right"></i>
+                    Devam
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal 4: Hold Nedenleri -->
+<div class="modal-overlay" id="holdModal">
+    <div class="modal">
+        <div class="modal-header">
+            <h3>
+                <i class="fa-solid fa-hand"></i>
+                Hold Nedenleri
+            </h3>
+            <button class="btn-close-modal" onclick="closeHoldModal()">
+                <i class="fa-solid fa-times"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+            <!-- Mekanik Test Uygunsuzluğu -->
+            <div class="hold-section">
+                <div class="hold-section-header" onclick="toggleHoldSection(this)">
+                    <span class="hold-section-title">
+                        <i class="fa-solid fa-wrench"></i>
+                        1- Mekanik Test Uygunsuzluğu
+                    </span>
+                    <i class="fa-solid fa-chevron-down"></i>
+                </div>
+                <div class="hold-section-content">
+                    <div class="hold-options">
+                        <label class="hold-radio-option">
+                            <input type="radio" name="hold-reason" value="Mukavemet Düşük">
+                            <span>Mukavemet Düşük</span>
+                        </label>
+                        <label class="hold-radio-option">
+                            <input type="radio" name="hold-reason" value="Mukavemet Yüksek">
+                            <span>Mukavemet Yüksek</span>
+                        </label>
+                        <label class="hold-radio-option">
+                            <input type="radio" name="hold-reason" value="Çekme Darbe Direnci Düşük">
+                            <span>Çekme Darbe Direnci Düşük</span>
+                        </label>
+                        <label class="hold-radio-option">
+                            <input type="radio" name="hold-reason" value="Uzama Düşük">
+                            <span>Uzama Düşük</span>
+                        </label>
+                        <label class="hold-radio-option">
+                            <input type="radio" name="hold-reason" value="% Kesit Daralması Düşük">
+                            <span>% Kesit Daralması Düşük</span>
+                        </label>
+                        <label class="hold-radio-option">
+                            <input type="radio" name="hold-reason" value="Sertlik Yüksek">
+                            <span>Sertlik Yüksek</span>
+                        </label>
+                        <label class="hold-radio-option">
+                            <input type="radio" name="hold-reason" value="Sertlik Düşük">
+                            <span>Sertlik Düşük</span>
+                        </label>
+                        <label class="hold-radio-option">
+                            <input type="radio" name="hold-reason" value="Sertlik Dağılımı (Mekanik Test)">
+                            <span>Sertlik Dağılımı (Mekanik Test)</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Boyutsal/Fiziksel Uygunsuzluk -->
+            <div class="hold-section">
+                <div class="hold-section-header" onclick="toggleHoldSection(this)">
+                    <span class="hold-section-title">
+                        <i class="fa-solid fa-ruler"></i>
+                        2- Boyutsal/Fiziksel Uygunsuzluk
+                    </span>
+                    <i class="fa-solid fa-chevron-down"></i>
+                </div>
+                <div class="hold-section-content">
+                    <div class="hold-options">
+                        <label class="hold-radio-option">
+                            <input type="radio" name="hold-reason" value="Kısa">
+                            <span>Kısa</span>
+                        </label>
+                        <label class="hold-radio-option">
+                            <input type="radio" name="hold-reason" value="Uzun">
+                            <span>Uzun</span>
+                        </label>
+                        <label class="hold-radio-option">
+                            <input type="radio" name="hold-reason" value="H (+) Tolerans Haricı">
+                            <span>H (+) Tolerans Haricı</span>
+                        </label>
+                        <label class="hold-radio-option">
+                            <input type="radio" name="hold-reason" value="E (-) Tolerans Haricı">
+                            <span>E (-) Tolerans Haricı</span>
+                        </label>
+                        <label class="hold-radio-option">
+                            <input type="radio" name="hold-reason" value="T (-) Tolerans Haricı">
+                            <span>T (-) Tolerans Haricı</span>
+                        </label>
+                        <label class="hold-radio-option">
+                            <input type="radio" name="hold-reason" value="T (+) Tolerans Haricı">
+                            <span>T (+) Tolerans Haricı</span>
+                        </label>
+                        <label class="hold-radio-option">
+                            <input type="radio" name="hold-reason" value="Boy Aşımı Kesit">
+                            <span>Boy Aşımı Kesit</span>
+                        </label>
+                        <label class="hold-radio-option">
+                            <input type="radio" name="hold-reason" value="Doğrusallık Eğrisi">
+                            <span>Doğrusallık Eğrisi</span>
+                        </label>
+                        <label class="hold-radio-option">
+                            <input type="radio" name="hold-reason" value="Sırt Merizi">
+                            <span>Sırt Merizi</span>
+                        </label>
+                        <label class="hold-radio-option">
+                            <input type="radio" name="hold-reason" value="Dökme Ucu">
+                            <span>Dökme Ucu</span>
+                        </label>
+                        <label class="hold-radio-option">
+                            <input type="radio" name="hold-reason" value="Kesit Beklenen (Boyutsal)">
+                            <span>Kesit Beklenen (Boyutsal)</span>
+                        </label>
+                        <label class="hold-radio-option">
+                            <input type="radio" name="hold-reason" value="Diğer Sebepler (Boyutsal)">
+                            <span>Diğer Sebepler (Boyutsal)</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Yüzey Kusurları -->
+            <div class="hold-section">
+                <div class="hold-section-header" onclick="toggleHoldSection(this)">
+                    <span class="hold-section-title">
+                        <i class="fa-solid fa-layer-group"></i>
+                        3- Yüzey Kusurları
+                    </span>
+                    <i class="fa-solid fa-chevron-down"></i>
+                </div>
+                <div class="hold-section-content">
+                    <div class="hold-options">
+                        <label class="hold-radio-option">
+                            <input type="radio" name="hold-reason" value="Ream Blank (Katışık)">
+                            <span>Ream Blank (Katışık)</span>
+                        </label>
+                        <label class="hold-radio-option">
+                            <input type="radio" name="hold-reason" value="YMK Ayak Üçü Çıpak">
+                            <span>YMK Ayak Üçü Çıpak</span>
+                        </label>
+                        <label class="hold-radio-option">
+                            <input type="radio" name="hold-reason" value="YMK Ayak Dışı Çıpak">
+                            <span>YMK Ayak Dışı Çıpak</span>
+                        </label>
+                        <label class="hold-radio-option">
+                            <input type="radio" name="hold-reason" value="YMK Ayak İçi Çıpak">
+                            <span>YMK Ayak İçi Çıpak</span>
+                        </label>
+                        <label class="hold-radio-option">
+                            <input type="radio" name="hold-reason" value="Hadde Ayak İçi Çıpak">
+                            <span>Hadde Ayak İçi Çıpak</span>
+                        </label>
+                        <label class="hold-radio-option">
+                            <input type="radio" name="hold-reason" value="Merdane Kıragı">
+                            <span>Merdane Kıragı</span>
+                        </label>
+                        <label class="hold-radio-option">
+                            <input type="radio" name="hold-reason" value="Diğer Sebepler (Yüzey)">
+                            <span>Diğer Sebepler (Yüzey)</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Proses Kusurları -->
+            <div class="hold-section">
+                <div class="hold-section-header" onclick="toggleHoldSection(this)">
+                    <span class="hold-section-title">
+                        <i class="fa-solid fa-gears"></i>
+                        4- Proses Kusurları
+                    </span>
+                    <i class="fa-solid fa-chevron-down"></i>
+                </div>
+                <div class="hold-section-content">
+                    <div class="hold-options">
+                        <label class="hold-radio-option">
+                            <input type="radio" name="hold-reason" value="Fırında Bekleme Süresi Uzun">
+                            <span>Fırında Bekleme Süresi Uzun</span>
+                        </label>
+                        <label class="hold-radio-option">
+                            <input type="radio" name="hold-reason" value="Uygun Olmayan Hadde Sıcaklığı">
+                            <span>Uygun Olmayan Hadde Sıcaklığı</span>
+                        </label>
+                        <label class="hold-radio-option">
+                            <input type="radio" name="hold-reason" value="Soğuk Haddeleme">
+                            <span>Soğuk Haddeleme</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-modal btn-modal-back" onclick="closeHoldModal()">
+                İptal
+            </button>
+            <button class="btn-modal btn-modal-next" onclick="confirmHoldReason()">
+                Kaydet
+                <i class="fa-solid fa-check"></i>
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal 5: Kalite Seçimi -->
+<div class="modal-overlay" id="kaliteModal1">
+    <div class="modal" style="max-width: 450px;">
+        <div class="modal-header">
+            <h3>
+                <i class="fa-solid fa-medal"></i>
+                Haddehane - Kalite Değişimi
+            </h3>
+            <button class="btn-close-modal" onclick="closeKaliteModal()">
+                <i class="fa-solid fa-times"></i>
+            </button>
+        </div>
+        <div class="modal-body" style="padding: 40px;">
+            <div class="form-group" style="margin-bottom: 28px;">
+                <label class="form-label" style="font-size: 13px; margin-bottom: 12px;">
+                    <i class="fa-solid fa-medal"></i>
+                    Kalite:
+                </label>
+                <input type="text" class="form-input" id="kalite-input" value="S235JR_00" readonly style="font-size: 16px; padding: 20px 24px;">
+            </div>
+            <div class="form-group" style="margin-bottom: 28px;">
+                <label class="form-label" style="font-size: 13px; margin-bottom: 12px;">
+                    <i class="fa-solid fa-barcode"></i>
+                    Malzeme Kodu:
+                </label>
+                <input type="text" class="form-input" value="80000801" readonly style="font-size: 16px; padding: 20px 24px;">
+            </div>
+            <div class="form-group">
+                <label class="form-label" style="font-size: 13px; margin-bottom: 12px;">
+                    <i class="fa-solid fa-file-contract"></i>
+                    Şartname:
+                </label>
+                <input type="text" class="form-input" value="0000000013" readonly style="font-size: 16px; padding: 20px 24px;">
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-modal btn-modal-back" onclick="closeKaliteModal()">
+                İptal
+            </button>
+            <button class="btn-modal btn-modal-next" onclick="openKaliteListesi()">
+                İleri
+                <i class="fa-solid fa-arrow-right"></i>
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal 6: Kalite Listesi -->
+<div class="modal-overlay" id="kaliteModal2">
+    <div class="modal" style="max-width: 550px;">
+        <div class="modal-header">
+            <h3>
+                <i class="fa-solid fa-list"></i>
+                Kalite Listesi
+            </h3>
+            <button class="btn-close-modal" onclick="closeKaliteListesi()">
+                <i class="fa-solid fa-times"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="kalite-dropdown" onclick="toggleKaliteDropdown(this)">
+                <div class="kalite-dropdown-header">
+                    <span>S235</span>
+                    <i class="fa-solid fa-chevron-down"></i>
+                </div>
+                <div class="kalite-dropdown-content">
+                    <div class="kalite-option" onclick="selectKaliteOption(event, 'S235JR_00')">S235JR_00</div>
+                    <div class="kalite-option" onclick="selectKaliteOption(event, 'S235JR_01')">S235JR_01</div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-modal btn-modal-back" onclick="backToKaliteModal1()">
+                Geri
+            </button>
+            <button class="btn-modal btn-modal-next" onclick="openMalzemeListesi()">
+                İleri
+                <i class="fa-solid fa-arrow-right"></i>
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal 7: Malzeme Listesi -->
+<div class="modal-overlay" id="malzemeModal">
+    <div class="modal">
+        <div class="modal-header">
+            <h3>
+                <i class="fa-solid fa-box"></i>
+                Malzeme Listesi
+            </h3>
+            <button class="btn-close-modal" onclick="closeMalzemeListesi()">
+                <i class="fa-solid fa-times"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="catalog-table-wrapper">
+                <table class="catalog-table">
+                    <tbody>
+                    <tr>
+                        <td><input type="text" value="80000801 - IPE 270 S235JR_00 12000 PROFIL" readonly style="width: 100%; border: none; background: transparent; padding: 8px;"></td>
+                        <td style="text-align: right; width: 100px;">
+                            <button class="btn-select-catalog" onclick="selectMalzeme('80000801')">İleri</button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-modal btn-modal-back" onclick="backToKaliteListesi()">
+                İptal
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal 8: Şartname Listesi -->
+<div class="modal-overlay" id="sartnameModal">
+    <div class="modal" style="max-width: 550px;">
+        <div class="modal-header">
+            <h3>
+                <i class="fa-solid fa-file-contract"></i>
+                Şartname Listesi
+            </h3>
+            <button class="btn-close-modal" onclick="closeSartnameModal()">
+                <i class="fa-solid fa-times"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <input type="text" class="form-input" value="0000000013 - Test" readonly>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-modal btn-modal-back" onclick="closeSartnameModal()">
+                İptal
+            </button>
+            <button class="btn-modal btn-modal-next" onclick="openKalitePartileri()">
+                İleri
+                <i class="fa-solid fa-arrow-right"></i>
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal 9: Kalite Değişimi Partiler -->
+<div class="modal-overlay" id="kalitePartiModal">
+    <div class="modal">
+        <div class="modal-header">
+            <h3>
+                <i class="fa-solid fa-exchange-alt"></i>
+                Haddehane - Kalite Değişimi
+            </h3>
+            <button class="btn-close-modal" onclick="closeKalitePartiModal()">
+                <i class="fa-solid fa-times"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="hata-table-wrapper">
+                <table class="hata-table">
+                    <thead>
+                    <tr>
+                        <th style="width: 40px;"><input type="checkbox" id="selectAllParti" onclick="toggleAllParti()"></th>
+                        <th>Şartname</th>
+                        <th>Parti</th>
+                        <th>Malzeme</th>
+                        <th>Malzeme kısa metni</th>
+                        <th>Döküm No</th>
+                        <th>Kalite</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td><input type="checkbox" class="parti-checkbox" checked></td>
+                        <td>0000000013</td>
+                        <td>890000000364</td>
+                        <td>80000621</td>
+                        <td>HEB 260 S275JR_00 12000 PROFIL</td>
+                        <td>TESTDOKUM4</td>
+                        <td>S235JR_00</td>
+
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox" class="parti-checkbox" checked></td>
+                        <td>0000000013</td>
+                        <td>890000000365</td>
+                        <td>80000621</td>
+                        <td>HEB 260 S275JR_00 12000 PROFIL</td>
+                        <td>TESTDOKUM4</td>
+                        <td>S235JR_00</td>
+
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox" class="parti-checkbox" checked></td>
+                        <td>0000000013</td>
+                        <td>890000000359</td>
+                        <td>80000621</td>
+                        <td>HEB 260 S275JR_00 12000 PROFIL</td>
+                        <td>TESTDOKUM4</td>
+                        <td>S235JR_00</td>
+
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox" class="parti-checkbox" checked></td>
+                        <td>0000000013</td>
+                        <td>890000000358</td>
+                        <td>80000621</td>
+                        <td>HEB 260 S275JR_00 12000 PROFIL</td>
+                        <td>TESTDOKUM4</td>
+                        <td>S235JR_00</td>
+
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox" class="parti-checkbox" checked></td>
+                        <td>0000000013</td>
+                        <td>890000000362</td>
+                        <td>80000621</td>
+                        <td>HEB 260 S275JR_00 12000 PROFIL</td>
+                        <td>TESTDOKUM4</td>
+                        <td>S235JR_00</td>
+
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-modal btn-modal-back" onclick="closeKalitePartiModal()">
+                İptal
+            </button>
+            <button class="btn-modal btn-modal-next" onclick="confirmKalitePartileri()">
+                Devam
+                <i class="fa-solid fa-arrow-right"></i>
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal 10: Döküm Onayı -->
+<div class="modal-overlay" id="dokumOnayModal">
+    <div class="modal" style="max-width: 500px;">
+        <div class="modal-header">
+            <h3>
+                <i class="fa-solid fa-question-circle"></i>
+                Onay
+            </h3>
+            <button class="btn-close-modal" onclick="closeDokumOnayModal()">
+                <i class="fa-solid fa-times"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="confirmation-content">
+                <p style="text-align: center; font-size: 15px; color: #475569; margin-bottom: 24px;">
+                    TESTDOKUM4 Dökümü alt kimyasal sonuçları bulunamadı, devam etmek istiyor musunuz?
+                </p>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-modal btn-modal-back" onclick="closeDokumOnayModal()">
+                Hayır
+            </button>
+            <button class="btn-modal btn-modal-next" style="background: #10b981;" onclick="confirmDokumOnay()">
+                Evet
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal 11: Kullanım Kararı Kodu Seçimi -->
+<div class="modal-overlay" id="kullanimKarariModal">
+    <div class="modal" style="max-width: 550px;">
+        <div class="modal-header">
+            <h3>
+                <i class="fa-solid fa-clipboard-check"></i>
+                Kullanım Kararı Kodu Seçimi
+            </h3>
+            <button class="btn-close-modal" onclick="closeKullanimKarariModal()">
+                <i class="fa-solid fa-times"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="kullanim-karari-list">
+                <div class="kullanim-karari-item" onclick="selectKullanimKarari('Z08', 'Kullanım kararları - Ray Profil')">
+                    <span class="kk-kod">Z08</span>
+                    <span class="kk-aciklama">Kullanım kararları - Ray Profil</span>
+                    <button class="btn-select-catalog">Seç</button>
+                </div>
+                <div class="kullanim-karari-item" onclick="selectKullanimKarari('Z91', '2. sınıfa dönüşüm')">
+                    <span class="kk-kod">Z91</span>
+                    <span class="kk-aciklama">2. sınıfa dönüşüm</span>
+                    <button class="btn-select-catalog">Seç</button>
+                </div>
+                <div class="kullanim-karari-item" onclick="selectKullanimKarari('Z92', '3. sınıfa dönüşüm')">
+                    <span class="kk-kod">Z92</span>
+                    <span class="kk-aciklama">3. sınıfa dönüşüm</span>
+                    <button class="btn-select-catalog">Seç</button>
+                </div>
+                <div class="kullanim-karari-item highlighted" onclick="selectKullanimKarari('Z03', 'Kalite dönüşümü')">
+                    <span class="kk-kod">Z03</span>
+                    <span class="kk-aciklama">Kalite dönüşümü</span>
+                    <button class="btn-select-catalog">Seç</button>
+                </div>
+                <div class="kullanim-karari-item" onclick="selectKullanimKarari('Z04', 'Hurda kararı')">
+                    <span class="kk-kod">Z04</span>
+                    <span class="kk-aciklama">Hurda kararı</span>
+                    <button class="btn-select-catalog">Seç</button>
+                </div>
+                <div class="kullanim-karari-item" onclick="selectKullanimKarari('Z05', 'Alt boy 1. sınıf')">
+                    <span class="kk-kod">Z05</span>
+                    <span class="kk-aciklama">Alt boy 1. sınıf</span>
+                    <button class="btn-select-catalog">Seç</button>
+                </div>
+                <div class="kullanim-karari-item" onclick="selectKullanimKarari('Z06', 'Alt boy 2. sınıf')">
+                    <span class="kk-kod">Z06</span>
+                    <span class="kk-aciklama">Alt boy 2. sınıf</span>
+                    <button class="btn-select-catalog">Seç</button>
+                </div>
+                <div class="kullanim-karari-item" onclick="selectKullanimKarari('Z07', '1. sınıf Kabul')">
+                    <span class="kk-kod">Z07</span>
+                    <span class="kk-aciklama">1. sınıf Kabul</span>
+                    <button class="btn-select-catalog">Seç</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal 12: Hurda Değişikliği -->
+<div class="modal-overlay" id="hurdaDegisikligiModal">
+    <div class="modal">
+        <div class="modal-header">
+            <h3>
+                <i class="fa-solid fa-recycle"></i>
+                Hurda Değişikliği
+            </h3>
+            <button class="btn-close-modal" onclick="closeHurdaDegisikligiModal()">
+                <i class="fa-solid fa-times"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div style="display: flex; gap: 12px; margin-bottom: 20px;">
+                <button class="btn-hurda-header" onclick="openHurdaMalzemeSecimModal()">
+                    <i class="fa-solid fa-list"></i>
+                    Malzeme Kodu
+                </button>
+                <button class="btn-hurda-header" id="selectedMalzemeBtn" onclick="openHurdaMalzemeSecimModal()">
+                    <i class="fa-solid fa-box"></i>
+                    80000621
+                </button>
+            </div>
+
+            <div class="hata-table-wrapper">
+                <table class="hata-table">
+                    <thead>
+                    <tr>
+                        <th style="width: 40px;"></th>
+                        <th style="width: 120px;">Üst Kod</th>
+                        <th style="width: 80px;">Alt Kod</th>
+                        <th style="width: 80px;"></th>
+                        <th>Alt Kod Tanımı</th>
+                        <th style="width: 110px;">Hata Sayısı</th>
+                        <th style="width: 60px;"></th>
+                    </tr>
+                    </thead>
+                    <tbody id="hurdaTableBody">
+                    <tr>
+                        <td><input type="checkbox"></td>
+                        <td></td>
+                        <td class="dots-cell" onclick="openHurdaCatalogModal()">•••</td>
+                        <td></td>
+                        <td></td>
+                        <td><input type="number" value="" min="1" style="width: 100%;"></td>
+                        <td style="text-align: center;">
+                            <button class="btn-delete-icon" onclick="deleteHurdaRow(this)">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <button class="btn-add-row" onclick="addHurdaRow()">
+                <i class="fa-solid fa-plus"></i>
+                Satır Ekle
+            </button>
+
+            <button class="btn-delete-row-bottom" onclick="deleteSelectedHurdaRows()">
+                <i class="fa-solid fa-minus"></i>
+                Satır Sil
+            </button>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-modal btn-modal-back" onclick="closeHurdaDegisikligiModal()">
+                Geri
+            </button>
+            <button class="btn-modal btn-modal-next" onclick="confirmHurdaDegisikligi()">
+                İleri
+                <i class="fa-solid fa-arrow-right"></i>
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal 13: Malzeme Seçimi (Hurda için) -->
+<div class="modal-overlay" id="hurdaMalzemeModal">
+    <div class="modal" style="max-width: 550px;">
+        <div class="modal-header">
+            <h3>
+                <i class="fa-solid fa-box"></i>
+                Malzeme Seçimi
+            </h3>
+            <button class="btn-close-modal" onclick="closeHurdaMalzemeModal()">
+                <i class="fa-solid fa-times"></i>
+            </button>
+        </div>
+        <div class="modal-body" style="padding: 40px;">
+            <div class="form-group" style="margin-bottom: 28px;">
+                <label class="form-label" style="font-size: 13px; margin-bottom: 12px;">
+                    <i class="fa-solid fa-barcode"></i>
+                    MALZEME KODU
+                </label>
+                <input type="text" class="form-input" value="70000057" readonly style="font-size: 16px; padding: 20px 24px;">
+            </div>
+            <div class="form-group">
+                <label class="form-label" style="font-size: 13px; margin-bottom: 12px;">
+                    <i class="fa-solid fa-file-lines"></i>
+                    MALZEME KISA METNİ
+                </label>
+                <input type="text" class="form-input" value="Dönüşüm Hurdası" readonly style="font-size: 16px; padding: 20px 24px;">
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-modal btn-modal-back" onclick="closeHurdaMalzemeModal()">
+                Kapat
+            </button>
+            <button class="btn-modal btn-modal-next" onclick="selectHurdaMalzeme()">
+                Seç
+                <i class="fa-solid fa-check"></i>
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal 14: Hurda Katalog Seçimi -->
+<div class="modal-overlay" id="hurdaCatalogModal">
+    <div class="modal">
+        <div class="modal-header">
+            <h3>
+                <i class="fa-solid fa-book"></i>
+                Katalog Seçimi
+            </h3>
+            <button class="btn-close-modal" onclick="closeHurdaCatalogModal()">
+                <i class="fa-solid fa-times"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="catalog-table-wrapper">
+                <table class="catalog-table">
+                    <tbody>
+                    <tr onclick="toggleExpand(this)" class="expanded">
+                        <td class="code-cell">ZHHT09</td>
+                        <td>PROFIL HURDA ŞEKİL KUSURU</td>
+                        <td style="text-align: right; width: 40px;">
+                            <i class="fa-solid fa-chevron-up" style="color: #64748b;"></i>
+                        </td>
+                    </tr>
+                    <tr class="sub-row">
+                        <td class="code-cell">001</td>
+                        <td>ÖNDÜLE</td>
+                        <td style="text-align: right;">
+                            <button class="btn-select-catalog" onclick="selectHurdaCatalog('ZHHT09', '001', 'ÖNDÜLE')">Seç</button>
+                        </td>
+                    </tr>
+                    <tr class="sub-row">
+                        <td class="code-cell">002</td>
+                        <td>VERTİCAL KIRIŞI</td>
+                        <td style="text-align: right;">
+                            <button class="btn-select-catalog" onclick="selectHurdaCatalog('ZHHT09', '002', 'VERTİCAL KIRIŞI')">Seç</button>
+                        </td>
+                    </tr>
+                    <tr class="sub-row">
+                        <td class="code-cell">003</td>
+                        <td>FİTİLLİ</td>
+                        <td style="text-align: right;">
+                            <button class="btn-select-catalog" onclick="selectHurdaCatalog('ZHHT09', '003', 'FİTİLLİ')">Seç</button>
+                        </td>
+                    </tr>
+                    <tr class="sub-row">
+                        <td class="code-cell">004</td>
+                        <td>RADÜSDA ÇATLAK</td>
+                        <td style="text-align: right;">
+                            <button class="btn-select-catalog" onclick="selectHurdaCatalog('ZHHT09', '004', 'RADÜSDA ÇATLAK')">Seç</button>
+                        </td>
+                    </tr>
+                    <tr class="sub-row">
+                        <td class="code-cell">005</td>
+                        <td>RADÜSDA YARA</td>
+                        <td style="text-align: right;">
+                            <button class="btn-select-catalog" onclick="selectHurdaCatalog('ZHHT09', '005', 'RADÜSDA YARA')">Seç</button>
+                        </td>
+                    </tr>
+                    <tr class="sub-row">
+                        <td class="code-cell">006</td>
+                        <td>AYAK UCU YARA</td>
+                        <td style="text-align: right;">
+                            <button class="btn-select-catalog" onclick="selectHurdaCatalog('ZHHT09', '006', 'AYAK UCU YARA')">Seç</button>
+                        </td>
+                    </tr>
+                    <tr class="sub-row">
+                        <td class="code-cell">007</td>
+                        <td>YMK ÇAPAK</td>
+                        <td style="text-align: right;">
+                            <button class="btn-select-catalog" onclick="selectHurdaCatalog('ZHHT09', '007', 'YMK ÇAPAK')">Seç</button>
+                        </td>
+                    </tr>
+                    <tr class="sub-row">
+                        <td class="code-cell">008</td>
+                        <td>DOĞRULTMADA RADİUS ÇATLAĞI</td>
+                        <td style="text-align: right;">
+                            <button class="btn-select-catalog" onclick="selectHurdaCatalog('ZHHT09', '008', 'DOĞRULTMADA RADİUS ÇATLAĞI')">Seç</button>
+                        </td>
+                    </tr>
+                    <tr class="sub-row">
+                        <td class="code-cell">009</td>
+                        <td>ECSİK PASO</td>
+                        <td style="text-align: right;">
+                            <button class="btn-select-catalog" onclick="selectHurdaCatalog('ZHHT09', '009', 'ECSİK PASO')">Seç</button>
+                        </td>
+                    </tr>
+                    <tr class="sub-row">
+                        <td class="code-cell">010</td>
+                        <td>DALGALI İZ KALıNTıSı</td>
+                        <td style="text-align: right;">
+                            <button class="btn-select-catalog" onclick="selectHurdaCatalog('ZHHT09', '010', 'DALGALI İZ KALıNTıSı')">Seç</button>
+                        </td>
+                    </tr>
+                    <tr class="sub-row">
+                        <td class="code-cell">011</td>
+                        <td>YMK AYAK UCU ÇAPAK</td>
+                        <td style="text-align: right;">
+                            <button class="btn-select-catalog" onclick="selectHurdaCatalog('ZHHT09', '011', 'YMK AYAK UCU ÇAPAK')">Seç</button>
+                        </td>
+                    </tr>
+                    <tr onclick="toggleExpand(this)">
+                        <td class="code-cell">ZHHT11</td>
+                        <td>PROFIL HURDA KÜTLE KUSURU</td>
+                        <td style="text-align: right; width: 40px;">
+                            <i class="fa-solid fa-chevron-down" style="color: #64748b;"></i>
+                        </td>
+                    </tr>
+                    <tr onclick="toggleExpand(this)">
+                        <td class="code-cell">ZHHT12</td>
+                        <td>PROFIL HURDA HADDE BOZUK</td>
+                        <td style="text-align: right; width: 40px;">
+                            <i class="fa-solid fa-chevron-down" style="color: #64748b;"></i>
+                        </td>
+                    </tr>
+                    <tr onclick="toggleExpand(this)">
+                        <td class="code-cell">ZHHT13</td>
+                        <td>PROFIL HURDA MEKANİK TEST</td>
+                        <td style="text-align: right; width: 40px;">
+                            <i class="fa-solid fa-chevron-down" style="color: #64748b;"></i>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-modal btn-modal-back" onclick="closeHurdaCatalogModal()">
+                Geri
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal 15: Şartname Değiştir (İlk Adım) -->
+<div class="modal-overlay" id="sartnameDegistirModal">
+    <div class="modal" style="max-width: 500px;">
+        <div class="modal-header">
+            <h3>
+                <i class="fa-solid fa-file-contract"></i>
+                Haddehane - Şartname Değiştir
+            </h3>
+            <button class="btn-close-modal" onclick="closeSartnameDegistirModal()">
+                <i class="fa-solid fa-times"></i>
+            </button>
+        </div>
+        <div class="modal-body" style="padding: 40px;">
+            <div class="form-group">
+                <label class="form-label" style="font-size: 13px; margin-bottom: 12px;">
+                    <i class="fa-solid fa-file-lines"></i>
+                    Şartname:
+                </label>
+                <input type="text" class="form-input" id="sartname-input" value="0000000012" readonly style="font-size: 16px; padding: 20px 24px;">
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-modal btn-modal-back" onclick="closeSartnameDegistirModal()">
+                İptal
+            </button>
+            <button class="btn-modal btn-modal-next" onclick="openSartnameListesi()">
+                İleri
+                <i class="fa-solid fa-arrow-right"></i>
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal 16: Şartname Listesi -->
+<div class="modal-overlay" id="sartnameListesiModal">
+    <div class="modal" style="max-width: 600px;">
+        <div class="modal-header">
+            <h3>
+                <i class="fa-solid fa-list"></i>
+                Şartname Listesi
+            </h3>
+            <button class="btn-close-modal" onclick="closeSartnameListesi()">
+                <i class="fa-solid fa-times"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="catalog-table-wrapper">
+                <table class="catalog-table">
+                    <thead>
+                    <tr style="background: #f1f5f9;">
+                        <th style="padding: 14px; text-align: left; font-weight: 700; color: #475569;">Şartname No</th>
+                        <th style="padding: 14px; text-align: left; font-weight: 700; color: #475569;">Şartname Adı</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr onclick="selectSartname('0000000016', 'Şartname 80000621 rev 2')">
+                        <td class="code-cell" style="padding: 16px;">0000000016</td>
+                        <td style="padding: 16px;">Şartname 80000621 rev 2</td>
+                    </tr>
+                    <tr onclick="selectSartname('0000000012', 'Şartname 80000621')">
+                        <td class="code-cell" style="padding: 16px;">0000000012</td>
+                        <td style="padding: 16px;">Şartname 80000621</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-modal btn-modal-back" onclick="backToSartnameDegistir()">
+                Geri
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal 17: Şartname Değiştir (Seçilen) -->
+<div class="modal-overlay" id="sartnameDegistirModal2">
+    <div class="modal" style="max-width: 500px;">
+        <div class="modal-header">
+            <h3>
+                <i class="fa-solid fa-file-contract"></i>
+                Haddehane - Şartname Değiştir
+            </h3>
+            <button class="btn-close-modal" onclick="closeSartnameDegistirModal2()">
+                <i class="fa-solid fa-times"></i>
+            </button>
+        </div>
+        <div class="modal-body" style="padding: 40px;">
+            <div class="form-group">
+                <label class="form-label" style="font-size: 13px; margin-bottom: 12px;">
+                    <i class="fa-solid fa-file-lines"></i>
+                    Şartname:
+                </label>
+                <input type="text" class="form-input" id="sartname-input-2" value="0000000018" readonly style="font-size: 16px; padding: 20px 24px;">
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-modal btn-modal-back" onclick="closeSartnameDegistirModal2()">
+                İptal
+            </button>
+
+            <button class="btn-modal btn-modal-next" onclick="openSartnamePartileri()">
+                İleri
+                <i class="fa-solid fa-arrow-right"></i>
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal 18: Şartname Değiştir Partiler -->
+<div class="modal-overlay" id="sartnamePartiModal">
+    <div class="modal">
+        <div class="modal-header">
+            <h3>
+                <i class="fa-solid fa-exchange-alt"></i>
+                Haddehane - Şartname Değiştir
+            </h3>
+            <button class="btn-close-modal" onclick="closeSartnamePartiModal()">
+                <i class="fa-solid fa-times"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="hata-table-wrapper">
+                <table class="hata-table">
+                    <thead>
+                    <tr>
+                        <th>Şartname</th>
+                        <th>Parti</th>
+                        <th>Malzeme</th>
+                        <th>Malzeme kısa metni</th>
+                        <th>Döküm No</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>0000000012</td>
+                        <td>890000000533</td>
+                        <td>80000621</td>
+                        <td>HEB 260 S275JR_00 12000 PROFIL</td>
+                        <td>TESTDOKUM5</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-modal btn-modal-back" onclick="closeSartnamePartiModal()">
+                İptal
+            </button>
+            <button class="btn-modal btn-modal-next" style="background: #10b981;" onclick="confirmSartnamePartisi()">
+                <i class="fa-solid fa-check"></i>
+            </button>
+        </div>
+
+    </div>
+
+</div>
+<div class="modal-overlay" id="hurdaCatalogModal">
+    <div class="modal">
+        <div class="modal-header">
+            <h3>
+                <i class="fa-solid fa-book"></i>
+                Katalog Seçimi
+            </h3>
+            <button class="btn-close-modal" onclick="closeHurdaCatalogModal()">
+                <i class="fa-solid fa-times"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="catalog-table-wrapper">
+                <table class="catalog-table">
+                    <tbody>
+                    <tr onclick="toggleExpand(this)" class="expanded">
+                        <td class="code-cell">ZHHT09</td>
+                        <td>PROFIL HURDA ŞEKİL KUSURU</td>
+                        <td style="text-align: right; width: 40px;">
+                            <i class="fa-solid fa-chevron-up" style="color: #64748b;"></i>
+                        </td>
+                    </tr>
+                    <tr class="sub-row">
+                        <td class="code-cell">001</td>
+                        <td>ÖNDÜLE</td>
+                        <td style="text-align: right;">
+                            <button class="btn-select-catalog" onclick="selectHurdaCatalog('ZHHT09', '001', 'ÖNDÜLE')">Seç</button>
+                        </td>
+                    </tr>
+                    <tr class="sub-row">
+                        <td class="code-cell">002</td>
+                        <td>VERTİCAL KIRIŞI</td>
+                        <td style="text-align: right;">
+                            <button class="btn-select-catalog" onclick="selectHurdaCatalog('ZHHT09', '002', 'VERTİCAL KIRIŞI')">Seç</button>
+                        </td>
+                    </tr>
+                    <tr class="sub-row">
+                        <td class="code-cell">003</td>
+                        <td>FİTİLLİ</td>
+                        <td style="text-align: right;">
+                            <button class="btn-select-catalog" onclick="selectHurdaCatalog('ZHHT09', '003', 'FİTİLLİ')">Seç</button>
+                        </td>
+                    </tr>
+                    <tr class="sub-row">
+                        <td class="code-cell">004</td>
+                        <td>RADÜSDA ÇATLAK</td>
+                        <td style="text-align: right;">
+                            <button class="btn-select-catalog" onclick="selectHurdaCatalog('ZHHT09', '004', 'RADÜSDA ÇATLAK')">Seç</button>
+                        </td>
+                    </tr>
+                    <tr class="sub-row">
+                        <td class="code-cell">005</td>
+                        <td>RADÜSDA YARA</td>
+                        <td style="text-align: right;">
+                            <button class="btn-select-catalog" onclick="selectHurdaCatalog('ZHHT09', '005', 'RADÜSDA YARA')">Seç</button>
+                        </td>
+                    </tr>
+                    <tr class="sub-row">
+                        <td class="code-cell">006</td>
+                        <td>AYAK UCU YARA</td>
+                        <td style="text-align: right;">
+                            <button class="btn-select-catalog" onclick="selectHurdaCatalog('ZHHT09', '006', 'AYAK UCU YARA')">Seç</button>
+                        </td>
+                    </tr>
+                    <tr class="sub-row">
+                        <td class="code-cell">007</td>
+                        <td>YMK ÇAPAK</td>
+                        <td style="text-align: right;">
+                            <button class="btn-select-catalog" onclick="selectHurdaCatalog('ZHHT09', '007', 'YMK ÇAPAK')">Seç</button>
+                        </td>
+                    </tr>
+                    <tr class="sub-row">
+                        <td class="code-cell">008</td>
+                        <td>DOĞRULTMADA RADİUS ÇATLAĞI</td>
+                        <td style="text-align: right;">
+                            <button class="btn-select-catalog" onclick="selectHurdaCatalog('ZHHT09', '008', 'DOĞRULTMADA RADİUS ÇATLAĞI')">Seç</button>
+                        </td>
+                    </tr>
+                    <tr class="sub-row">
+                        <td class="code-cell">009</td>
+                        <td>ECSİK PASO</td>
+                        <td style="text-align: right;">
+                            <button class="btn-select-catalog" onclick="selectHurdaCatalog('ZHHT09', '009', 'ECSİK PASO')">Seç</button>
+                        </td>
+                    </tr>
+                    <tr class="sub-row">
+                        <td class="code-cell">010</td>
+                        <td>DALGALI İZ KALıNTıSı</td>
+                        <td style="text-align: right;">
+                            <button class="btn-select-catalog" onclick="selectHurdaCatalog('ZHHT09', '010', 'DALGALI İZ KALıNTıSı')">Seç</button>
+                        </td>
+                    </tr>
+                    <tr class="sub-row">
+                        <td class="code-cell">011</td>
+                        <td>YMK AYAK UCU ÇAPAK</td>
+                        <td style="text-align: right;">
+                            <button class="btn-select-catalog" onclick="selectHurdaCatalog('ZHHT09', '011', 'YMK AYAK UCU ÇAPAK')">Seç</button>
+                        </td>
+                    </tr>
+                    <tr onclick="toggleExpand(this)">
+                        <td class="code-cell">ZHHT11</td>
+                        <td>PROFIL HURDA KÜTLE KUSURU</td>
+                        <td style="text-align: right; width: 40px;">
+                            <i class="fa-solid fa-chevron-down" style="color: #64748b;"></i>
+                        </td>
+                    </tr>
+                    <tr onclick="toggleExpand(this)">
+                        <td class="code-cell">ZHHT12</td>
+                        <td>PROFIL HURDA HADDE BOZUK</td>
+                        <td style="text-align: right; width: 40px;">
+                            <i class="fa-solid fa-chevron-down" style="color: #64748b;"></i>
+                        </td>
+                    </tr>
+                    <tr onclick="toggleExpand(this)">
+                        <td class="code-cell">ZHHT13</td>
+                        <td>PROFIL HURDA MEKANİK TEST</td>
+                        <td style="text-align: right; width: 40px;">
+                            <i class="fa-solid fa-chevron-down" style="color: #64748b;"></i>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-modal btn-modal-back" onclick="closeHurdaCatalogModal()">
+                Geri
+            </button>
+        </div>
+    </div>
+</div>
+<div class="modal-overlay" id="kullanimKarariModal">
+    <div class="modal" style="max-width: 550px;">
+        <div class="modal-header">
+            <h3>
+                <i class="fa-solid fa-clipboard-check"></i>
+                Kullanım Kararı Kodu Seçimi
+            </h3>
+            <button class="btn-close-modal" onclick="closeKullanimKarariModal()">
+                <i class="fa-solid fa-times"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="kullanim-karari-list">
+                <div class="kullanim-karari-item" onclick="selectKullanimKarari('Z08', 'Kullanım kararları - Ray Profil')">
+                    <span class="kk-kod">Z08</span>
+                    <span class="kk-aciklama">Kullanım kararları - Ray Profil</span>
+                    <button class="btn-select-catalog">Seç</button>
+                </div>
+                <div class="kullanim-karari-item" onclick="selectKullanimKarari('Z91', '2. sınıfa dönüşüm')">
+                    <span class="kk-kod">Z91</span>
+                    <span class="kk-aciklama">2. sınıfa dönüşüm</span>
+                    <button class="btn-select-catalog">Seç</button>
+                </div>
+                <div class="kullanim-karari-item" onclick="selectKullanimKarari('Z92', '3. sınıfa dönüşüm')">
+                    <span class="kk-kod">Z92</span>
+                    <span class="kk-aciklama">3. sınıfa dönüşüm</span>
+                    <button class="btn-select-catalog">Seç</button>
+                </div>
+                <div class="kullanim-karari-item highlighted" onclick="selectKullanimKarari('Z03', 'Kalite dönüşümü')">
+                    <span class="kk-kod">Z03</span>
+                    <span class="kk-aciklama">Kalite dönüşümü</span>
+                    <button class="btn-select-catalog">Seç</button>
+                </div>
+                <div class="kullanim-karari-item" onclick="selectKullanimKarari('Z04', 'Hurda kararı')">
+                    <span class="kk-kod">Z04</span>
+                    <span class="kk-aciklama">Hurda kararı</span>
+                    <button class="btn-select-catalog">Seç</button>
+                </div>
+                <div class="kullanim-karari-item" onclick="selectKullanimKarari('Z05', 'Alt boy 1. sınıf')">
+                    <span class="kk-kod">Z05</span>
+                    <span class="kk-aciklama">Alt boy 1. sınıf</span>
+                    <button class="btn-select-catalog">Seç</button>
+                </div>
+                <div class="kullanim-karari-item" onclick="selectKullanimKarari('Z06', 'Alt boy 2. sınıf')">
+                    <span class="kk-kod">Z06</span>
+                    <span class="kk-aciklama">Alt boy 2. sınıf</span>
+                    <button class="btn-select-catalog">Seç</button>
+                </div>
+                <div class="kullanim-karari-item" onclick="selectKullanimKarari('Z07', '1. sınıf Kabul')">
+                    <span class="kk-kod">Z07</span>
+                    <span class="kk-aciklama">1. sınıf Kabul</span>
+                    <button class="btn-select-catalog">Seç</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-overlay" id="holdModal">
+    <div class="modal">
+        <div class="modal-header">
+            <h3>
+                <i class="fa-solid fa-hand"></i>
+                Hold Nedenleri
+            </h3>
+            <button class="btn-close-modal" onclick="closeHoldModal()">
+                <i class="fa-solid fa-times"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+            <!-- Mekanik Test Uygunsuzluğu -->
+            <div class="hold-section">
+                <div class="hold-section-header" onclick="toggleHoldSection(this)">
+                    <span class="hold-section-title">
+                        <i class="fa-solid fa-wrench"></i>
+                        1- Mekanik Test Uygunsuzluğu
+                    </span>
+                    <i class="fa-solid fa-chevron-down"></i>
+                </div>
+                <div class="hold-section-content">
+                    <div class="hold-options">
+                        <label class="hold-radio-option">
+                            <input type="radio" name="hold-reason" value="Mukavemet Düşük">
+                            <span>Mukavemet Düşük</span>
+                        </label>
+                        <label class="hold-radio-option">
+                            <input type="radio" name="hold-reason" value="Mukavemet Yüksek">
+                            <span>Mukavemet Yüksek</span>
+                        </label>
+                        <label class="hold-radio-option">
+                            <input type="radio" name="hold-reason" value="Çekme Darbe Direnci Düşük">
+                            <span>Çekme Darbe Direnci Düşük</span>
+                        </label>
+                        <label class="hold-radio-option">
+                            <input type="radio" name="hold-reason" value="Uzama Düşük">
+                            <span>Uzama Düşük</span>
+                        </label>
+                        <label class="hold-radio-option">
+                            <input type="radio" name="hold-reason" value="% Kesit Daralması Düşük">
+                            <span>% Kesit Daralması Düşük</span>
+                        </label>
+                        <label class="hold-radio-option">
+                            <input type="radio" name="hold-reason" value="Sertlik Yüksek">
+                            <span>Sertlik Yüksek</span>
+                        </label>
+                        <label class="hold-radio-option">
+                            <input type="radio" name="hold-reason" value="Sertlik Düşük">
+                            <span>Sertlik Düşük</span>
+                        </label>
+                        <label class="hold-radio-option">
+                            <input type="radio" name="hold-reason" value="Sertlik Dağılımı (Mekanik Test)">
+                            <span>Sertlik Dağılımı (Mekanik Test)</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Boyutsal/Fiziksel Uygunsuzluk -->
+            <div class="hold-section">
+                <div class="hold-section-header" onclick="toggleHoldSection(this)">
+                    <span class="hold-section-title">
+                        <i class="fa-solid fa-ruler"></i>
+                        2- Boyutsal/Fiziksel Uygunsuzluk
+                    </span>
+                    <i class="fa-solid fa-chevron-down"></i>
+                </div>
+                <div class="hold-section-content">
+                    <div class="hold-options">
+                        <label class="hold-radio-option">
+                            <input type="radio" name="hold-reason" value="Kısa">
+                            <span>Kısa</span>
+                        </label>
+                        <label class="hold-radio-option">
+                            <input type="radio" name="hold-reason" value="Uzun">
+                            <span>Uzun</span>
+                        </label>
+                        <label class="hold-radio-option">
+                            <input type="radio" name="hold-reason" value="H (+) Tolerans Haricı">
+                            <span>H (+) Tolerans Haricı</span>
+                        </label>
+                        <label class="hold-radio-option">
+                            <input type="radio" name="hold-reason" value="E (-) Tolerans Haricı">
+                            <span>E (-) Tolerans Haricı</span>
+                        </label>
+                        <label class="hold-radio-option">
+                            <input type="radio" name="hold-reason" value="T (-) Tolerans Haricı">
+                            <span>T (-) Tolerans Haricı</span>
+                        </label>
+                        <label class="hold-radio-option">
+                            <input type="radio" name="hold-reason" value="T (+) Tolerans Haricı">
+                            <span>T (+) Tolerans Haricı</span>
+                        </label>
+                        <label class="hold-radio-option">
+                            <input type="radio" name="hold-reason" value="Boy Aşımı Kesit">
+                            <span>Boy Aşımı Kesit</span>
+                        </label>
+                        <label class="hold-radio-option">
+                            <input type="radio" name="hold-reason" value="Doğrusallık Eğrisi">
+                            <span>Doğrusallık Eğrisi</span>
+                        </label>
+                        <label class="hold-radio-option">
+                            <input type="radio" name="hold-reason" value="Sırt Merizi">
+                            <span>Sırt Merizi</span>
+                        </label>
+                        <label class="hold-radio-option">
+                            <input type="radio" name="hold-reason" value="Dökme Ucu">
+                            <span>Dökme Ucu</span>
+                        </label>
+                        <label class="hold-radio-option">
+                            <input type="radio" name="hold-reason" value="Kesit Beklenen (Boyutsal)">
+                            <span>Kesit Beklenen (Boyutsal)</span>
+                        </label>
+                        <label class="hold-radio-option">
+                            <input type="radio" name="hold-reason" value="Diğer Sebepler (Boyutsal)">
+                            <span>Diğer Sebepler (Boyutsal)</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Yüzey Kusurları -->
+            <div class="hold-section">
+                <div class="hold-section-header" onclick="toggleHoldSection(this)">
+                    <span class="hold-section-title">
+                        <i class="fa-solid fa-layer-group"></i>
+                        3- Yüzey Kusurları
+                    </span>
+                    <i class="fa-solid fa-chevron-down"></i>
+                </div>
+                <div class="hold-section-content">
+                    <div class="hold-options">
+                        <label class="hold-radio-option">
+                            <input type="radio" name="hold-reason" value="Ream Blank (Katışık)">
+                            <span>Ream Blank (Katışık)</span>
+                        </label>
+                        <label class="hold-radio-option">
+                            <input type="radio" name="hold-reason" value="YMK Ayak Üçü Çıpak">
+                            <span>YMK Ayak Üçü Çıpak</span>
+                        </label>
+                        <label class="hold-radio-option">
+                            <input type="radio" name="hold-reason" value="YMK Ayak Dışı Çıpak">
+                            <span>YMK Ayak Dışı Çıpak</span>
+                        </label>
+                        <label class="hold-radio-option">
+                            <input type="radio" name="hold-reason" value="YMK Ayak İçi Çıpak">
+                            <span>YMK Ayak İçi Çıpak</span>
+                        </label>
+                        <label class="hold-radio-option">
+                            <input type="radio" name="hold-reason" value="Hadde Ayak İçi Çıpak">
+                            <span>Hadde Ayak İçi Çıpak</span>
+                        </label>
+                        <label class="hold-radio-option">
+                            <input type="radio" name="hold-reason" value="Merdane Kıragı">
+                            <span>Merdane Kıragı</span>
+                        </label>
+                        <label class="hold-radio-option">
+                            <input type="radio" name="hold-reason" value="Diğer Sebepler (Yüzey)">
+                            <span>Diğer Sebepler (Yüzey)</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Proses Kusurları -->
+            <div class="hold-section">
+                <div class="hold-section-header" onclick="toggleHoldSection(this)">
+                    <span class="hold-section-title">
+                        <i class="fa-solid fa-gears"></i>
+                        4- Proses Kusurları
+                    </span>
+                    <i class="fa-solid fa-chevron-down"></i>
+                </div>
+                <div class="hold-section-content">
+                    <div class="hold-options">
+                        <label class="hold-radio-option">
+                            <input type="radio" name="hold-reason" value="Fırında Bekleme Süresi Uzun">
+                            <span>Fırında Bekleme Süresi Uzun</span>
+                        </label>
+                        <label class="hold-radio-option">
+                            <input type="radio" name="hold-reason" value="Uygun Olmayan Hadde Sıcaklığı">
+                            <span>Uygun Olmayan Hadde Sıcaklığı</span>
+                        </label>
+                        <label class="hold-radio-option">
+                            <input type="radio" name="hold-reason" value="Soğuk Haddeleme">
+                            <span>Soğuk Haddeleme</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-modal btn-modal-back" onclick="closeHoldModal()">
+                İptal
+            </button>
+            <button class="btn-modal btn-modal-next" onclick="confirmHoldReason()">
+                Kaydet
+                <i class="fa-solid fa-check"></i>
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Tarih ve saat güncelleme
+    function updateDateTime() {
+        const now = new Date();
+        const dateOptions = { day: 'numeric', month: 'long', year: 'numeric' };
+        const dateStr = now.toLocaleDateString('tr-TR', dateOptions);
+        const timeStr = now.toLocaleTimeString('tr-TR', { hour12: false });
+        document.getElementById('current-date').textContent = dateStr;
+        document.getElementById('current-time').textContent = timeStr;
+    }
+    updateDateTime();
+    setInterval(updateDateTime, 1000);
+
+    // Global değişken - seçilen sınıf tipini saklamak için
+    let selectedSinifTipi = '';
+    let isReworkSelected = false;
+    let selectedHoldReason = '';
+
+    // Hold checkbox'a event listener ekle
+    document.addEventListener('DOMContentLoaded', function() {
+        const holdCheckbox = document.getElementById('hold');
+        holdCheckbox.addEventListener('change', function() {
+            if (this.checked) {
+                openHoldModal();
+            }
+        });
+    });
+
+    // STEP 0: Sınıf Değişim Onay Modal
+    function openSinifDegisimOnay() {
+        document.getElementById('sinifDegisimOnayModal').classList.add('active');
+    }
+
+    function closeSinifDegisimOnay() {
+        document.getElementById('sinifDegisimOnayModal').classList.remove('active');
+    }
+
+    function confirmDegisimTipi() {
+        const selectedType = document.querySelector('input[name="degisim-tipi"]:checked').value;
+
+        if (selectedType === 'sinif') {
+            // Sınıf değişimi seçildi
+            closeSinifDegisimOnay();
+            document.getElementById('sinifModal1').classList.add('active');
+        } else {
+            // Hurda değişimi seçildi
+            closeSinifDegisimOnay();
+            openHurdaDegisikligiModal();
+        }
+    }
+
+    // STEP 1: Sınıf Modal
+    function closeSinifModal() {
+        document.querySelectorAll('.modal-overlay').forEach(modal => {
+            modal.classList.remove('active');
+        });
+    }
+
+    // Katalog açma (••• tıklama)
+    function openCatalogModal() {
+        window.currentEditingRow = event.target.closest('tr');
+        document.getElementById('sinifModal1').classList.remove('active');
+        document.getElementById('sinifModal2').classList.add('active');
+    }
+
+    function closeKatalogModal() {
+        document.getElementById('sinifModal2').classList.remove('active');
+        document.getElementById('sinifModal1').classList.add('active');
+    }
+
+    // STEP 2: Katalog Seçimi
+    function toggleExpand(row) {
+        const icon = row.querySelector('i');
+        const isExpanded = row.classList.contains('expanded');
+
+        document.querySelectorAll('.expanded').forEach(r => {
+            r.classList.remove('expanded');
+            const i = r.querySelector('i');
+            if(i) {
+                i.classList.remove('fa-chevron-up');
+                i.classList.add('fa-chevron-down');
+            }
+        });
+
+        document.querySelectorAll('.sub-row').forEach(sr => {
+            sr.style.display = 'none';
+        });
+
+        if (!isExpanded) {
+            row.classList.add('expanded');
+            icon.classList.remove('fa-chevron-down');
+            icon.classList.add('fa-chevron-up');
+
+            let nextRow = row.nextElementSibling;
+            while (nextRow && nextRow.classList.contains('sub-row')) {
+                nextRow.style.display = 'table-row';
+                nextRow = nextRow.nextElementSibling;
+            }
+        }
+    }
+
+    function selectCatalog(ustKod, altKod, description) {
+        if(window.currentEditingRow) {
+            const cells = window.currentEditingRow.cells;
+            cells[1].textContent = ustKod; // Üst Kod (ZHHT16)
+            cells[2].innerHTML = '<span class="dots-cell" onclick="openCatalogModal()">•••</span>'; // Alt Kod (•••)
+            cells[3].textContent = altKod; // Kod numarası (002)
+            cells[4].textContent = description; // Alt Kod Tanımı (Akma Mukavemeti)
+            cells[5].innerHTML = '<input type="number" value="1" min="1" style="width: 100%;">'; // Hata Sayısı
+        }
+
+        closeKatalogModal();
+    }
+
+    // Tablo işlemleri
+    function addHataRow() {
+        const tbody = document.getElementById('hataTableBody');
+        const newRow = tbody.insertRow();
+        newRow.innerHTML = `
+            <td><input type="checkbox"></td>
+            <td></td>
+            <td class="dots-cell" onclick="openCatalogModal()">•••</td>
+            <td></td>
+            <td></td>
+            <td><input type="number" value="" min="1" style="width: 100%;"></td>
+            <td style="text-align: center;">
+                <button class="btn-delete-icon" onclick="deleteHataRow(this)">
+                    <i class="fa-solid fa-trash"></i>
+                </button>
+            </td>
+        `;
+    }
+
+    function deleteHataRow(btn) {
+        const row = btn.closest('tr');
+        row.remove();
+    }
+
+    function deleteSelectedRows() {
+        const checkboxes = document.querySelectorAll('#hataTableBody input[type="checkbox"]:checked');
+        checkboxes.forEach(checkbox => {
+            checkbox.closest('tr').remove();
+        });
+    }
+
+    // STEP 1 -> SUCCESS
+    function goToSuccess() {
+        const sinifTipi = document.getElementById('sinif-tipi').value;
+        selectedSinifTipi = sinifTipi;
+
+        document.getElementById('sinifModal1').classList.remove('active');
+        document.getElementById('successModal').classList.add('active');
+    }
+
+    function closeSuccessModal() {
+        document.getElementById('successModal').classList.remove('active');
+
+        // Ana ekranda sınıfı ve açıklamayı güncelle
+        document.getElementById('sinif-value').value = `${selectedSinifTipi}. Sınıf`;
+        document.getElementById('aciklama').value = `${selectedSinifTipi}. Sınıfa dönüştürüldü`;
+    }
+
+    // Ana onay butonu
+    function showFinalConfirmation() {
+        const selectedKK = document.querySelector('.selected-value').textContent;
+        const reworkCheckbox = document.getElementById('rework');
+
+        if (selectedKK === 'Seçim yapılmadı') {
+            alert('Lütfen kullanım kararı seçiniz!');
+            return;
+        }
+
+        // Rework seçili mi kontrol et
+        if (reworkCheckbox.checked) {
+            // Rework için başarı modalını göster
+            showReworkSuccessModal();
+        } else {
+            // Normal onay
+            alert('Kullanım kararı başarıyla onaylandı!');
+        }
+    }
+
+    // Rework başarı modalını göster
+    function showReworkSuccessModal() {
+        // Success modal içeriğini güncelle
+        const successModal = document.getElementById('successModal');
+        const successContent = successModal.querySelector('.success-content');
+
+        successContent.innerHTML = `
+            <div class="success-icon">
+                <i class="fa-solid fa-check"></i>
+            </div>
+            <h4>Başarılı</h4>
+            <p>0000000000800000621 Malzeme ve 0000000087 Parti için stok transferi başarılı bir şekilde gerçekleştirilmiştir.</p>
+            <button class="btn-continue" onclick="closeReworkSuccessModal()">
+                <i class="fa-solid fa-arrow-right"></i>
+                Devam
+            </button>
+        `;
+
+        successModal.classList.add('active');
+    }
+
+    // Rework başarı modalını kapat ve açıklamayı güncelle
+    function closeReworkSuccessModal() {
+        document.getElementById('successModal').classList.remove('active');
+
+        // Açıklama alanına "Rework için" yaz
+        document.getElementById('aciklama').value = 'Rework için';
+    }
+
+    // Close modal on overlay click
+    document.querySelectorAll('.modal-overlay').forEach(overlay => {
+        overlay.addEventListener('click', function(e) {
+            if (e.target === overlay) {
+                e.target.classList.remove('active');
+            }
+        });
+    });
+
+    // Close modal on ESC key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            document.querySelectorAll('.modal-overlay').forEach(modal => {
+                modal.classList.remove('active');
+            });
+        }
+    });
+
+    // Initialize sub-rows as hidden except expanded
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.sub-row').forEach(row => {
+            if (!row.previousElementSibling.classList.contains('expanded')) {
+                row.style.display = 'none';
+            }
+        });
+    });
+
+    // Initialize sub-rows as hidden except expanded
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.sub-row').forEach(row => {
+            if (!row.previousElementSibling.classList.contains('expanded')) {
+                row.style.display = 'none';
+            }
+        });
+    });
+    function openHoldModal() {
+        document.getElementById('holdModal').classList.add('active');
+    }
+
+    function closeHoldModal() {
+        document.getElementById('holdModal').classList.remove('active');
+        // Checkbox'ı kaldır
+        document.getElementById('hold').checked = false;
+    }
+
+    function toggleHoldSection(header) {
+        const section = header.parentElement;
+        const wasExpanded = section.classList.contains('expanded');
+
+        // Tüm section'ları kapat
+        document.querySelectorAll('.hold-section').forEach(s => {
+            s.classList.remove('expanded');
+        });
+
+        // Eğer kapalıysa aç
+        if (!wasExpanded) {
+            section.classList.add('expanded');
+        }
+    }
+
+    function confirmHoldReason() {
+        const selectedRadio = document.querySelector('input[name="hold-reason"]:checked');
+
+        if (!selectedRadio) {
+            alert('Lütfen bir hold nedeni seçiniz!');
+            return;
+        }
+
+        selectedHoldReason = selectedRadio.value;
+
+        // Hold modalını kapat
+        document.getElementById('holdModal').classList.remove('active');
+
+        // Başarı mesajını göster
+        showHoldSuccessModal();
+    }
+
+    function showHoldSuccessModal() {
+        const successModal = document.getElementById('successModal');
+        const successContent = successModal.querySelector('.success-content');
+
+        successContent.innerHTML = `
+            <div class="success-icon">
+                <i class="fa-solid fa-check"></i>
+            </div>
+            <h4>Başarılı</h4>
+            <p><span style="color: #ef4444;">●</span> 890000000000365 partisi Hold durumuna çıkarılmıştır.</p>
+            <button class="btn-continue" onclick="closeHoldSuccessModal()">
+                <i class="fa-solid fa-arrow-right"></i>
+                Devam
+            </button>
+        `;
+
+        successModal.classList.add('active');
+    }
+
+    function closeHoldSuccessModal() {
+        document.getElementById('successModal').classList.remove('active');
+
+        // Açıklama alanına "[HOLD]: {seçilen neden}" yaz
+        document.getElementById('aciklama').value = `[HOLD]: ${selectedHoldReason}`;
+    }
+
+    // Kalite Değiştir Fonksiyonları
+    let selectedKalite = '';
+    let selectedMalzeme = '';
+
+    function openKaliteModal() {
+        document.getElementById('kaliteModal1').classList.add('active');
+    }
+
+    function closeKaliteModal() {
+        document.getElementById('kaliteModal1').classList.remove('active');
+    }
+
+    function openKaliteListesi() {
+        document.getElementById('kaliteModal1').classList.remove('active');
+        document.getElementById('kaliteModal2').classList.add('active');
+    }
+
+    function closeKaliteListesi() {
+        document.getElementById('kaliteModal2').classList.remove('active');
+    }
+
+    function backToKaliteModal1() {
+        document.getElementById('kaliteModal2').classList.remove('active');
+        document.getElementById('kaliteModal1').classList.add('active');
+    }
+
+    function toggleKaliteDropdown(dropdown) {
+        dropdown.classList.toggle('expanded');
+    }
+
+    function selectKaliteOption(event, kalite) {
+        event.stopPropagation();
+        selectedKalite = kalite;
+
+        // Seçili olanı işaretle
+        document.querySelectorAll('.kalite-option').forEach(opt => {
+            opt.classList.remove('selected');
+        });
+        event.target.classList.add('selected');
+
+        // Input'u güncelle
+        document.getElementById('kalite-input').value = kalite;
+    }
+
+    function openMalzemeListesi() {
+        document.getElementById('kaliteModal2').classList.remove('active');
+        document.getElementById('malzemeModal').classList.add('active');
+    }
+
+    function closeMalzemeListesi() {
+        document.getElementById('malzemeModal').classList.remove('active');
+    }
+
+    function backToKaliteListesi() {
+        document.getElementById('malzemeModal').classList.remove('active');
+        document.getElementById('kaliteModal2').classList.add('active');
+    }
+
+    function selectMalzeme(malzemeKodu) {
+        selectedMalzeme = malzemeKodu;
+        document.getElementById('malzemeModal').classList.remove('active');
+        document.getElementById('sartnameModal').classList.add('active');
+    }
+
+    function closeSartnameModal() {
+        document.getElementById('sartnameModal').classList.remove('active');
+    }
+
+    function openKalitePartileri() {
+        document.getElementById('sartnameModal').classList.remove('active');
+        document.getElementById('kalitePartiModal').classList.add('active');
+    }
+
+    function closeKalitePartiModal() {
+        document.getElementById('kalitePartiModal').classList.remove('active');
+    }
+
+    function toggleAllParti() {
+        const selectAll = document.getElementById('selectAllParti');
+        const checkboxes = document.querySelectorAll('.parti-checkbox');
+        checkboxes.forEach(cb => cb.checked = selectAll.checked);
+    }
+
+    function confirmKalitePartileri() {
+        document.getElementById('kalitePartiModal').classList.remove('active');
+        document.getElementById('dokumOnayModal').classList.add('active');
+    }
+
+    function closeDokumOnayModal() {
+        document.getElementById('dokumOnayModal').classList.remove('active');
+    }
+
+    function confirmDokumOnay() {
+        document.getElementById('dokumOnayModal').classList.remove('active');
+
+        // Başarı mesajını göster
+        showKaliteDegisimSuccess();
+    }
+
+    function showKaliteDegisimSuccess() {
+        const successModal = document.getElementById('successModal');
+        const successContent = successModal.querySelector('.success-content');
+
+        successContent.innerHTML = `
+            <div class="success-icon">
+                <i class="fa-solid fa-check"></i>
+            </div>
+            <h4>Başarılı</h4>
+            <p>Kalite değişikliği başarıyla devralınmıştır.</p>
+            <button class="btn-continue" onclick="closeKaliteDegisimSuccess()">
+                <i class="fa-solid fa-arrow-right"></i>
+                Devam
+            </button>
+        `;
+
+        successModal.classList.add('active');
+    }
+
+    function closeKaliteDegisimSuccess() {
+        document.getElementById('successModal').classList.remove('active');
+
+        // Kalite değerini güncelle
+        document.getElementById('kalite-value').value = selectedKalite || 'S235JR_00';
+
+        // Açıklama alanına yaz
+        document.getElementById('aciklama').value = 'Kalite dönüşümü yapılmıştır.';
+
+        // Kullanım kararı modalını otomatik açma - kullanıcı butona bassın
+    }
+
+    function openKullanimKarariModal() {
+        document.getElementById('kullanimKarariModal').classList.add('active');
+    }
+
+    function closeKullanimKarariModal() {
+        document.getElementById('kullanimKarariModal').classList.remove('active');
+    }
+
+    function selectKullanimKarari(kod, aciklama) {
+        // Kullanım kararını seç
+        const selectedValue = document.getElementById('selected-kk-value');
+        selectedValue.textContent = kod;
+        selectedValue.classList.remove('empty');
+
+        // Modalı kapat
+        closeKullanimKarariModal();
+
+        // Eğer Z04 (Hurda kararı) seçildiyse özel işlem
+        if (kod === 'Z04') {
+            showHurdaKarariSuccess();
+        }
+    }
+
+    // Hurda Değişikliği Fonksiyonları
+    function openHurdaDegisikligiModal() {
+        document.getElementById('hurdaDegisikligiModal').classList.add('active');
+    }
+
+    function closeHurdaDegisikligiModal() {
+        document.getElementById('hurdaDegisikligiModal').classList.remove('active');
+    }
+
+    function openHurdaMalzemeSecimModal() {
+        // Hurda Değişikliği modalını gizle ama arka planda tut
+        document.getElementById('hurdaDegisikligiModal').classList.remove('active');
+        document.getElementById('hurdaMalzemeModal').classList.add('active');
+    }
+
+    function openMalzemeSecimi() {
+        document.getElementById('hurdaDegisikligiModal').classList.remove('active');
+        document.getElementById('hurdaMalzemeModal').classList.add('active');
+    }
+
+    function closeHurdaMalzemeModal() {
+        document.getElementById('hurdaMalzemeModal').classList.remove('active');
+        document.getElementById('hurdaDegisikligiModal').classList.add('active');
+    }
+
+    function selectHurdaMalzeme() {
+        // Seçilen malzeme kodunu güncelle
+        const malzemeKoduBtn = document.getElementById('selectedMalzemeBtn');
+        malzemeKoduBtn.innerHTML = '<i class="fa-solid fa-box"></i> 70000057';
+
+        closeHurdaMalzemeModal();
+    }
+
+    function openHurdaCatalogModal() {
+        window.currentEditingRow = event.target.closest('tr');
+        document.getElementById('hurdaDegisikligiModal').classList.remove('active');
+        document.getElementById('hurdaCatalogModal').classList.add('active');
+    }
+
+    function closeHurdaCatalogModal() {
+        document.getElementById('hurdaCatalogModal').classList.remove('active');
+        document.getElementById('hurdaDegisikligiModal').classList.add('active');
+    }
+
+    function selectHurdaCatalog(ustKod, altKod, description) {
+        if(window.currentEditingRow) {
+            const cells = window.currentEditingRow.cells;
+            cells[1].textContent = ustKod; // Üst Kod
+            cells[2].innerHTML = '<span class="dots-cell" onclick="openHurdaCatalogModal()">•••</span>'; // Alt Kod
+            cells[3].textContent = altKod; // Kod numarası
+            cells[4].textContent = description; // Alt Kod Tanımı
+            cells[5].innerHTML = '<input type="number" value="1" min="1" style="width: 100%;">'; // Hata Sayısı
+        }
+
+        closeHurdaCatalogModal();
+    }
+
+    function addHurdaRow() {
+        const tbody = document.getElementById('hurdaTableBody');
+        const newRow = tbody.insertRow();
+        newRow.innerHTML = `
+            <td><input type="checkbox"></td>
+            <td></td>
+            <td class="dots-cell" onclick="openHurdaCatalogModal()">•••</td>
+            <td></td>
+            <td></td>
+            <td><input type="number" value="" min="1" style="width: 100%;"></td>
+            <td style="text-align: center;">
+                <button class="btn-delete-icon" onclick="deleteHurdaRow(this)">
+                    <i class="fa-solid fa-trash"></i>
+                </button>
+            </td>
+        `;
+    }
+
+    function deleteHurdaRow(btn) {
+        const row = btn.closest('tr');
+        row.remove();
+    }
+
+    function deleteSelectedHurdaRows() {
+        const checkboxes = document.querySelectorAll('#hurdaTableBody input[type="checkbox"]:checked');
+        checkboxes.forEach(checkbox => {
+            checkbox.closest('tr').remove();
+        });
+    }
+
+    function confirmHurdaDegisikligi() {
+        // Hurda değişikliğini onayla
+        document.getElementById('hurdaDegisikligiModal').classList.remove('active');
+
+        // Kullanım kararı modalını aç
+        setTimeout(() => {
+            document.getElementById('kullanimKarariModal').classList.add('active');
+        }, 300);
+    }
+
+    function showHurdaKarariSuccess() {
+        const successModal = document.getElementById('successModal');
+        const successContent = successModal.querySelector('.success-content');
+
+        successContent.innerHTML = `
+            <div class="success-icon">
+                <i class="fa-solid fa-check"></i>
+            </div>
+            <h4>Başarılı</h4>
+            <p>0000000000800000621 Malzeme ve 0000000088 Parti için stok transferi başarılı bir şekilde gerçekleştirilmiştir.</p>
+            <p>890000000365 partisi için kullanım kararı verilmiştir.</p>
+            <button class="btn-continue" onclick="closeHurdaKarariSuccess()">
+                <i class="fa-solid fa-arrow-right"></i>
+                Devam
+            </button>
+        `;
+
+        successModal.classList.add('active');
+    }
+
+    function closeHurdaKarariSuccess() {
+        document.getElementById('successModal').classList.remove('active');
+
+        // Açıklama alanına "Hurdaya ayrılmıştır." yaz
+        document.getElementById('aciklama').value = 'Hurdaya ayrılmıştır.';
+    }
+
+    // Şartname Değiştir Fonksiyonları
+    let selectedSartnameNo = '';
+    let selectedSartnameAdi = '';
+
+    function openSartnameDegistirModal() {
+        document.getElementById('sartnameDegistirModal').classList.add('active');
+    }
+
+    function closeSartnameDegistirModal() {
+        document.getElementById('sartnameDegistirModal').classList.remove('active');
+    }
+
+    function openSartnameListesi() {
+        document.getElementById('sartnameDegistirModal').classList.remove('active');
+        document.getElementById('sartnameListesiModal').classList.add('active');
+    }
+
+    function closeSartnameListesi() {
+        document.getElementById('sartnameListesiModal').classList.remove('active');
+    }
+
+    function backToSartnameDegistir() {
+        document.getElementById('sartnameListesiModal').classList.remove('active');
+        document.getElementById('sartnameDegistirModal').classList.add('active');
+    }
+
+    function selectSartname(sartnameNo, sartnameAdi) {
+        selectedSartnameNo = sartnameNo;
+        selectedSartnameAdi = sartnameAdi;
+
+        // Seçilen şartnameyi göster
+        document.getElementById('sartname-input-2').value = sartnameNo;
+
+        // Listeyi kapat, yeni modalı aç
+        document.getElementById('sartnameListesiModal').classList.remove('active');
+        document.getElementById('sartnameDegistirModal2').classList.add('active');
+    }
+
+    function closeSartnameDegistirModal2() {
+        document.getElementById('sartnameDegistirModal2').classList.remove('active');
+    }
+
+    function openSartnamePartileri() {
+        document.getElementById('sartnameDegistirModal2').classList.remove('active');
+        document.getElementById('sartnamePartiModal').classList.add('active');
+    }
+
+    function closeSartnamePartiModal() {
+        document.getElementById('sartnamePartiModal').classList.remove('active');
+    }
+
+    function confirmSartnamePartisi() {
+        // Parti modalını kapat
+        document.getElementById('sartnamePartiModal').classList.remove('active');
+
+        // Ara başarı mesajını göster
+        showSartnameDegisikligiSuccess();
+    }
+
+    function showSartnameDegisikligiSuccess() {
+        const successModal = document.getElementById('successModal');
+        const successContent = successModal.querySelector('.success-content');
+
+        successContent.innerHTML = `
+            <div class="success-icon">
+                <i class="fa-solid fa-check"></i>
+            </div>
+            <h4>Başarılı</h4>
+            <p>Şartname değişikliği başarıyla devralınmıştır.</p>
+            <button class="btn-continue" onclick="closeSartnameDegisikligiSuccess()">
+                <i class="fa-solid fa-arrow-right"></i>
+                Devam
+            </button>
+        `;
+
+        successModal.classList.add('active');
+    }
+
+    function closeSartnameDegisikligiSuccess() {
+        document.getElementById('successModal').classList.remove('active');
+
+        // Şartname değerini güncelle
+        document.getElementById('sartname-value').value = selectedSartnameNo;
+
+        // Son başarı mesajını göster
+        showFinalSartnameSuccess();
+    }
+
+    function showFinalSartnameSuccess() {
+        const successModal = document.getElementById('successModal');
+        const successContent = successModal.querySelector('.success-content');
+
+        successContent.innerHTML = `
+            <div class="success-icon">
+                <i class="fa-solid fa-check"></i>
+            </div>
+            <h4>Başarılı</h4>
+            <p>0000000000800000621 Malzeme ve 0000000087 Parti için stok transferi başarılı bir şekilde gerçekleştirilmiştir.</p>
+            <button class="btn-continue" onclick="closeFinalSartnameSuccess()">
+                <i class="fa-solid fa-arrow-right"></i>
+                Devam
+            </button>
+        `;
+
+        successModal.classList.add('active');
+    }
+
+    function closeFinalSartnameSuccess() {
+        document.getElementById('successModal').classList.remove('active');
+        // İşlem tamamlandı
+    }
+</script>
+
+</body>
+</html>

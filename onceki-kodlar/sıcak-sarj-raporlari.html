@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <title>🔥 Sıcak Şarj Gerçekleşme Raporu</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Sidebar -->
+  <div id="sidebar-placeholder"></div>
+
+  <!-- İçerik -->
+  <div class="content-wrapper">
+    <!-- Breadcrumb -->
+    <div class="breadcrumbs">
+      <a href="index.html">Anasayfa</a> <span>›</span> <span>Sıcak Şarj Raporu</span>
+    </div>
+
+    <!-- Sayfa Başlık ve Buton -->
+    <div class="custom-card">
+      <h1 class="report-title">🔥 Sıcak Şarj Gerçekleşme Raporu</h1>
+      <div class="right-buttons">
+        <button class="btn btn-blue">Geçen Ayın Raporu</button>
+        <button class="btn btn-blue">Bu Ayın Raporu</button>
+      </div>
+    </div>
+
+    <!-- Filtre Alanı -->
+    <div class="filter-section">
+      <div class="filter-item">
+        <label>Başlangıç Tarihi</label>
+        <input type="date" />
+        <label>Bitiş Tarihi</label>
+        <input type="date" />
+      </div>
+      <div class="action-buttons">
+        <button class="btn btn-green">Rapor Getir</button>
+        <button class="btn btn-blue">Excel Rapor</button>
+      </div>
+    </div>
+
+    <!-- Tablo -->
+    <div class="table-wrapper">
+      <table class="custom-table">
+        <thead>
+          <tr>
+            <th>TARİH</th>
+            <th>SOĞUK<br>SIC. ORT.</th>
+            <th>SOĞUK<br>ŞARJ TON</th>
+            <th>SOĞUK<br>YÜZDE</th>
+            <th>ILIK<br>SIC. ORT.</th>
+            <th>ILIK<br>ŞARJ TON</th>
+            <th>ILIK<br>YÜZDE</th>
+            <th>SICAK<br>SIC. ORT.</th>
+            <th>SICAK<br>ŞARJ TON</th>
+            <th>SICAK<br>YÜZDE</th>
+            <th>DİREKT<br>SIC. ORT.</th>
+            <th>DİREKT<br>ŞARJ TON</th>
+            <th>DİREKT<br>YÜZDE</th>
+            <th>TOPLAM<br>SIC. ORT.</th>
+            <th>TOPLAM<br>ŞARJ TON</th>
+            <th>KOK GAZI<br>SARF. (Nm³)</th>
+            <th>KOK GAZI<br>SARF. (Nm³/Ton)</th>
+            <th>ENERJİ<br>TÜKETİMİ (kcal/Ton)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>18.06.2025</td><td>80</td><td>12.5</td><td>10%</td>
+            <td>180</td><td>25.0</td><td>20%</td>
+            <td>420</td><td>50.0</td><td>40%</td>
+            <td>610</td><td>37.5</td><td>30%</td>
+            <td>365</td><td>125.0</td><td>900</td><td>7.2</td><td>7300</td>
+          </tr>
+          <tr>
+            <td>19.06.2025</td><td>85</td><td>10.0</td><td>8%</td>
+            <td>175</td><td>20.0</td><td>18%</td>
+            <td>430</td><td>55.0</td><td>45%</td>
+            <td>605</td><td>42.0</td><td>29%</td>
+            <td>368</td><td>127.0</td><td>910</td><td>7.1</td><td>7350</td>
+          </tr>
+          <tr>
+            <td>20.06.2025</td><td>78</td><td>15.0</td><td>12%</td>
+            <td>160</td><td>22.0</td><td>17%</td>
+            <td>415</td><td>53.0</td><td>41%</td>
+            <td>615</td><td>36.0</td><td>30%</td>
+            <td>362</td><td>126.0</td><td>890</td><td>7.3</td><td>7280</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Sidebar'ı Yükle -->
+  <script>
+    fetch("sidebar.html")
+      .then(res => res.text())
+      .then(html => document.getElementById("sidebar-placeholder").innerHTML = html);
+  </script>
+</body>
+</html>

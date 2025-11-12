@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Freze Takip Formu - Kardemir</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+  <link href="style.css" rel="stylesheet" />
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f7f9fc;
+    }
+
+    .raylar {
+      overflow-x: auto;
+      padding-bottom: 10px;
+      scrollbar-width: thin;
+      scrollbar-color: #a0aec0 #edf2f7;
+    }
+
+    .raylar::-webkit-scrollbar {
+      height: 8px;
+    }
+
+    .raylar::-webkit-scrollbar-track {
+      background: #edf2f7;
+      border-radius: 10px;
+    }
+
+    .raylar::-webkit-scrollbar-thumb {
+      background: #a0aec0;
+      border-radius: 10px;
+      border: 2px solid #edf2f7;
+    }
+
+    .raylar::-webkit-scrollbar-thumb:hover {
+      background: #718096;
+    }
+
+    .data-table input[type="text"] {
+      width: 38px;
+      min-width: 38px;
+      height: 28px;
+      padding: 3px 1px;
+      font-size: 12px;
+      border-radius: 4px;
+      border: 1px solid #d1d5db;
+      text-align: center;
+      background: #fff;
+      box-sizing: border-box;
+    }
+
+    .data-table th,
+    .data-table td {
+      text-align: center;
+      white-space: nowrap;
+      padding: 5px 3px;
+      font-size: 12px;
+      border-bottom: 1px solid #e5e7eb;
+      background-color: #ffffff;
+    }
+
+    .data-table th {
+      background-color: #f3f4f6;
+      font-weight: 600;
+      color: #374151;
+      font-size: 11px;
+      letter-spacing: 0.025em;
+      text-transform: uppercase;
+      border-top: 1px solid #e2e6ed;
+      white-space: normal !important;
+      /* Satır sonuna sığmazsa alta geçsin */
+      word-wrap: break-word;
+      max-width: 100px;
+      /* Hücre genişliği sınırlı kalsın */
+      overflow: hidden;
+      text-overflow: ellipsis;
+      position: relative;
+      cursor: help;
+    }
+
+    .data-table th:hover::after {
+      content: attr(title);
+      /* th etiketi içindeki title değerini gösterir */
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0, 0, 0, 0.8);
+      color: #fff;
+      font-size: 11px;
+      padding: 5px 8px;
+      border-radius: 4px;
+      white-space: nowrap;
+      pointer-events: none;
+      z-index: 999;
+    }
+
+    .data-table th.header-xlong {
+      min-width: 140px;
+    }
+
+    .data-table th.header-long {
+      min-width: 110px;
+    }
+
+    .data-table th.header-medium {
+      min-width: 70px;
+    }
+
+    .data-table th.header-short {
+      min-width: 38px;
+    }
+
+    .data-table {
+      min-width: calc(140px + 70px*4 + 38px + (30*38px) + 70px*3);
+    }
+
+    .dokum-title {
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+      font-weight: 700;
+      font-size: 1.25rem;
+      color: #1f2937;
+    }
+
+    .vardiya-box label {
+      display: inline-flex;
+      align-items: center;
+      margin-right: 26px;
+      font-weight: 500;
+      font-size: 15px;
+    }
+
+    .vardiya-box input[type="checkbox"] {
+      accent-color: #2563eb;
+      width: 19px;
+      height: 19px;
+      margin-right: 7px;
+    }
+
+    .vardiya-box {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px 24px;
+      margin-top: 6px;
+    }
+
+    .kutu-field {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .kutu-label {
+      font-weight: 600;
+      font-size: 15px;
+      color: #2d3748;
+      margin-bottom: 1px;
+    }
+
+    .kutu-input,
+    .kutu-select {
+      font-size: 15px;
+      padding: 7px 12px;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      background: #fff;
+      min-width: 190px;
+    }
+
+    .kutu-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 24px;
+      margin-bottom: 24px;
+    }
+
+    @media (max-width:1100px) {
+      .kutu-group {
+        flex-direction: column;
+        gap: 12px;
+      }
+    }
+
+    @media (max-width: 768px) {
+
+      .data-table th,
+      .data-table td {
+        font-size: 11px;
+        padding: 4px 2px;
+      }
+
+      .data-table input[type="text"] {
+        width: 32px;
+        min-width: 32px;
+        font-size: 10px;
+        padding: 2px 1px;
+      }
+
+      .data-table th.header-xlong {
+        min-width: 100px;
+      }
+
+      .data-table th.header-long {
+        min-width: 80px;
+      }
+
+      .data-table th.header-medium {
+        min-width: 50px;
+      }
+
+      .data-table th.header-short {
+        min-width: 32px;
+      }
+
+      .data-table {
+        min-width: calc(100px + 50px*4 + 32px + (30 * 32px) + 50px*3);
+      }
+
+      .kutu-input,
+      .kutu-select {
+        min-width: 0;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Sidebar -->
+  <aside id="sidebar">
+    <div id="sidebar-container" class="sidebar-container"></div>
+    <script>
+      fetch("sidebar.html")
+        .then((res) => res.text())
+        .then((data) => (document.getElementById("sidebar-container").innerHTML = data));
+    </script>
+  </aside>
+
+  <main class="container mx-auto px-2 py-4 max-w-7xl">
+    <h1 class="text-4xl font-extrabold mb-8 text-center text-gray-900 leading-tight">Freze Takip Formu</h1>
+
+    <!-- Üst Kutu Alanlar -->
+    <div class="bg-white rounded-xl shadow-md px-8 py-6 mb-10">
+      <div class="kutu-group">
+        <div class="kutu-field">
+          <label for="baslangicTarihi" class="kutu-label">Başlangıç Tarihi</label>
+          <input type="date" id="baslangicTarihi" class="kutu-input" />
+        </div>
+        <div class="kutu-field">
+          <label for="bitisTarihi" class="kutu-label">Bitiş Tarihi</label>
+          <input type="date" id="bitisTarihi" class="kutu-input" />
+        </div>
+        <div class="kutu-field">
+          <label for="kalite" class="kutu-label">Kalite</label>
+          <select id="kalite" class="kutu-select">
+            <option value="">Seçiniz</option>
+            <option value="C45_00">C45_00</option>
+            <option value="S235JR">S235JR</option>
+            <option value="R35HT_01">R35HT_01</option>
+          </select>
+        </div>
+        <div class="kutu-field">
+          <label for="dokumNo" class="kutu-label">Döküm No</label>
+          <input type="text" id="dokumNo" class="kutu-input" />
+        </div>
+      </div>
+      <div class="kutu-field mt-4">
+        <label class="kutu-label mb-1">Vardiya</label>
+        <div class="vardiya-box">
+          <label><input type="checkbox" name="vardiya" value="1" />1. Vardiya</label>
+          <label><input type="checkbox" name="vardiya" value="2" />2. Vardiya</label>
+          <label><input type="checkbox" name="vardiya" value="3" />3. Vardiya</label>
+          <label><input type="checkbox" name="vardiya" value="all" id="vardiyaAll" />Tümü</label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Döküm Tablosu -->
+    <div id="dokum1" class="dokum-panel bg-white p-6 rounded-lg shadow-md mb-8">
+      <div class="dokum-title">1. Döküm Sıra</div>
+      <div class="raylar">
+        <table class="data-table w-full">
+          <thead>
+            <tr>
+              <th class="header-xlong">Döküm Tarihi</th>
+              <th class="header-medium">Döküm No</th>
+              <th class="header-medium">Kalite</th>
+              <th class="header-medium">Vardiya</th>
+              <th class="header-short">SIRA</th>
+              <script>for (let i = 1; i <= 30; i++) { document.write(`<th class="header-short">${i}</th>`); }</script>
+              <th class="header-medium">İşlem Adedi</th>
+              <th class="header-medium">Bozuk Adet</th>
+              <th class="header-medium">Toplam Adet</th>
+            </tr>
+          </thead>
+          <tbody>
+            <script>
+              ['D', 'C', 'B', 'A'].forEach(sira => {
+                document.write(`<tr>`);
+                document.write(`<td class="table-dokumtarihi"></td>`);
+                document.write(`<td class="table-dokumno"></td>`);
+                document.write(`<td class="table-kalite"></td>`);
+                document.write(`<td class="table-vardiya">1. Vardiya</td>`);
+                document.write(`<td>${sira}</td>`);
+                for (let i = 1; i <= 30; i++) {
+                  document.write(`<td><input type="text" name="d1_${sira}_${i}" data-row-id="d1_${sira}" /></td>`);
+                }
+                document.write(`<td class="islem-adet font-semibold">0</td>`);
+                document.write(`<td class="bozuk-adet font-semibold">0</td>`);
+                document.write(`<td class="toplam-adet font-semibold">0</td>`);
+                document.write(`</tr>`);
+              });
+            </script>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div id="dokum2" class="dokum-panel bg-white p-6 rounded-lg shadow-md mb-8">
+      <div class="dokum-title">2. Döküm Sıra</div>
+      <div class="raylar">
+        <table class="data-table w-full">
+          <thead>
+            <tr>
+              <th class="header-xlong" title="Döküm Tarihi">Döküm<br>Tarihi</th>
+              <th class="header-medium" title="Döküm Numarası">Döküm<br>No</th>
+              <th class="header-medium" title="Malzeme Kalitesi">Kalite</th>
+              <th class="header-medium" title="Çalışılan Vardiya">Vardiya</th>
+              <th class="header-short" title="Sıra Numarası">SIRA</th>
+              <script>for (let i = 1; i <= 30; i++) { document.write(`<th class="header-short">${i}</th>`); }</script>
+              <th class="header-medium">İşlem Adedi</th>
+              <th class="header-medium">Bozuk Adet</th>
+              <th class="header-medium">Toplam Adet</th>
+            </tr>
+          </thead>
+          <tbody>
+            <script>
+              ['D', 'C', 'B', 'A'].forEach(sira => {
+                document.write(`<tr>`);
+                document.write(`<td class="table-dokumtarihi"></td>`);
+                document.write(`<td class="table-dokumno"></td>`);
+                document.write(`<td class="table-kalite"></td>`);
+                document.write(`<td class="table-vardiya">2. Vardiya</td>`);
+                document.write(`<td>${sira}</td>`);
+                for (let i = 1; i <= 30; i++) {
+                  document.write(`<td><input type="text" name="d2_${sira}_${i}" data-row-id="d2_${sira}" /></td>`);
+                }
+                document.write(`<td class="islem-adet font-semibold">0</td>`);
+                document.write(`<td class="bozuk-adet font-semibold">0</td>`);
+                document.write(`<td class="toplam-adet font-semibold">0</td>`);
+                document.write(`</tr>`);
+              });
+            </script>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div id="dokum3" class="dokum-panel bg-white p-6 rounded-lg shadow-md mb-8">
+      <div class="dokum-title">3. Döküm Sıra</div>
+      <div class="raylar">
+        <table class="data-table w-full">
+          <thead>
+            <tr>
+              <th class="header-xlong">Döküm Tarihi</th>
+              <th class="header-medium">Döküm No</th>
+              <th class="header-medium">Kalite</th>
+              <th class="header-medium">Vardiya</th>
+              <th class="header-short">SIRA</th>
+              <script>for (let i = 1; i <= 30; i++) { document.write(`<th class="header-short">${i}</th>`); }</script>
+              <th class="header-medium">İşlem Adedi</th>
+              <th class="header-medium">Bozuk Adet</th>
+              <th class="header-medium">Toplam Adet</th>
+            </tr>
+          </thead>
+          <tbody>
+            <script>
+              ['D', 'C', 'B', 'A'].forEach(sira => {
+                document.write(`<tr>`);
+                document.write(`<td class="table-dokumtarihi"></td>`);
+                document.write(`<td class="table-dokumno"></td>`);
+                document.write(`<td class="table-kalite"></td>`);
+                document.write(`<td class="table-vardiya">3. Vardiya</td>`);
+                document.write(`<td>${sira}</td>`);
+                for (let i = 1; i <= 30; i++) {
+                  document.write(`<td><input type="text" name="d3_${sira}_${i}" data-row-id="d3_${sira}" /></td>`);
+                }
+                document.write(`<td class="islem-adet font-semibold">0</td>`);
+                document.write(`<td class="bozuk-adet font-semibold">0</td>`);
+                document.write(`<td class="toplam-adet font-semibold">0</td>`);
+                document.write(`</tr>`);
+              });
+            </script>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="flex justify-end gap-3 mt-8">
+      <button
+        class="px-5 py-2.5 rounded-md text-white font-medium text-sm inline-flex items-center space-x-2 transition-colors duration-200 shadow-md bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50"
+        id="excelBtn">
+        <i class="fa-solid fa-file-excel"></i>
+        <span>Excel'e Aktar</span>
+      </button>
+      <button
+        class="px-5 py-2.5 rounded-md text-white font-medium text-sm inline-flex items-center space-x-2 transition-colors duration-200 shadow-md bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50"
+        id="pdfBtn">
+        <i class="fa-solid fa-file-pdf"></i>
+        <span>PDF Aktar</span>
+      </button>
+      <button
+        class="px-5 py-2.5 rounded-md text-white font-medium text-sm inline-flex items-center space-x-2 transition-colors duration-200 shadow-md bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+        id="mailBtn">
+        <i class="fa-solid fa-envelope"></i>
+        <span>E-Mail Gönder</span>
+      </button>
+    </div>
+  </main>
+  <script>
+    function updateTableHeaders() {
+      const dokumtarihi = document.getElementById('baslangicTarihi').value || ''; // Döküm tarihi yukarıda yoksa, boş gelsin
+      const dokumno = document.getElementById('dokumNo').value || '';
+      const kalite = document.getElementById('kalite').value || '';
+      // Döküm tarihi için: tabloya ek alan koymak istersen, ayrı bir alan kullanırsın
+      document.querySelectorAll('.table-dokumtarihi').forEach(el => el.textContent = baslangic); // Buraya dokumTarihi alanı eklersen değiştir
+      document.querySelectorAll('.table-dokumno').forEach(el => el.textContent = dokumno);
+      document.querySelectorAll('.table-kalite').forEach(el => el.textContent = kalite);
+    }
+    function tumuSencronizasyon() {
+      let tumuCheck = document.querySelector('input[name="vardiya"][value="all"]');
+      let vChecks = Array.from(document.querySelectorAll('input[name="vardiya"]:not([value="all"])'));
+      if (tumuCheck.checked) { vChecks.forEach(c => c.checked = true); }
+      else { let hepsiSecili = vChecks.every(c => c.checked); tumuCheck.checked = hepsiSecili; }
+    }
+    function vardiyaPanelGoster() {
+      let secimler = Array.from(document.querySelectorAll('input[name="vardiya"]:checked')).map(x => x.value);
+      ['1', '2', '3'].forEach(function (v) {
+        document.getElementById('dokum' + v).style.display = secimler.includes(v) || secimler.includes("all") ? 'block' : 'none';
+      });
+      updateTableHeaders();
+      setupTableInputListeners();
+      document.querySelectorAll('.dokum-panel[style*="block"] .data-table tbody tr').forEach(row => { updateRowCounts(row); });
+    }
+    function updateRowCounts(row) {
+      let islemAdedi = 0, bozukAdet = 0, toplamAdet = 0;
+      const inputs = row.querySelectorAll('td input[type="text"]');
+      inputs.forEach(input => {
+        const value = input.value.trim();
+        if (value === "1") { islemAdedi++; toplamAdet++; }
+        else if (value === "2") { bozukAdet++; toplamAdet++; }
+        else if (!isNaN(Number(value)) && Number(value) > 0) { toplamAdet += Number(value); }
+      });
+      row.querySelector('.islem-adet').textContent = islemAdedi;
+      row.querySelector('.bozuk-adet').textContent = bozukAdet;
+      row.querySelector('.toplam-adet').textContent = toplamAdet;
+    }
+    function setupTableInputListeners() {
+      document.querySelectorAll('.data-table input[type="text"]').forEach(input => {
+        input.removeEventListener('input', handleTableInputChange);
+        input.addEventListener('input', handleTableInputChange);
+      });
+    }
+    function handleTableInputChange(event) {
+      const input = event.target;
+      const row = input.closest('tr');
+      if (row) { updateRowCounts(row); }
+    }
+    document.querySelectorAll('input[name="vardiya"]:not([value="all"])').forEach(el => {
+      el.addEventListener('change', function () { tumuSencronizasyon(); vardiyaPanelGoster(); });
+    });
+    document.getElementById('vardiyaAll').addEventListener('change', function () {
+      const isChecked = this.checked;
+      document.querySelectorAll('input[name="vardiya"]:not([value="all"])').forEach(el => { el.checked = isChecked; });
+      vardiyaPanelGoster();
+    });
+    ['dokumNo', 'kalite', 'baslangicTarihi', 'bitisTarihi'].forEach(function (id) {
+      document.getElementById(id).addEventListener('input', updateTableHeaders);
+      document.getElementById(id).addEventListener('change', updateTableHeaders);
+    });
+    vardiyaPanelGoster();
+    document.addEventListener('DOMContentLoaded', () => {
+      const today = new Date();
+      const yyyy = today.getFullYear();
+      const mm = String(today.getMonth() + 1).padStart(2, '0');
+      const dd = String(today.getDate()).padStart(2, '0');
+      document.getElementById('baslangicTarihi').value = `${yyyy}-${mm}-${dd}`;
+      updateTableHeaders();
+    });
+    document.getElementById('excelBtn').onclick = function (e) { e.preventDefault(); alert("Excel'e aktarım entegrasyonu buraya eklenir."); };
+    document.getElementById('pdfBtn').onclick = function (e) { e.preventDefault(); alert("PDF aktarım entegrasyonu buraya eklenir."); };
+    document.getElementById('mailBtn').onclick = function (e) { e.preventDefault(); alert("E-Mail gönderme entegrasyonu buraya eklenir."); };
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,1123 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Roll Report</title>
+    <link rel="stylesheet" href="style.css" />
+    <style>
+        .highlight-expanded {
+            background-color: rgba(236, 232, 129, 0.2);
+            border: 2px solid #ccc;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+        }
+    </style>
+</head>
+
+<body>
+    <div id="sidebar"></div>
+    <script>
+        fetch('sidebar.html')
+            .then(res => res.text())
+            .then(data => document.getElementById('sidebar').innerHTML = data);
+    </script>
+
+    <div class="content-wrapper">
+        <div class="custom-title" style="font-size: 30px;">🔩 MERDANE TAKİP</div>
+
+        <div class="custom-card">
+            <div class="custom-title blue">📘 Güncel Merdane Ölçü ve Durum Bilgileri</div>
+            <form>
+                <div class="filter-row">
+                    <label><input type="checkbox" name="actualSelect" value="BD1"
+                            onchange="handleActualSelection(this)"> BD1</label>
+                    <label><input type="checkbox" name="actualSelect" value="BD2"
+                            onchange="handleActualSelection(this)"> BD2</label>
+                    <label><input type="checkbox" name="actualSelect" value="UR" onchange="handleActualSelection(this)">
+                        UR</label>
+                    <label><input type="checkbox" name="actualSelect" value="EDGER"
+                            onchange="handleActualSelection(this)"> EDGER</label>
+                    <label><input type="checkbox" name="actualSelect" value="UF" onchange="handleActualSelection(this)">
+                        UF</label>
+                    <label><input type="checkbox" name="actualSelect" value="ALL"
+                            onchange="handleActualSelection(this)"> Hepsi</label>
+                </div>
+            </form>
+
+            <div class="table-wrapper">
+                <table class="custom-table">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Hadde Kafası Tipi</th>
+                            <th>Ürün</th>
+                            <th>Merdane Seti No</th>
+                            <th>Servise Alınma Tarihi</th>
+                            <th>Servisten Çıkış Tarihi</th>
+                            <th>Kullanılan Kütük</th>
+                            <th>Üretilen Tonaj (ton)</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="expandable-header BD1" onclick="toggleRows(this, 'BD1-actual')">
+                            <td>➕</td>
+                            <td>BD1</td>
+                            <td>IPE270</td>
+                            <td>SET-001</td>
+                            <td>01.01.2025</td>
+                            <td>-</td>
+                            <td>300</td>
+                            <td>1200</td>
+                        </tr>
+                        <tr class="child-row BD1-actual" style="display: none;">
+                            <td colspan="8">
+                                <table class="custom-table inner-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Merdane Tipi</th>
+                                            <th>Merdane Adı</th>
+                                            <th>Gerçek Merdane Çapı (mm)</th>
+                                            <th>Üretici Firma</th>
+                                            <th>Malzeme Kalitesi</th>
+                                            <th>Sertlik (HB / HSD)</th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Top Roll</td>
+                                            <td>BD1-TOP</td>
+                                            <td>860 mm</td>
+                                            <td>KARDOKMAK</td>
+                                            <td>ADAMITE</td>
+                                            <td>210000</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Bottom Roll</td>
+                                            <td>BD1-BOT</td>
+                                            <td>858 mm</td>
+                                            <td>KARDOKMAK</td>
+                                            <td>ADAMITE</td>
+                                            <td>210000</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr class="expandable-header BD2" onclick="toggleRows(this, 'BD2-actual')">
+                            <td>➕</td>
+                            <td>BD2</td>
+                            <td>IPE300</td>
+                            <td>SET-002</td>
+                            <td>02.01.2025</td>
+                            <td>-</td>
+                            <td>310</td>
+                            <td>1250</td>
+                        </tr>
+                        <tr class="child-row BD2-actual" style="display: none;">
+                            <td colspan="8">
+                                <table class="custom-table inner-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Merdane Tipi</th>
+                                            <th>Merdane Adı</th>
+                                            <th>Gerçek Merdane Çapı (mm)</th>
+                                            <th>Üretici Firma</th>
+                                            <th>Malzeme Kalitesi</th>
+                                            <th>Sertlik (HB / HSD)</th>
+                                        </tr>
+
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Top Roll</td>
+                                            <td>BD2-TOP</td>
+                                            <td>859 mm</td>
+                                            <td>KARDOKMAK</td>
+                                            <td>ADAMITE</td>
+                                            <td>209000</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Bottom Roll</td>
+                                            <td>BD2-BOT</td>
+                                            <td>857 mm</td>
+                                            <td>KARDOKMAK</td>
+                                            <td>ADAMITE</td>
+                                            <td>209000</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr class="expandable-header UR" onclick="toggleRows(this, 'UR-actual')">
+                            <td>➕</td>
+                            <td>UR</td>
+                            <td>IPE320</td>
+                            <td>SET-003</td>
+                            <td>03.01.2025</td>
+                            <td>-</td>
+                            <td>400</td>
+                            <td>1500</td>
+                        </tr>
+                        <tr class="child-row UR-actual" style="display: none;">
+                            <td colspan="8">
+                                <table class="custom-table inner-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Merdane Tipi</th>
+                                            <th>Merdane Adı</th>
+                                            <th>Gerçek Merdane Çapı (mm)</th>
+                                            <th>Üretici Firma</th>
+                                            <th>Malzeme Kalitesi</th>
+                                            <th>Sertlik (HB / HSD)</th>
+                                        </tr>
+
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Top Roll</td>
+                                            <td>UR-TOP</td>
+                                            <td>850 mm</td>
+                                            <td>KARDEMİR</td>
+                                            <td>ADAMITE</td>
+                                            <td>215000</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Bottom Roll</td>
+                                            <td>UR-BOT</td>
+                                            <td>848 mm</td>
+                                            <td>KARDEMİR</td>
+                                            <td>ADAMITE</td>
+                                            <td>215000</td>
+                                        </tr>
+                                        <tr>
+                                            <td>OS Roll</td>
+                                            <td>UR-OS</td>
+                                            <td>849 mm</td>
+                                            <td>KARDEMİR</td>
+                                            <td>ADAMITE</td>
+                                            <td>215000</td>
+                                        </tr>
+                                        <tr>
+                                            <td>DS Roll</td>
+                                            <td>UR-DS</td>
+                                            <td>847 mm</td>
+                                            <td>KARDEMİR</td>
+                                            <td>ADAMITE</td>
+                                            <td>215000</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr class="expandable-header EDGER" onclick="toggleRows(this, 'EDGER-actual')">
+                            <td>➕</td>
+                            <td>EDGER</td>
+                            <td>IPE350</td>
+                            <td>SET-004</td>
+                            <td>04.01.2025</td>
+                            <td>-</td>
+                            <td>310</td>
+                            <td>1300</td>
+                        </tr>
+                        <tr class="child-row EDGER-actual" style="display: none;">
+                            <td colspan="8">
+                                <table class="custom-table inner-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Merdane Tipi</th>
+                                            <th>Merdane Adı</th>
+                                            <th>Gerçek Merdane Çapı (mm)</th>
+                                            <th>Üretici Firma</th>
+                                            <th>Malzeme Kalitesi</th>
+                                            <th>Sertlik (HB / HSD)</th>
+                                        </tr>
+
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Top Roll</td>
+                                            <td>EDGER-TOP</td>
+                                            <td>856 mm</td>
+                                            <td>KARDOKMAK</td>
+                                            <td>ADAMITE</td>
+                                            <td>212000</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Bottom Roll</td>
+                                            <td>EDGER-BOT</td>
+                                            <td>854 mm</td>
+                                            <td>KARDOKMAK</td>
+                                            <td>ADAMITE</td>
+                                            <td>212000</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr class="expandable-header UF" onclick="toggleRows(this, 'UF-actual')">
+                            <td>➕</td>
+                            <td>UF</td>
+                            <td>IPE360</td>
+                            <td>SET-005</td>
+                            <td>05.01.2025</td>
+                            <td>-</td>
+                            <td>290</td>
+                            <td>1100</td>
+                        </tr>
+                        <tr class="child-row UF-actual" style="display: none;">
+                            <td colspan="8">
+                                <table class="custom-table inner-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Merdane Tipi</th>
+                                            <th>Merdane Adı</th>
+                                            <th>Gerçek Merdane Çapı (mm)</th>
+                                            <th>Üretici Firma</th>
+                                            <th>Malzeme Kalitesi</th>
+                                            <th>Sertlik (HB / HSD)</th>
+                                        </tr>
+
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Top Roll</td>
+                                            <td>UF-TOP</td>
+                                            <td>851 mm</td>
+                                            <td>KARDEMİR</td>
+                                            <td>ADAMITE</td>
+                                            <td>214000</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Bottom Roll</td>
+                                            <td>UF-BOT</td>
+                                            <td>849 mm</td>
+                                            <td>KARDEMİR</td>
+                                            <td>ADAMITE</td>
+                                            <td>214000</td>
+                                        </tr>
+                                        <tr>
+                                            <td>OS Roll</td>
+                                            <td>UF-OS</td>
+                                            <td>850 mm</td>
+                                            <td>KARDEMİR</td>
+                                            <td>ADAMITE</td>
+                                            <td>214000</td>
+                                        </tr>
+                                        <tr>
+                                            <td>DS Roll</td>
+                                            <td>UF-DS</td>
+                                            <td>848 mm</td>
+                                            <td>KARDEMİR</td>
+                                            <td>ADAMITE</td>
+                                            <td>214000</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="custom-card">
+            <div class="custom-title green">📗 Merdane Kullanım ve Servis Geçmişi</div>
+            <form>
+                <div class="filter-row">
+                    <label><input type="checkbox" name="historySelect" value="BD1"
+                            onchange="handleHistorySelection(this)"> BD1</label>
+                    <label><input type="checkbox" name="historySelect" value="BD2"
+                            onchange="handleHistorySelection(this)"> BD2</label>
+                    <label><input type="checkbox" name="historySelect" value="UR"
+                            onchange="handleHistorySelection(this)"> UR</label>
+                    <label><input type="checkbox" name="historySelect" value="EDGER"
+                            onchange="handleHistorySelection(this)"> EDGER</label>
+                    <label><input type="checkbox" name="historySelect" value="UF"
+                            onchange="handleHistorySelection(this)"> UF</label>
+                    <label><input type="checkbox" name="historySelect" value="ALL"
+                            onchange="handleHistorySelection(this)"> Hepsi</label>
+                </div>
+            </form>
+            <div class="filter-row">
+                <input type="text" id="searchRollName" placeholder="Roll Name" onkeyup="filterTables()" />
+                <input type="text" id="searchProduct" placeholder="Product" onkeyup="filterTables()" />
+                <input type="text" id="searchSetId" placeholder="Roll Set ID" onkeyup="filterTables()" />
+                <input type="date" id="entryDate" onchange="filterTables()" />
+                <button class="btn btn-blue" onclick="exportToExcel()">Excel'e Aktar</button>
+                <button class="btn btn-blue" onclick="window.print()">PDF Yazdır</button>
+            </div>
+            <div class="table-wrapper">
+                <table class="custom-table">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Hadde Kafası Tipi</th>
+                            <th>Ürün</th>
+                            <th>Merdane Seti No</th>
+                            <th>Servise Alınma Tarihi</th>
+                            <th>Servisten Çıkış Tarihi</th>
+                            <th>Kullanılan Kütük</th>
+                            <th>Üretilen Tonaj (ton)</th>
+                        </tr>
+
+                    </thead>
+                    <tbody>
+                        <tr class="expandable-header BD1" onclick="toggleRows(this, 'BD1-history')">
+                            <td>➕</td>
+                            <td>BD1</td>
+                            <td>IPE270</td>
+                            <td>SET-001</td>
+                            <td>01.02.2025</td>
+                            <td>15.03.2025</td>
+                            <td>280</td>
+                            <td>1000</td>
+                        </tr>
+                        <tr class="child-row BD1-history" style="display: none;">
+                            <td colspan="8">
+                                <table class="custom-table inner-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Merdane Tipi</th>
+                                            <th>Merdane Adı</th>
+                                            <th>Çalışma Merdane Çapı (mm)</th>
+                                            <th>Üretici Firma</th>
+                                            <th>Malzeme Kalitesi</th>
+                                            <th>Sertlik (HB / HSD)</th>
+                                        </tr>
+
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Top Roll</td>
+                                            <td>BD1-TOP</td>
+                                            <td>855 mm</td>
+                                            <td>KARDOKMAK</td>
+                                            <td>ADAMITE</td>
+                                            <td>205000</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Bottom Roll</td>
+                                            <td>BD1-BOT</td>
+                                            <td>853 mm</td>
+                                            <td>KARDOKMAK</td>
+                                            <td>ADAMITE</td>
+                                            <td>205000</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr class="expandable-header BD2" onclick="toggleRows(this, 'BD2-history')">
+                            <td>➕</td>
+                            <td>BD2</td>
+                            <td>IPE300</td>
+                            <td>SET-002</td>
+                            <td>05.02.2025</td>
+                            <td>18.03.2025</td>
+                            <td>275</td>
+                            <td>1020</td>
+                        </tr>
+                        <tr class="child-row BD2-history" style="display: none;">
+                            <td colspan="8">
+                                <table class="custom-table inner-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Merdane Tipi</th>
+                                            <th>Merdane Adı</th>
+                                            <th>Çalışma Merdane Çapı (mm)</th>
+                                            <th>Üretici Firma</th>
+                                            <th>Malzeme Kalitesi</th>
+                                            <th>Sertlik (HB / HSD)</th>
+                                        </tr>
+
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Top Roll</td>
+                                            <td>BD2-TOP</td>
+                                            <td>854 mm</td>
+                                            <td>KARDOKMAK</td>
+                                            <td>ADAMITE</td>
+                                            <td>204000</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Bottom Roll</td>
+                                            <td>BD2-BOT</td>
+                                            <td>852 mm</td>
+                                            <td>KARDOKMAK</td>
+                                            <td>ADAMITE</td>
+                                            <td>204000</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr class="expandable-header UR" onclick="toggleRows(this, 'UR-history')">
+                            <td>➕</td>
+                            <td>UR</td>
+                            <td>IPE320</td>
+                            <td>SET-003</td>
+                            <td>10.02.2025</td>
+                            <td>20.03.2025</td>
+                            <td>390</td>
+                            <td>1470</td>
+                        </tr>
+                        <tr class="child-row UR-history" style="display: none;">
+                            <td colspan="8">
+                                <table class="custom-table inner-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Merdane Tipi</th>
+                                            <th>Merdane Adı</th>
+                                            <th>Çalışma Merdane Çapı (mm)</th>
+                                            <th>Üretici Firma</th>
+                                            <th>Malzeme Kalitesi</th>
+                                            <th>Sertlik (HB / HSD)</th>
+                                        </tr>
+
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Top Roll</td>
+                                            <td>UR-TOP</td>
+                                            <td>848 mm</td>
+                                            <td>KARDEMİR</td>
+                                            <td>ADAMITE</td>
+                                            <td>213000</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Bottom Roll</td>
+                                            <td>UR-BOT</td>
+                                            <td>846 mm</td>
+                                            <td>KARDEMİR</td>
+                                            <td>ADAMITE</td>
+                                            <td>213000</td>
+                                        </tr>
+                                        <tr>
+                                            <td>OS Roll</td>
+                                            <td>UR-OS</td>
+                                            <td>847 mm</td>
+                                            <td>KARDEMİR</td>
+                                            <td>ADAMITE</td>
+                                            <td>213000</td>
+                                        </tr>
+                                        <tr>
+                                            <td>DS Roll</td>
+                                            <td>UR-DS</td>
+                                            <td>845 mm</td>
+                                            <td>KARDEMİR</td>
+                                            <td>ADAMITE</td>
+                                            <td>213000</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr class="expandable-header EDGER" onclick="toggleRows(this, 'EDGER-history')">
+                            <td>➕</td>
+                            <td>EDGER</td>
+                            <td>IPE350</td>
+                            <td>SET-004</td>
+                            <td>12.02.2025</td>
+                            <td>22.03.2025</td>
+                            <td>300</td>
+                            <td>1250</td>
+                        </tr>
+                        <tr class="child-row EDGER-history" style="display: none;">
+                            <td colspan="8">
+                                <table class="custom-table inner-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Merdane Tipi</th>
+                                            <th>Merdane Adı</th>
+                                            <th>Çalışma Merdane Çapı (mm)</th>
+                                            <th>Üretici Firma</th>
+                                            <th>Malzeme Kalitesi</th>
+                                            <th>Sertlik (HB / HSD)</th>
+                                        </tr>
+
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Top Roll</td>
+                                            <td>EDGER-TOP</td>
+                                            <td>853 mm</td>
+                                            <td>KARDOKMAK</td>
+                                            <td>ADAMITE</td>
+                                            <td>211000</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Bottom Roll</td>
+                                            <td>EDGER-BOT</td>
+                                            <td>851 mm</td>
+                                            <td>KARDOKMAK</td>
+                                            <td>ADAMITE</td>
+                                            <td>211000</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr class="expandable-header UF" onclick="toggleRows(this, 'UF-history')">
+                            <td>➕</td>
+                            <td>UF</td>
+                            <td>IPE360</td>
+                            <td>SET-005</td>
+                            <td>15.02.2025</td>
+                            <td>25.03.2025</td>
+                            <td>285</td>
+                            <td>1130</td>
+                        </tr>
+                        <tr class="child-row UF-history" style="display: none;">
+                            <td colspan="8">
+                                <table class="custom-table inner-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Merdane Tipi</th>
+                                            <th>Merdane Adı</th>
+                                            <th>Çalışma Merdane Çapı (mm)</th>
+                                            <th>Üretici Firma</th>
+                                            <th>Malzeme Kalitesi</th>
+                                            <th>Sertlik (HB / HSD)</th>
+                                        </tr>
+
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Top Roll</td>
+                                            <td>UF-TOP</td>
+                                            <td>849 mm</td>
+                                            <td>KARDEMİR</td>
+                                            <td>ADAMITE</td>
+                                            <td>212000</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Bottom Roll</td>
+                                            <td>UF-BOT</td>
+                                            <td>847 mm</td>
+                                            <td>KARDEMİR</td>
+                                            <td>ADAMITE</td>
+                                            <td>212000</td>
+                                        </tr>
+                                        <tr>
+                                            <td>OS Roll</td>
+                                            <td>UF-OS</td>
+                                            <td>848 mm</td>
+                                            <td>KARDEMİR</td>
+                                            <td>ADAMITE</td>
+                                            <td>212000</td>
+                                        </tr>
+                                        <tr>
+                                            <td>DS Roll</td>
+                                            <td>UF-DS</td>
+                                            <td>846 mm</td>
+                                            <td>KARDEMİR</td>
+                                            <td>ADAMITE</td>
+                                            <td>212000</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr class="expandable-header BD1" onclick="toggleRows(this, 'BD1-history-2')">
+                            <td>➕</td>
+                            <td>BD1</td>
+                            <td>HEB200</td>
+                            <td>SET-006</td>
+                            <td>01.03.2025</td>
+                            <td>10.04.2025</td>
+                            <td>320</td>
+                            <td>1300</td>
+                        </tr>
+                        <tr class="child-row BD1-history-2" style="display: none;">
+                            <td colspan="8">
+                                <table class="custom-table inner-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Merdane Tipi</th>
+                                            <th>Merdane Adı</th>
+                                            <th>Çalışma Merdane Çapı (mm)</th>
+                                            <th>Üretici Firma</th>
+                                            <th>Malzeme Kalitesi</th>
+                                            <th>Sertlik (HB / HSD)</th>
+                                        </tr>
+
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Top Roll</td>
+                                            <td>BD1-TOP-V2</td>
+                                            <td>850 mm</td>
+                                            <td>KARDOKMAK</td>
+                                            <td>ADAMITE</td>
+                                            <td>208000</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Bottom Roll</td>
+                                            <td>BD1-BOT-V2</td>
+                                            <td>848 mm</td>
+                                            <td>KARDOKMAK</td>
+                                            <td>ADAMITE</td>
+                                            <td>208000</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr class="expandable-header BD2" onclick="toggleRows(this, 'BD2-history-2')">
+                            <td>➕</td>
+                            <td>BD2</td>
+                            <td>HEA220</td>
+                            <td>SET-007</td>
+                            <td>05.03.2025</td>
+                            <td>15.04.2025</td>
+                            <td>300</td>
+                            <td>1150</td>
+                        </tr>
+                        <tr class="child-row BD2-history-2" style="display: none;">
+                            <td colspan="8">
+                                <table class="custom-table inner-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Merdane Tipi</th>
+                                            <th>Merdane Adı</th>
+                                            <th>Çalışma Merdane Çapı (mm)</th>
+                                            <th>Üretici Firma</th>
+                                            <th>Malzeme Kalitesi</th>
+                                            <th>Sertlik (HB / HSD)</th>
+                                        </tr>
+
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Top Roll</td>
+                                            <td>BD2-TOP-V2</td>
+                                            <td>852 mm</td>
+                                            <td>KARDOKMAK</td>
+                                            <td>ADAMITE</td>
+                                            <td>206000</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Bottom Roll</td>
+                                            <td>BD2-BOT-V2</td>
+                                            <td>850 mm</td>
+                                            <td>KARDOKMAK</td>
+                                            <td>ADAMITE</td>
+                                            <td>206000</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr class="expandable-header UR" onclick="toggleRows(this, 'UR-history-2')">
+                            <td>➕</td>
+                            <td>UR</td>
+                            <td>UPN240</td>
+                            <td>SET-008</td>
+                            <td>10.03.2025</td>
+                            <td>20.04.2025</td>
+                            <td>420</td>
+                            <td>1600</td>
+                        </tr>
+                        <tr class="child-row UR-history-2" style="display: none;">
+                            <td colspan="8">
+                                <table class="custom-table inner-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Merdane Tipi</th>
+                                            <th>Merdane Adı</th>
+                                            <th>Çalışma Merdane Çapı (mm)</th>
+                                            <th>Üretici Firma</th>
+                                            <th>Malzeme Kalitesi</th>
+                                            <th>Sertlik (HB / HSD)</th>
+                                        </tr>
+
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Top Roll</td>
+                                            <td>UR-TOP-V2</td>
+                                            <td>845 mm</td>
+                                            <td>KARDEMİR</td>
+                                            <td>ADAMITE</td>
+                                            <td>216000</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Bottom Roll</td>
+                                            <td>UR-BOT-V2</td>
+                                            <td>843 mm</td>
+                                            <td>KARDEMİR</td>
+                                            <td>ADAMITE</td>
+                                            <td>216000</td>
+                                        </tr>
+                                        <tr>
+                                            <td>OS Roll</td>
+                                            <td>UR-OS-V2</td>
+                                            <td>844 mm</td>
+                                            <td>KARDEMİR</td>
+                                            <td>ADAMITE</td>
+                                            <td>216000</td>
+                                        </tr>
+                                        <tr>
+                                            <td>DS Roll</td>
+                                            <td>UR-DS-V2</td>
+                                            <td>842 mm</td>
+                                            <td>KARDEMİR</td>
+                                            <td>ADAMITE</td>
+                                            <td>216000</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr class="expandable-header EDGER" onclick="toggleRows(this, 'EDGER-history-2')">
+                            <td>➕</td>
+                            <td>EDGER</td>
+                            <td>IPE200</td>
+                            <td>SET-009</td>
+                            <td>15.03.2025</td>
+                            <td>25.04.2025</td>
+                            <td>290</td>
+                            <td>1200</td>
+                        </tr>
+                        <tr class="child-row EDGER-history-2" style="display: none;">
+                            <td colspan="8">
+                                <table class="custom-table inner-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Merdane Tipi</th>
+                                            <th>Merdane Adı</th>
+                                            <th>Çalışma Merdane Çapı (mm)</th>
+                                            <th>Üretici Firma</th>
+                                            <th>Malzeme Kalitesi</th>
+                                            <th>Sertlik (HB / HSD)</th>
+                                        </tr>
+
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Top Roll</td>
+                                            <td>EDGER-TOP-V2</td>
+                                            <td>850 mm</td>
+                                            <td>KARDOKMAK</td>
+                                            <td>ADAMITE</td>
+                                            <td>210000</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Bottom Roll</td>
+                                            <td>EDGER-BOT-V2</td>
+                                            <td>848 mm</td>
+                                            <td>KARDOKMAK</td>
+                                            <td>ADAMITE</td>
+                                            <td>210000</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr class="expandable-header UF" onclick="toggleRows(this, 'UF-history-2')">
+                            <td>➕</td>
+                            <td>UF</td>
+                            <td>UNP180</td>
+                            <td>SET-010</td>
+                            <td>20.03.2025</td>
+                            <td>30.04.2025</td>
+                            <td>270</td>
+                            <td>1050</td>
+                        </tr>
+                        <tr class="child-row UF-history-2" style="display: none;">
+                            <td colspan="8">
+                                <table class="custom-table inner-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Merdane Tipi</th>
+                                            <th>Merdane Adı</th>
+                                            <th>Çalışma Merdane Çapı (mm)</th>
+                                            <th>Üretici Firma</th>
+                                            <th>Malzeme Kalitesi</th>
+                                            <th>Sertlik (HB / HSD)</th>
+                                        </tr>
+
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Top Roll</td>
+                                            <td>UF-TOP-V2</td>
+                                            <td>845 mm</td>
+                                            <td>KARDEMİR</td>
+                                            <td>ADAMITE</td>
+                                            <td>210000</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Bottom Roll</td>
+                                            <td>UF-BOT-V2</td>
+                                            <td>843 mm</td>
+                                            <td>KARDEMİR</td>
+                                            <td>ADAMITE</td>
+                                            <td>210000</td>
+                                        </tr>
+                                        <tr>
+                                            <td>OS Roll</td>
+                                            <td>UF-OS-V2</td>
+                                            <td>844 mm</td>
+                                            <td>KARDEMİR</td>
+                                            <td>ADAMITE</td>
+                                            <td>210000</td>
+                                        </tr>
+                                        <tr>
+                                            <td>DS Roll</td>
+                                            <td>UF-DS-V2</td>
+                                            <td>842 mm</td>
+                                            <td>KARDEMİR</td>
+                                            <td>ADAMITE</td>
+                                            <td>210000</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr class="expandable-header BD1" onclick="toggleRows(this, 'BD1-history-3')">
+                            <td>➕</td>
+                            <td>BD1</td>
+                            <td>IPE240</td>
+                            <td>SET-011</td>
+                            <td>01.04.2025</td>
+                            <td>10.05.2025</td>
+                            <td>310</td>
+                            <td>1250</td>
+                        </tr>
+                        <tr class="child-row BD1-history-3" style="display: none;">
+                            <td colspan="8">
+                                <table class="custom-table inner-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Merdane Tipi</th>
+                                            <th>Merdane Adı</th>
+                                            <th>Çalışma Merdane Çapı (mm)</th>
+                                            <th>Üretici Firma</th>
+                                            <th>Malzeme Kalitesi</th>
+                                            <th>Sertlik (HB / HSD)</th>
+                                        </tr>
+
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Top Roll</td>
+                                            <td>BD1-TOP-V3</td>
+                                            <td>858 mm</td>
+                                            <td>KARDOKMAK</td>
+                                            <td>ADAMITE</td>
+                                            <td>209500</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Bottom Roll</td>
+                                            <td>BD1-BOT-V3</td>
+                                            <td>856 mm</td>
+                                            <td>KARDOKMAK</td>
+                                            <td>ADAMITE</td>
+                                            <td>209500</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleRows(clickedRow, group) {
+            const rowsContainer = clickedRow.closest('.table-wrapper');
+            const rows = rowsContainer.querySelectorAll(`.${group}`);
+            const iconCell = clickedRow.querySelector('td:first-child');
+
+            if (rows[0].style.display === 'none') {
+                rows.forEach(row => {
+                    row.style.display = '';
+                    const innerTable = row.querySelector('table');
+                    if (innerTable) {
+                        innerTable.classList.add('highlight-expanded');
+                    }
+                });
+                clickedRow.classList.add('highlight-expanded');
+                iconCell.textContent = '➖';
+            } else {
+                rows.forEach(row => {
+                    row.style.display = 'none';
+                    const innerTable = row.querySelector('table');
+                    if (innerTable) {
+                        innerTable.classList.remove('highlight-expanded');
+                    }
+                });
+                clickedRow.classList.remove('highlight-expanded');
+                iconCell.textContent = '➕';
+            }
+        }
+
+        function resetExpandableRows(tableSelector) {
+            const expandableHeaders = document.querySelectorAll(`${tableSelector} .expandable-header`);
+            const childRows = document.querySelectorAll(`${tableSelector} .child-row`);
+
+            expandableHeaders.forEach(header => {
+                header.classList.remove('highlight-expanded');
+                header.querySelector('td:first-child').textContent = '➕';
+            });
+
+            childRows.forEach(child => {
+                child.style.display = 'none';
+                const innerTable = child.querySelector('table');
+                if (innerTable) {
+                    innerTable.classList.remove('highlight-expanded');
+                }
+            });
+        }
+
+        function handleActualSelection(clickedCheckbox) {
+            const checkboxes = document.querySelectorAll('input[name="actualSelect"]');
+            const allCheckbox = document.querySelector('input[name="actualSelect"][value="ALL"]');
+
+            if (clickedCheckbox.value === 'ALL') {
+                // If "Hepsi" is clicked
+                if (clickedCheckbox.checked) {
+                    checkboxes.forEach(cb => {
+                        if (cb !== allCheckbox) {
+                            cb.checked = false; // Uncheck all other specific type checkboxes
+                        }
+                    });
+                } else {
+                    // If "Hepsi" is unchecked, and no other boxes are checked, re-check "Hepsi"
+                    // to ensure at least one filter is active (show all).
+                    // This prevents an empty state if nothing is selected.
+                    const anyOtherChecked = Array.from(checkboxes).some(cb => cb.checked && cb.value !== 'ALL');
+                    if (!anyOtherChecked) {
+                        allCheckbox.checked = true;
+                    }
+                }
+            } else {
+                // If a specific type checkbox is clicked
+                if (clickedCheckbox.checked) {
+                    allCheckbox.checked = false; // Uncheck "Hepsi"
+                } else {
+                    // If a specific type checkbox is unchecked, check if any other specific type is checked.
+                    // If no specific types are checked, re-check "Hepsi" to show all.
+                    const anySpecificChecked = Array.from(checkboxes).some(cb => cb.checked && cb.value !== 'ALL');
+                    if (!anySpecificChecked) {
+                        allCheckbox.checked = true;
+                    }
+                }
+            }
+            filterActualData();
+        }
+
+
+        function filterActualData() {
+            resetExpandableRows(".custom-card:nth-of-type(2)");
+            const checkboxes = document.querySelectorAll('input[name="actualSelect"]');
+            const selectedTypes = Array.from(checkboxes).filter(cb => cb.checked && cb.value !== 'ALL').map(cb => cb.value);
+            const allCheckbox = document.querySelector('input[name="actualSelect"][value="ALL"]');
+
+            const actualHeaders = document.querySelectorAll(".custom-card:nth-of-type(2) .expandable-header");
+
+            actualHeaders.forEach(row => {
+                let showRow = false;
+                if (allCheckbox.checked) {
+                    showRow = true; // Show all if 'ALL' is checked
+                } else if (selectedTypes.length === 0) {
+                    showRow = false; // Show nothing if 'ALL' is not checked and no specific types are selected
+                } else {
+                    for (let i = 0; i < selectedTypes.length; i++) {
+                        if (row.classList.contains(selectedTypes[i])) {
+                            showRow = true;
+                            break;
+                        }
+                    }
+                }
+                row.style.display = showRow ? '' : 'none';
+            });
+        }
+
+        function handleHistorySelection(clickedCheckbox) {
+            const checkboxes = document.querySelectorAll('input[name="historySelect"]');
+            const allCheckbox = document.querySelector('input[name="historySelect"][value="ALL"]');
+
+            if (clickedCheckbox.value === 'ALL') {
+                if (clickedCheckbox.checked) {
+                    checkboxes.forEach(cb => {
+                        if (cb !== allCheckbox) {
+                            cb.checked = false;
+                        }
+                    });
+                } else {
+                    const anyOtherChecked = Array.from(checkboxes).some(cb => cb.checked && cb.value !== 'ALL');
+                    if (!anyOtherChecked) {
+                        allCheckbox.checked = true;
+                    }
+                }
+            } else {
+                if (clickedCheckbox.checked) {
+                    allCheckbox.checked = false;
+                } else {
+                    const anySpecificChecked = Array.from(checkboxes).some(cb => cb.checked && cb.value !== 'ALL');
+                    if (!anySpecificChecked) {
+                        allCheckbox.checked = true;
+                    }
+                }
+            }
+            filterHistoryData();
+        }
+
+        function filterHistoryData() {
+            resetExpandableRows(".custom-card:nth-of-type(3)");
+            const checkboxes = document.querySelectorAll('input[name="historySelect"]');
+            const selectedTypes = Array.from(checkboxes).filter(cb => cb.checked && cb.value !== 'ALL').map(cb => cb.value);
+            const allCheckbox = document.querySelector('input[name="historySelect"][value="ALL"]');
+
+            const historyHeaders = document.querySelectorAll(".custom-card:nth-of-type(3) .expandable-header");
+
+            historyHeaders.forEach(row => {
+                let showRow = false;
+                if (allCheckbox.checked) {
+                    showRow = true;
+                } else if (selectedTypes.length === 0) {
+                    showRow = false;
+                } else {
+                    for (let i = 0; i < selectedTypes.length; i++) {
+                        if (row.classList.contains(selectedTypes[i])) {
+                            showRow = true;
+                            break;
+                        }
+                    }
+                }
+                row.style.display = showRow ? '' : 'none';
+            });
+        }
+
+        // Bu fonksiyonlar şu an kullanılmıyor, ancak gelecekteki filtrelemeler için kalabilir.
+        function filterTables() {
+            // Your existing filter logic can go here
+            // This function would typically apply filters based on input fields,
+            // and then update the display of rows accordingly.
+            // It would also need to ensure that expanded rows are handled correctly.
+        }
+
+        function exportToExcel() {
+            // Excel export logic
+            alert('Excel\'e Aktar fonksiyonu burada çalışacak.');
+        }
+
+        // Initial call to set all filters to 'Hepsi' (All) on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelector('input[name="actualSelect"][value="ALL"]').checked = true;
+            document.querySelector('input[name="historySelect"][value="ALL"]').checked = true;
+            filterActualData(); // Call filter functions after setting initial state
+            filterHistoryData();
+        });
+    </script>
+</body>
+
+</html>

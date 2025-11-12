@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>Kardemir - Proses Parametreleri Takip Raporu (ÇKH/KHH)</title>
+
+  <link href="style.css" rel="stylesheet" />
+
+  <style>
+    .content-wrapper {
+      margin-left: 250px;
+      padding: 20px;
+      min-height: 100vh;
+    }
+
+    @media(max-width:768px) {
+      .content-wrapper {
+        margin-left: 0;
+        padding: 12px;
+      }
+    }
+
+    .table-container {
+      overflow-x: auto;
+      margin-top: 14px;
+    }
+
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: auto;
+    }
+
+    .data-table thead th {
+      background: var(--main-bg-light, #f2f2f2);
+      color: var(--text-color-dark, #333);
+      font-weight: 700;
+      text-transform: uppercase;
+      border-bottom: 1px solid var(--border-color, #ccc);
+      padding: 8px 6px;
+      font-size: 11px;
+      line-height: 1.2;
+      white-space: normal;
+      min-width: 120px;
+      text-align: center;
+    }
+
+    .data-table td {
+      border-bottom: 1px solid var(--border-color, #e3e3e3);
+      padding: 8px 6px;
+      font-size: 12px;
+      text-align: center;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      min-width: 120px;
+    }
+
+    .data-table tbody tr:hover {
+      background: #f8f8f8;
+    }
+
+    .filter-section {
+      margin-bottom: 12px;
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .action-buttons input[type="date"],
+    .action-buttons input[type="text"] {
+      border: 1px solid var(--border-color, #ccc);
+      border-radius: 4px;
+      padding: 8px 10px;
+      font-size: 13px;
+      min-width: 160px;
+      background: #fff;
+    }
+
+    .action-buttons button {
+      background: var(--kardemir-blue, #1976d2);
+      color: #fff;
+      border: 0;
+      padding: 8px 14px;
+      border-radius: 4px;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    .action-buttons button.secondary {
+      background: #6c757d;
+    }
+
+    .action-buttons button.warning {
+      background: #f0ad4e;
+      color: #000;
+    }
+
+    .pagination {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      margin-top: 12px;
+    }
+
+    .pagination .info {
+      margin-right: auto;
+      font-size: 12px;
+      color: #555;
+    }
+
+    .pagination button {
+      border: 1px solid var(--border-color, #ccc);
+      background: #fff;
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .pagination button[disabled] {
+      opacity: .5;
+      cursor: not-allowed;
+    }
+
+    .pagination .page-btn.active {
+      background: var(--kardemir-blue, #1976d2);
+      color: #fff;
+      border-color: transparent;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Sidebar -->
+  <aside id="sidebar">
+    <div id="sidebar-container"></div>
+    <script>
+      fetch('sidebar.html').then(r => r.text()).then(h => { document.getElementById('sidebar-container').innerHTML = h; });
+    </script>
+  </aside>
+
+  <div class="content-wrapper">
+    <header class="header">
+      <div class="breadcrumbs">
+        <a href="izleme-ekranı.html">Ana Sayfa</a> <span>&gt;</span>
+        <span>RPH Proses İzleme Ekranı</span>
+      </div>
+    </header>
+
+    <h1 class="report-title">Proses İzleme Ekranı</h1>
+
+    <!-- Filtre Bölümü -->
+    <div class="filter-section">
+      <div class="action-buttons" style="margin-left:0">
+        <input type="date" id="startDate" title="Başlangıç Tarihi" />
+        <input type="date" id="endDate" title="Bitiş Tarihi" />
+        <input type="text" id="isEmriNo" placeholder="İş Emri No" />
+        <button onclick="applyFilter()">Filtrele</button>
+        <button class="secondary" onclick="resetFilter()">Temizle</button>
+        <button class="warning" onclick="exportExcel()">Excel'e Aktar</button>
+      </div>
+    </div>
+
+    <!-- Tablo -->
+    <div class="table-container">
+      <table class="data-table" id="kutuk-rapor">
+        <thead>
+          <tr>
+            <th>Kütük ID</th>
+            <th>İş Emri No</th>
+            <th>Döküm Numarası</th>
+            <th>Kütük Ebatı</th>
+            <th>Kalite</th>
+            <th>Çap</th>
+            <th>Üretim Tarihi</th>
+            <th>Fırın Şarj Zamanı</th>
+            <th>Fırın Deşarj Zamanı</th>
+            <th>Fırında Kalma Süresi</th>
+            <th>Fırın Basıncı (Ortalama)</th>
+            <th>Fırın Deşarj Sıcaklığı (Ortalama)</th>
+            <th>Descaler Basıncı (Ortalama)</th>
+            <th>Hadde Giriş Sıcaklığı (Ortalama)</th>
+            <th>Waterbox 1 Basınç (Ortalama)</th>
+            <th>Waterbox 1 Akış m³ (Ortalama)</th>
+            <th>Meer Drive Giriş Sıcaklığı (Ortalama)</th>
+            <th>TBM Giriş Sıcaklığı (Ortalama)</th>
+            <th>Waterbox 8 Basınç (Ortalama)</th>
+            <th>Waterbox 8 Akış m³ (Ortalama)</th>
+            <th>HiProfile Ölçüm Verileri (Her Kangal Bazında)</th>
+            <th>Serme Kafa Sıcaklığı (Ortalama)</th>
+            <th>ICC Kapak Durumu (Açık/Kapalı)</th>
+            <th>Fan Durumu (% Verim / RPM)</th>
+            <th>Konveyör Hızları (m/sn)</th>
+          </tr>
+        </thead>
+        <tbody id="rapor-body"></tbody>
+      </table>
+    </div>
+
+    <!-- Pagination şeridi -->
+    <div id="pagination" class="pagination">
+      <span class="info" id="pageInfo"></span>
+      <button id="firstBtn" title="İlk Sayfa">&laquo;</button>
+      <button id="prevBtn" title="Önceki Sayfa">&lsaquo;</button>
+      <span id="pageNumbers"></span>
+      <button id="nextBtn" title="Sonraki Sayfa">&rsaquo;</button>
+      <button id="lastBtn" title="Son Sayfa">&raquo;</button>
+    </div>
+  </div>
+
+  <!-- XLSX (Excel) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js" crossorigin="anonymous"
+    referrerpolicy="no-referrer"></script>
+
+  <script>
+    /********** Yardımcılar **********/
+    const pad = n => String(n).padStart(2, '0');
+    const dmy = d => `${pad(d.getDate())}.${pad(d.getMonth() + 1)}.${d.getFullYear()}`;
+    const toISO = s => { const [dd, mm, yy] = s.split('.'); return `${yy}-${mm}-${dd}`; };
+
+    /********** Veri Modeli **********/
+    // Görseldeki tüm sütunlara uygun veri alanları
+    let data = [];           // Tüm veri (objeler)
+    let current = [];        // Filtre sonrası görüntü listesi
+    const pageSize = 10;
+    let currentPage = 1;
+
+    // Örnek veri üretimi (temsili)
+    (function seed() {
+      const kalite = ['B420C_00', 'B420C_01', 'B500C_00'];
+      const ebat = ['150x150', '170x170', '200x200'];
+      const caplar = [12, 14, 16, 18, 20];
+
+      for (let i = 0; i < 40; i++) {
+        const base = new Date(2025, 8, 1); // Eyl 2025
+        const day = new Date(base.getTime() + 86400000 * Math.floor(Math.random() * 20));
+        const uretim = dmy(day);
+        const sarjH = 6 + Math.floor(Math.random() * 6);
+        const desH = sarjH + 6 + Math.floor(Math.random() * 3);
+        const sarj = `${uretim} ${pad(sarjH)}:${pad(Math.floor(Math.random() * 60))}`;
+        const desarj = `${uretim} ${pad(desH)}:${pad(Math.floor(Math.random() * 60))}`;
+
+        const kal = kalite[Math.floor(Math.random() * kalite.length)];
+        const eb = ebat[Math.floor(Math.random() * ebat.length)];
+        const cp = caplar[Math.floor(Math.random() * caplar.length)];
+
+        const kalmaMin = (desH - sarjH) * 60 + Math.floor(Math.random() * 10);
+        const row = {
+          kutukId: 2500000 + i,
+          isEmriNo: String(4000000100 + i),
+
+          dokumNo: 2524000 + i,
+          kutukEb: eb,
+          kalite: kal,
+          cap: cp,
+          uretimT: uretim,
+          firinSarj: sarj,
+          firinDes: desarj,
+          kalmaSure: `${kalmaMin} dk`,
+          firinBas: `${(1 + Math.random()).toFixed(1)} bar`,
+          firinDesSic: `${(950 + Math.floor(Math.random() * 150))} °C`,
+          descalerBas: `${(3 + Math.random() * 2).toFixed(1)} bar`,
+          haddeGirisSic: `${(950 + Math.floor(Math.random() * 120))} °C`,
+          wb1Bas: `${(4 + Math.random() * 2).toFixed(1)} bar`,
+          wb1Akis: `${(12 + Math.random() * 5).toFixed(1)} m³`,
+          meerDriveSic: `${(400 + Math.floor(Math.random() * 50))} °C`,
+          tbmGirisSic: `${(380 + Math.floor(Math.random() * 40))} °C`,
+          wb8Bas: `${(3.5 + Math.random() * 2).toFixed(1)} bar`,
+          wb8Akis: `${(10 + Math.random() * 5).toFixed(1)} m³`,
+          hiprofile: `Ovalite ${(0.1 + Math.random() * 0.2).toFixed(2)} mm`,
+          sermeKafaSic: `${(250 + Math.floor(Math.random() * 30))} °C`,
+          iccKapak: Math.random() > .5 ? 'Açık' : 'Kapalı',
+          fanDurumu: `${(60 + Math.floor(Math.random() * 35))}% / ${(800 + Math.floor(Math.random() * 400))} RPM`,
+          konveyorHiz: (2 + Math.random() * 2).toFixed(2)
+        };
+        data.push(row);
+      }
+      current = data.slice();
+    })();
+
+    /********** Render **********/
+    const bodyEl = document.getElementById('rapor-body');
+    const pageInfoEl = document.getElementById('pageInfo');
+    const pageNumbersEl = document.getElementById('pageNumbers');
+    const firstBtn = document.getElementById('firstBtn');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const lastBtn = document.getElementById('lastBtn');
+
+    function renderPage() {
+      const total = current.length;
+      const totalPages = Math.max(1, Math.ceil(total / pageSize));
+      if (currentPage > totalPages) currentPage = totalPages;
+      if (currentPage < 1) currentPage = 1;
+
+      const startIdx = (currentPage - 1) * pageSize;
+      const pageRows = current.slice(startIdx, startIdx + pageSize);
+
+      bodyEl.innerHTML = pageRows.map(r => `
+        <tr>
+          <td>${r.kutukId}</td>
+          <td>${r.isEmriNo}</td>
+          <td>${r.dokumNo}</td>
+          <td>${r.kutukEb}</td>
+          <td>${r.kalite}</td>
+          <td>${r.cap}</td>
+          <td>${r.uretimT}</td>
+          <td>${r.firinSarj}</td>
+          <td>${r.firinDes}</td>
+          <td>${r.kalmaSure}</td>
+          <td>${r.firinBas}</td>
+          <td>${r.firinDesSic}</td>
+          <td>${r.descalerBas}</td>
+          <td>${r.haddeGirisSic}</td>
+          <td>${r.wb1Bas}</td>
+          <td>${r.wb1Akis}</td>
+          <td>${r.meerDriveSic}</td>
+          <td>${r.tbmGirisSic}</td>
+          <td>${r.wb8Bas}</td>
+          <td>${r.wb8Akis}</td>
+          <td>${r.hiprofile}</td>
+          <td>${r.sermeKafaSic}</td>
+          <td>${r.iccKapak}</td>
+          <td>${r.fanDurumu}</td>
+          <td>${r.konveyorHiz}</td>
+        </tr>
+      `).join('');
+
+      // pagination
+      const start = total === 0 ? 0 : startIdx + 1;
+      const end = Math.min(startIdx + pageSize, total);
+      pageInfoEl.textContent = `${total} kayıttan ${start}-${end} arası gösteriliyor`;
+
+      firstBtn.disabled = currentPage === 1;
+      prevBtn.disabled = currentPage === 1;
+      nextBtn.disabled = currentPage === totalPages;
+      lastBtn.disabled = currentPage === totalPages;
+
+      const numbers = [];
+      let sp = Math.max(1, currentPage - 2);
+      let ep = Math.min(totalPages, sp + 4);
+      sp = Math.max(1, ep - 4);
+      for (let p = sp; p <= ep; p++) numbers.push(p);
+
+      pageNumbersEl.innerHTML = '';
+      numbers.forEach(p => {
+        const b = document.createElement('button');
+        b.className = 'page-btn' + (p === currentPage ? ' active' : '');
+        b.textContent = p;
+        b.onclick = () => { currentPage = p; renderPage(); };
+        pageNumbersEl.appendChild(b);
+      });
+    }
+
+    // sayfa kontrol
+    firstBtn.onclick = () => { currentPage = 1; renderPage(); };
+    prevBtn.onclick = () => { currentPage = Math.max(1, currentPage - 1); renderPage(); };
+    nextBtn.onclick = () => { currentPage = currentPage + 1; renderPage(); };
+    lastBtn.onclick = () => {
+      const totalPages = Math.max(1, Math.ceil(current.length / pageSize));
+      currentPage = totalPages; renderPage();
+    };
+
+    // ilk çizim
+    renderPage();
+
+    /********** Filtreleme **********/
+    function applyFilter() {
+      const sDate = document.getElementById('startDate').value;
+      const eDate = document.getElementById('endDate').value;
+      const sipNo = document.getElementById('isEmriNoFilter').value.trim();
+
+      current = data.filter(r => {
+        let ok = true;
+        if (sDate) { ok = ok && (new Date(toISO(r.uretimT)) >= new Date(sDate)); }
+        if (eDate) { ok = ok && (new Date(toISO(r.uretimT)) <= new Date(eDate)); }
+        if (sipNo) { ok = ok && r.isEmriNo.includes(sipNo); }
+        return ok;
+      });
+      currentPage = 1;
+      renderPage();
+    }
+    function resetFilter() {
+      document.getElementById('startDate').value = '';
+      document.getElementById('endDate').value = '';
+      document.getElementById('isEmriNoFilter').value = '';
+      current = data.slice();
+      currentPage = 1;
+      renderPage();
+    }
+
+    /********** Excel'e Aktar (tüm filtrelenmiş kayıtlar) **********/
+    function exportExcel() {
+      // Görünen sayfa değil, current (filtreli tüm satırlar) dışa aktarılır
+      const header = [
+        'Kütük ID', 'İş Emri No', 'Döküm Numarası', 'Kütük Ebatı', 'Kalite', 'Çap', 'Üretim Tarihi',
+        'Fırın Şarj Zamanı', 'Fırın Deşarj Zamanı', 'Fırında Kalma Süresi', 'Fırın Basıncı (Ort.)',
+        'Fırın Deşarj Sıcaklığı (Ort.)', 'Descaler Basıncı (Ort.)', 'Hadde Giriş Sıcaklığı (Ort.)',
+        'Waterbox 1 Basınç (Ort.)', 'Waterbox 1 Akış m³ (Ort.)', 'Meer Drive Giriş Sıcaklığı (Ort.)',
+        'TBM Giriş Sıcaklığı (Ort.)', 'Waterbox 8 Basınç (Ort.)', 'Waterbox 8 Akış m³ (Ort.)',
+        'HiProfile Ölçüm Verileri', 'Serme Kafa Sıcaklığı (Ort.)', 'ICC Kapak Durumu', 'Fan Durumu', 'Konveyör Hızları (m/sn)'
+      ];
+      const rows = current.map(r => [
+        r.kutukId, r.isEmriNo, r.dokumNo, r.kutukEb, r.kalite, r.cap, r.uretimT,
+        r.firinSarj, r.firinDes, r.kalmaSure, r.firinBas, r.firinDesSic, r.descalerBas,
+        r.haddeGirisSic, r.wb1Bas, r.wb1Akis, r.meerDriveSic, r.tbmGirisSic, r.wb8Bas,
+        r.wb8Akis, r.hiprofile, r.sermeKafaSic, r.iccKapak, r.fanDurumu, r.konveyorHiz
+      ]);
+
+      const wb = XLSX.utils.book_new();
+      const ws = XLSX.utils.aoa_to_sheet([header, ...rows]);
+      XLSX.utils.book_append_sheet(wb, ws, 'Proses Raporu');
+      XLSX.writeFile(wb, 'proses-parametreleri-raporu.xlsx');
+    }
+  </script>
+</body>
+
+</html>

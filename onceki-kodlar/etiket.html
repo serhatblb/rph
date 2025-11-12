@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Etiket Bilgileri - Kardemir</title>
+  <link rel="stylesheet" href="style.css" />
+  
+</head>
+
+<body>
+  <!-- Sidebar -->
+  <div id="sidebar"></div>
+  <script>
+    fetch('sidebar.html')
+      .then(res => res.text())
+      .then(data => document.getElementById('sidebar').innerHTML = data);
+  </script>
+
+  <!-- İçerik -->
+  <main class="content-wrapper">
+    <header class="header">
+      <div class="breadcrumbs">
+        <a href="#">Ana Sayfa</a> <span>›</span>
+        <span>Etiket</span>
+      </div>
+    </header>
+
+    <section class="main-report-area">
+      <h1 class="report-title">🏷️ Etiket Bilgileri</h1>
+
+      <div class="table-wrapper">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th><span>RAY ID / PAKET ID</span></th>
+              <th><span>DÖKÜM NO / NO'LAR</span></th>
+              <th><span>SİPARİŞ NO</span></th>
+              <th><span>MÜŞTERİ</span></th>
+              <th><span>SINIF</span></th>
+              <th><span>ÜRÜN TİPİ</span></th>
+              <th><span>KALİTE STANDARDI</span></th>
+              <th><span>KALİTE</span></th>
+              <th><span>AĞIRLIK (kg)</span></th>
+              <th><span>ÜRÜN ADEDİ</span></th>
+              <th><span>TARİH - SAAT</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>PAKET ID</td>
+              <td>2512332</td>
+              <td>300003661</td>
+              <td>X FİRMASI</td>
+              <td>1</td>
+              <td>PROFİL</td>
+              <td>S275JR</td>
+              <td>S275JR_01</td>
+              <td>1234</td>
+              <td>4</td>
+              <td>10.06.2025 14:32</td>
+            </tr>
+            <tr>
+              <td>RAY ID</td>
+              <td>2512332</td>
+              <td>300003662</td>
+              <td>DDY</td>
+              <td>1</td>
+              <td>RAY</td>
+              <td>S275JR</td>
+              <td>S275JR_01</td>
+              <td>1234</td>
+              <td>1</td>
+              <td>12.06.2025 15:32</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div style="margin-top: 30px;">
+        <button onclick="window.print()" class="details-button">🖨 Etiketi Yazdır</button>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

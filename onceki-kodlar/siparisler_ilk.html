@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Kardemir - Sipariş Bilgileri</title>
+    <link href="style.css" rel="stylesheet" />
+
+    <style>
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            table-layout: fixed;
+            /* Sütun genişliklerini sabitle */
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: 8px 10px;
+            /* Padding azaltıldı */
+            text-align: center;
+            border-bottom: 1px solid var(--border-color);
+            white-space: nowrap;
+            /* İçeriğin tek satırda kalmasını sağlar */
+            font-size: 13px;
+            overflow: hidden;
+            /* Hücre içeriği taşarsa gizle */
+            text-overflow: ellipsis;
+            /* Taşarsa üç nokta göster */
+        }
+
+        /* Sütun genişliklerini burada ayarlayarak daha iyi kontrol sağlayabiliriz */
+        .data-table th:nth-child(1),
+        .data-table td:nth-child(1) {
+            width: 10%;
+        }
+
+        /* Sipariş No */
+        .data-table th:nth-child(2),
+        .data-table td:nth-child(2) {
+            width: 18%;
+        }
+
+        /* Ürün Tanımı - Biraz daha daraltıldı */
+        .data-table th:nth-child(3),
+        .data-table td:nth-child(3) {
+            width: 12%;
+        }
+
+        /* Şartname Numarası */
+        .data-table th:nth-child(4),
+        .data-table td:nth-child(4) {
+            width: 8%;
+        }
+
+        /* Kalite */
+        .data-table th:nth-child(5),
+        .data-table td:nth-child(5) {
+            width: 10%;
+        }
+
+        /* Sipariş Miktarı */
+        .data-table th:nth-child(6),
+        .data-table td:nth-child(6) {
+            width: 10%;
+        }
+
+        /* Kalan Miktar */
+        .data-table th:nth-child(7),
+        .data-table td:nth-child(7) {
+            width: 10%;
+        }
+
+        /* Durum */
+        .data-table th:nth-child(8),
+        .data-table td:nth-child(8) {
+            width: 22%;
+        }
+
+        /* Detay - Genişlik artırıldı! */
+
+        /* Buton grupları için ek düzenleme */
+        .alt-button-group {
+            display: flex;
+            flex-wrap: wrap;
+            /* Butonlar sığmazsa alt satıra geçsin */
+            gap: 5px;
+            /* Butonlar arasında boşluk bırak */
+            margin-top: 5px;
+        }
+
+        .details-button,
+        .alt-detail-button {
+            padding: 5px 8px;
+            /* Buton padding'i azaltılabilir */
+            font-size: 12px;
+            /* Buton font boyutu küçültülebilir */
+            white-space: nowrap;
+            /* Buton metninin tek satırda kalmasını sağlar */
+            box-sizing: border-box;
+            /* Padding ve border genişliğe dahil */
+        }
+
+        .data-table thead th {
+            background-color: var(--main-bg-light);
+            font-weight: 700;
+            color: var(--text-color-dark);
+            text-transform: uppercase;
+            font-size: 13px;
+        }
+
+        .data-table tbody tr {
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .data-table tbody tr:hover {
+            background-color: #f8f8f8;
+        }
+
+        .data-table tbody tr.selected-row {
+            background-color: #e3f2fd;
+            border-left: 3px solid var(--kardemir-blue);
+        }
+        .enerji-kok-row {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+  gap: 20px;
+}
+
+.enerji-kok-box {
+  flex: 1;
+  background-color: #f8f9fa;
+  padding: 10px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  line-height: 1.5;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.05);
+}
+.haddehane-info-card {
+  overflow: hidden;
+}
+
+    </style>
+</head>
+
+<body>
+    <aside id="sidebar">
+        <div id="sidebar"></div>
+        <script>
+            fetch("sidebar.html")
+                .then((res) => res.text())
+                .then((data) => document.getElementById("sidebar").innerHTML = data);
+        </script>
+    </aside>
+
+    <div class="content-wrapper">
+        <header class="header">
+            <div class="breadcrumbs">
+                <a href="#">Ana Sayfa</a> <span>&gt;</span>
+                <span>Sipariş Sayfası</span>
+            </div>
+        </header>
+
+        <div class="main-report-area">
+            <h1 class="report-title">Sipariş Bilgileri</h1>
+            <div class="filter-section">
+                <div class="action-buttons" style="margin-left: 0">
+                    <button id="allOrdersBtn">Tümü</button>
+                    <button id="activeOrdersBtn">Aktif Siparişler</button>
+                    <button id="passiveOrdersBtn">Pasif Siparişler</button>
+                </div>
+            </div>
+
+            <div class="summary-container">
+                <div class="active-order-summary-card">
+                    <h3>Aktif Sipariş</h3>
+                    <div class="info-row">
+                        <div class="info-item">
+                            <span class="label">Aktif Sipariş Numarası:</span>
+                            <span class="value" id="summary-siparis-numarasi">300003661</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">Kalan Tonaj:</span>
+                            <span class="value" id="summary-kalan-tonaj">460 t</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">Durum:</span>
+                            <span class="value"><span class="status üretimde" id="summary-durum">Üretimde</span></span>
+                        </div>
+                    </div>
+                    <div class="info-row product-description">
+                        <span class="label">Ürün Tanımı:</span>
+                        <span class="value product-description-content">
+                            <span id="summary-urun-tanimi">HEB 400 S275JR_00 12000 PROFIL</span>
+                            <img alt="Ürün Resmi" class="urun-resim" id="summary-urun-resim"
+                                src="resimler/resim (4).png" />
+                        </span>
+                    </div>
+                </div>
+
+                <div class="haddehane-info-card">
+                    <h3>Haddehane Bilgileri</h3>
+                    <div class="info-row">
+                        <span><strong>Planlanan Üretim Tonajı:</strong> <span id="planlanan-hiz">200 ton
+                            </span></span>
+                        <span><strong>Anlık Üretim Tonajı:</strong> <span id="anlik-hiz">185 ton/saat </span></span>
+                    </div>
+                    <div class="info-row">
+                        <span><strong>Önceki Gün Üretim:</strong><span id="onceki-gun">120 t</span></span>
+                        <span><strong>Bugün Üretim:</strong> <span id="bugun">30 t</span></span>
+                    </div>
+                    <div class="info-row">
+                        <span><strong>Önceki Gün Duruş Süresi:</strong> <span id="onceki-gun-dk">180 dk</span></span>
+                        <span><strong>Bugün Duruş Süresi:</strong> <span id="bugun-dk">30 dk</span></span>
+                    </div>
+                    <!-- Yeni Enerji & Kok satırı -->
+                    <div class="info-row enerji-kok-row">
+  <div class="enerji-kok-box">
+    <strong>Enerji</strong><br>
+    <span>Günlük: <strong>210 MJ</strong></span><br>
+    <span>Aylık: <strong>6 300 MJ</strong></span>
+  </div>
+  <div class="enerji-kok-box">
+    <strong>Kok</strong><br>
+    <span>Günlük: <strong>120 ton</strong></span><br>
+    <span>Aylık: <strong>3 600 ton</strong></span>
+  </div>
+</div>
+
+                </div>
+            </div>
+        </div>
+
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Sipariş No</th>
+                    <th>Ürün Tanımı</th>
+                    <th>Şartname<br>Numarası</th>
+                    <th>Kalite</th>
+                    <th>Sipariş <br> Miktarı</th>
+                    <th>Kalan Miktar</th>
+                    <th>Durum</th>
+                    <th>Detay</th>
+                </tr>
+            </thead>
+            <tbody id="main-table-body"></tbody>
+        </table>
+    </div>
+
+    <div id="satirModalOverlay" class="modal-overlay">
+        <div class="modal">
+            <button class="modal-close" id="modalCloseBtn">&times;</button>
+            <div class="modal-header">Şartname Bilgileri</div>
+            <div class="modal-body">
+                <p>• Şartname maddesi 1: Teknik koşul A...</p>
+                <p>• Şartname maddesi 2: Ölçüm toleransı B...</p>
+                <p>• Şartname maddesi 3: Malzeme kalitesi C...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // --- VERİ ---
+            const allOrders = [
+                { siparisNumarasi: "300003661", urunTanimi: "HEB 400 S275JR_00 12000 <br> PROFIL", sartnameNumarasi: "ŞRT-001", kalite: "S275JR_00", siparisMiktari: 1000, kalanUretimMiktari: 460, durum: "Üretimde", resimYolu: "resimler/resim (4).png" },
+                { siparisNumarasi: "300003662", urunTanimi: "HEA 320 S275JR_00 12000 <br>  PROFIL", sartnameNumarasi: "ŞRT-002", kalite: "275JR_00", siparisMiktari: 1800, kalanUretimMiktari: 500, durum: "Beklemede", resimYolu: "resimler/resim (4).png" },
+                { siparisNumarasi: "300003663", urunTanimi: "IPE 500 S275JR_00 12000 <br>  Profil Y", sartnameNumarasi: "ŞRT-003", kalite: "275JR_00", siparisMiktari: 3000, kalanUretimMiktari: 0, durum: "Tamamlandı", resimYolu: "resimler/resim (4).png" },
+                { siparisNumarasi: "300003567", urunTanimi: "60E2 R260_02 36000 <br>  Ray Deliksiz", sartnameNumarasi: "ŞRT-004", kalite: "R260_02", siparisMiktari: 4500, kalanUretimMiktari: 4500, durum: "Planlandı", resimYolu: "resimler/resim (4).png" },
+                { siparisNumarasi: "300003568", urunTanimi: "60E2 R260_02 36000 <br>  Ray Deliksiz", sartnameNumarasi: "ŞRT-005", kalite: "R260_02", siparisMiktari: 1500, kalanUretimMiktari: 1500, durum: "Planlandı", resimYolu: "resimler/resim (4).png" },
+                { siparisNumarasi: "300003261", urunTanimi: "P65(R65) R350HT_00 <br>  25000 Ray Deliksiz", sartnameNumarasi: "ŞRT-006", kalite: "R350HT_00", siparisMiktari: 2200, kalanUretimMiktari: 800, durum: "Beklemede", resimYolu: "resimler/resim (4).png" },
+            ];
+            const planlananHiz = "200 ton/saat";
+            const anlikHiz = "185 ton/saat";
+            const oncekiGun = "120 ton";
+            const bugun = "30 ton";
+            const oncekiGunDk = "180 dk";
+            const bugunDk = "30 dk";
+
+            // Summary güncelle
+            document.getElementById("planlanan-hiz").textContent = planlananHiz;
+            document.getElementById("anlik-hiz").textContent = anlikHiz;
+            document.getElementById("onceki-gun").textContent = oncekiGun;
+            document.getElementById("bugun").textContent = bugun;
+            document.getElementById("onceki-gun-dk").textContent = oncekiGunDk;
+            document.getElementById("bugun-dk").textContent = bugunDk;
+
+            // localStorage’a kaydet
+            localStorage.setItem("kardemirSiparisler", JSON.stringify(allOrders));
+
+            // Element referansları
+            const tableBody = document.getElementById("main-table-body");
+            const allBtn = document.getElementById("allOrdersBtn");
+            const actBtn = document.getElementById("activeOrdersBtn");
+            const pasBtn = document.getElementById("passiveOrdersBtn");
+
+            const summaryNo = document.getElementById("summary-siparis-numarasi");
+            const summaryTonaj = document.getElementById("summary-kalan-tonaj");
+            const summaryDurum = document.getElementById("summary-durum");
+            const summaryUrun = document.getElementById("summary-urun-tanimi");
+            const summaryImg = document.getElementById("summary-urun-resim");
+
+            let currentFilter = "all";
+
+            // --- Fonksiyonlar ---
+            function populateTable(orders) {
+                tableBody.innerHTML = "";
+                orders.forEach((order, index) => {
+                    const row = tableBody.insertRow();
+                    row.dataset.id = order.siparisNumarasi;
+
+                    const durumClass = order.durum.toLowerCase().replace(/[\s\/]/g, "-");
+
+                    let detayButonlari = `
+                        <button class="details-button order-detail-btn" data-id="${order.siparisNumarasi}">Sipariş Detay</button>
+                        <button class="details-button semi-product-detail-btn" data-id="${order.siparisNumarasi}">Yarı Mamul Detay</button>
+                    `;
+
+                    if (index === 0) {
+                        detayButonlari += `
+                            <div class="alt-button-group">
+                                
+                            </div>
+                        `;
+                    }
+
+                    row.innerHTML = `
+                        <td>${order.siparisNumarasi}</td>
+                        <td>${order.urunTanimi}</td>
+                        <td class="sartname-numarasi-cell">${order.sartnameNumarasi}</td> <td>${order.kalite}</td>
+                        <td>${order.siparisMiktari} t</td>
+                        <td>${order.kalanUretimMiktari} t</td>
+                        <td><span class="status ${durumClass}">${order.durum}</span></td>
+                        <td>${detayButonlari}</td>
+                    `;
+                });
+            }
+
+            function updateSummaryCard(order) {
+                // <br> etiketlerini kaldırıyoruz:
+                const cleanName = order.urunTanimi.replace(/<br\s*\/?>/gi, ' ');
+                summaryUrun.textContent = cleanName;
+
+                // … kalan kod aynı
+                summaryNo.textContent = order.siparisNumarasi;
+                summaryTonaj.textContent = `${order.kalanUretimMiktari} t`;
+                summaryDurum.textContent = order.durum;
+                summaryDurum.className = `status ${order.durum.toLowerCase().replace(/[\s\/]/g, '-')}`;
+                if (order.resimYolu) {
+                    summaryImg.src = order.resimYolu;
+                    summaryImg.style.display = 'inline-block';
+                } else {
+                    summaryImg.style.display = 'none';
+                }
+            }
+
+            function resetSummaryCard() {
+                summaryNo.textContent = "-";
+                summaryTonaj.textContent = "-";
+                summaryDurum.textContent = "-";
+                summaryDurum.className = "status";
+                summaryUrun.textContent = "-";
+                summaryImg.style.display = "none";
+            }
+
+            function updateButtonStyles(activeBtn) {
+                [allBtn, actBtn, pasBtn].forEach(b => b.classList.remove("active-filter"));
+                activeBtn.classList.add("active-filter");
+            }
+
+            function applyFilter(type) {
+                currentFilter = type;
+                let filtered = [];
+                if (type === "all") {
+                    filtered = allOrders;
+                    updateButtonStyles(allBtn);
+                } else if (type === "active") {
+                    filtered = allOrders.filter(o => o.durum === "Üretimde" || o.durum === "Devam ediyor");
+                    updateButtonStyles(actBtn);
+                } else {
+                    filtered = allOrders.filter(o => o.durum !== "Üretimde" && o.durum !== "Devam ediyor");
+                    updateButtonStyles(pasBtn);
+                }
+                populateTable(filtered);
+                if (filtered.length) {
+                    updateSummaryCard(filtered[0]);
+                    const firstRow = tableBody.querySelector("tr");
+                    if (firstRow) {
+                        document.querySelectorAll(".data-table tbody tr").forEach(r => r.classList.remove("selected-row"));
+                        firstRow.classList.add("selected-row");
+                    }
+                } else {
+                    resetSummaryCard();
+                }
+            }
+
+            function attachSiparisNoClick() {
+                // Remove existing event listeners from the 'sartname-numarasi-cell' elements
+                document.querySelectorAll(".data-table tbody tr .sartname-numarasi-cell").forEach(td => {
+                    // Replace the element with a clone to remove all attached event listeners
+                    td.replaceWith(td.cloneNode(true));
+                });
+                // Attach new event listeners to the (now cloned) 'sartname-numarasi-cell' elements
+                document.querySelectorAll(".data-table tbody tr .sartname-numarasi-cell").forEach(td => {
+                    td.addEventListener("click", () => {
+                        document.getElementById("satirModalOverlay").style.display = "flex";
+                    });
+                });
+            }
+
+
+            // --- Event Listeners ---
+            allBtn.addEventListener("click", () => { applyFilter("all"); setTimeout(attachSiparisNoClick, 50); });
+            actBtn.addEventListener("click", () => { applyFilter("active"); setTimeout(attachSiparisNoClick, 50); });
+            pasBtn.addEventListener("click", () => { applyFilter("passive"); setTimeout(attachSiparisNoClick, 50); });
+
+            tableBody.addEventListener("click", e => {
+                if (e.target.classList.contains("order-detail-btn")) {
+                    localStorage.setItem("selectedOrderId", e.target.dataset.id);
+                    window.location.href = "siparis-detay2.html";
+                } else if (e.target.classList.contains("semi-product-detail-btn")) {
+                    localStorage.setItem("selectedOrderId", e.target.dataset.id);
+                    window.location.href = "yari-mamul-listesi.html";
+                }
+            });
+
+            // Modal kapatma
+            document.getElementById("modalCloseBtn").addEventListener("click", () => {
+                document.getElementById("satirModalOverlay").style.display = "none";
+            });
+            document.getElementById("satirModalOverlay").addEventListener("click", e => {
+                if (e.target === e.currentTarget) {
+                    document.getElementById("satirModalOverlay").style.display = "none";
+                }
+            });
+
+            // İlk yükleme
+            applyFilter("all");
+            attachSiparisNoClick();
+        });
+    </script>
+</body>
+
+</html>

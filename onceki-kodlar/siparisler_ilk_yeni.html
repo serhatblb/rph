@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title> İş Emri Bilgileri</title>
+  <link href="style.css" rel="stylesheet" />
+  <style>
+    .page-header {
+      background: #fff;
+      padding: 20px 25px;
+      border-radius: 8px;
+      margin-bottom: 25px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .page-title {
+      font-size: 24px;
+      color: #1976d2;
+      margin: 0;
+      font-weight: 700;
+    }
+
+    .header-left {
+      flex: 1;
+    }
+
+    .filter-buttons {
+      display: flex;
+      gap: 10px;
+    }
+
+    .filter-btn {
+      padding: 8px 18px;
+      border: none;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .filter-btn:hover {
+      opacity: 0.9;
+    }
+
+    #allOrdersBtn {
+      background: #1976d2;
+      color: #fff;
+    }
+
+    #allOrdersBtn.active {
+      background: #1565c0;
+    }
+
+    #activeOrdersBtn {
+      background: #4caf50;
+      color: #fff;
+    }
+
+    #activeOrdersBtn.active {
+      background: #388e3c;
+    }
+
+    #passiveOrdersBtn {
+      background: #f44336;
+      color: #fff;
+    }
+
+    #passiveOrdersBtn.active {
+      background: #d32f2f;
+    }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 25px;
+    }
+
+    .info-card {
+      background: #fff;
+      border-radius: 10px;
+      padding: 18px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+      transition: transform .2s, box-shadow .2s;
+    }
+
+    .info-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    }
+
+    .card-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .card-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #1976d2;
+      margin: 0;
+      padding-bottom: 12px;
+      border-bottom: 2px solid #e3f2fd;
+      flex: 1;
+    }
+
+    .inline-action {
+      margin-left: 12px;
+      white-space: nowrap;
+    }
+
+    .action-button {
+      background: #1976d2;
+      color: #fff;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background .3s;
+    }
+
+    .action-button:hover {
+      background: #125a9c;
+    }
+
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      gap: 10px;
+    }
+
+    .info-label {
+      font-size: 11px;
+      color: #666;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      font-weight: 600;
+      flex: 1;
+    }
+
+    .info-value {
+      font-size: 15px;
+      color: #1a1a1a;
+      font-weight: 700;
+      text-align: right;
+    }
+
+    .divider {
+      height: 1px;
+      background: #e8f0f8;
+      margin: 16px 0;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+      background: #e9f7ee;
+      color: #2e7d32;
+      border: 1px solid #c8ead3;
+    }
+
+    .product-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px;
+      background: #f8f9fa;
+      border-radius: 8px;
+      margin-bottom: 14px;
+    }
+
+    .product-image {
+      width: 50px;
+      height: 50px;
+      border-radius: 6px;
+      border: 1px solid #ddd;
+      object-fit: contain;
+      background: #fff;
+      padding: 3px;
+    }
+
+    .product-text {
+      flex: 1;
+      font-size: 12px;
+      color: #333;
+      line-height: 1.5;
+      font-weight: 500;
+    }
+
+    .table-section {
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+      margin-bottom: 30px;
+    }
+
+    .table-title {
+      font-size: 18px;
+      color: #1976d2;
+      margin: 0 0 16px;
+      font-weight: 700;
+    }
+
+    .data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px !important;
+  table-layout: fixed !important;       /* 🔹 Sütun genişlikleri sabit */
+}
+
+.data-table th {
+  background: #f8f9fb !important;
+  padding: 6px 6px !important;
+  text-align: center !important;
+  border-bottom: 2px solid #e3e6ea !important;
+  font-size: 10px !important;          /* 🔹 artık kesin küçülür */
+  font-weight: 700 !important;
+  color: #2c3e50 !important;
+  text-transform: uppercase !important;
+  line-height: 1.2 !important;
+  white-space: normal !important;
+  word-break: break-word !important;
+}
+
+
+    
+
+    .data-table td {
+      padding: 10px 8px;
+      text-align: center;
+      border-bottom: 1px solid #e3e6ea;
+    }
+
+    .data-table tbody tr:hover {
+      background: #eef5ff;
+    }
+
+    .order-link {
+      color: #1976d2;
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    .order-link:hover {
+      text-decoration: underline;
+    }
+
+    /* Modal (opsiyonel) */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      inset: 0;
+      background-color: rgba(0, 0, 0, .5);
+    }
+
+    .modal-content {
+      background: #fff;
+      margin: 5% auto;
+      padding: 30px;
+      border-radius: 12px;
+      width: 80%;
+      max-width: 900px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, .2);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+      padding-bottom: 15px;
+      border-bottom: 2px solid #e3f2fd;
+    }
+
+    .modal-title {
+      font-size: 22px;
+      font-weight: 700;
+      color: #1976d2;
+      margin: 0;
+    }
+
+    .close-btn {
+      font-size: 32px;
+      font-weight: 300;
+      color: #999;
+      cursor: pointer;
+      line-height: 1;
+    }
+
+    .close-btn:hover {
+      color: #333;
+    }
+
+    .chart-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+
+    .chart-card {
+      background: #f8f9fa;
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
+    }
+
+    .chart-card-title {
+      font-size: 13px;
+      color: #666;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      font-weight: 600;
+      margin-bottom: 15px;
+    }
+
+    .progress-circle {
+      width: 150px;
+      height: 150px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    .progress-ring {
+      transform: rotate(-90deg);
+    }
+
+    .progress-ring-bg {
+      fill: none;
+      stroke: #e0e0e0;
+      stroke-width: 12;
+    }
+
+    .progress-ring-fill {
+      fill: none;
+      stroke-width: 12;
+      stroke-linecap: round;
+      transition: stroke-dashoffset .5s ease;
+    }
+
+    .progress-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 32px;
+      font-weight: 700;
+      color: #1a1a1a;
+    }
+
+    .color-green {
+      stroke: #4caf50;
+    }
+
+    .color-blue {
+      stroke: #2196f3;
+    }
+
+    .color-orange {
+      stroke: #ff9800;
+    }
+
+    .color-purple {
+      stroke: #9c27b0;
+    }
+
+    /* Aktif satır: tam yeşil zemin + beyaz yazı */
+    /* 🔹 Aktif satır tam yeşil + beyaz metin */
+    tr.active-row,
+    tr.active-row:hover,
+    tr.active-row td {
+      background-color: #1ba94c !important;
+      /* yeşil */
+      color: #ffffff !important;
+      /* beyaz yazı */
+      font-weight: 600;
+    }
+
+    /* 🔹 Aktif satırın içindeki bağlantılar da beyaz olsun */
+    tr.active-row a {
+      color: #ffffff !important;
+      text-decoration: none;
+    }
+
+    /* 🔹 Hover veya zebra renkleri aktif satırı etkilemesin */
+    .data-table tbody tr:hover {
+      background-color: inherit !important;
+    }
+  </style>
+</head>
+
+<body>
+  <aside id="sidebar">
+    <div id="sidebar-container"></div>
+    <script>
+      fetch("sidebar.html").then(res => res.text()).then(html => { document.getElementById("sidebar-container").innerHTML = html; });
+    </script>
+  </aside>
+
+  <div class="content-wrapper">
+    <header class="header">
+      <div class="breadcrumbs">
+        <a href="#">Ana Sayfa</a><span>&gt;</span><span>RPH – İş Emri Sayfası</span>
+      </div>
+
+      <!-- 🔹 Yeni Başlık -->
+      <div class="page-title" style="
+    font-size: 22px;
+    color: #00205B;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  ">
+        RAY PROFİL  HADDEHANESİ
+      </div>
+    </header>
+
+
+    <!-- Bilgi Kartları -->
+    <div class="cards-grid">
+      <!-- Kart 1: Aktif İş Emri Detayları + BUTON -->
+      <div class="info-card">
+        <div class="card-head">
+          <h3 class="card-title">Aktif İş Emri Detayları</h3>
+          <div class="inline-action">
+            <button class="action-button" onclick="window.location.href='yarı-mamul-listesi.html'">Yarı Mamul
+              Listesi</button>
+          </div>
+        </div>
+
+        <div class="product-info">
+          <img src="resimler/resim (4).png" alt="Ürün" class="product-image" />
+          <div class="product-text">
+            <div class="info-label" style="margin-bottom:4px;">Ürün Tanımı</div>
+            HEB 400 S275JR_00 12000  <strong>PROFIL</strong> 
+          </div>
+        </div>
+
+        <div class="info-row">
+          <div class="info-label">Aktif İş Emri No</div>
+          <div class="info-value">300003661</div>
+        </div>
+        <div class="info-row">
+          <div class="info-label">Durum</div>
+          <div><span class="status-badge">Üretimde</span></div>
+        </div>
+        <div class="info-row">
+          <div class="info-label">Malzeme Kodu</div>
+          <div class="info-value">80003909</div>
+        </div>
+        <div class="info-row">
+          <div class="info-label">1.Kalite Üretim</div>
+          <div class="info-value">1.200 t</div>
+        </div>
+        <div class="info-row">
+          <div class="info-label">2.Kalite Üretim</div>
+          <div class="info-value">100 t</div>
+        </div>
+        <div class="info-row">
+          <div class="info-label">Hold</div>
+          <div class="info-value">10 t</div>
+        </div>
+        <div class="info-row">
+          <div class="info-label">Hadde Bozuğu</div>
+          <div class="info-value">20 t</div>
+        </div>
+        <div class="info-row">
+          <div class="info-label">Kalan Üretim Tonajı</div>
+          <div class="info-value">5 t</div>
+        </div>
+      </div>
+
+      <!-- Kart 2 -->
+      <div class="info-card">
+        <div class="card-head">
+          <h3 class="card-title">Şarj Bilgileri</h3>
+        </div>
+        <div class="info-row">
+          <div class="info-label">İş Emri Şarj Tonajı</div>
+          <div class="info-value">5.000 t</div>
+        </div>
+        <div class="info-row">
+          <div class="info-label">İş emri Şarj Adedi</div>
+          <div class="info-value">125 adet</div>
+        </div>
+        <div class="info-row">
+          <div class="info-label">Günlük Şarj Tonajı</div>
+          <div class="info-value">250 t</div>
+        </div>
+        <div class="info-row">
+          <div class="info-label">Günlük Şarj Adedi</div>
+          <div class="info-value">6 adet</div>
+        </div>
+        <div class="card-head">
+          <h3 class="card-title">Önceki Gün Bilgileri</h3>
+        </div>
+        <div class="info-row">
+          <div class="info-label">Genel Çalışma Oranı</div>
+          <div class="info-value">85%</div>
+        </div>
+        <div class="info-row">
+          <div class="info-label">Net Çalışma Oranı</div>
+          <div class="info-value">92%</div>
+        </div>
+        <div class="info-row">
+          <div class="info-label">Verim</div>
+          <div class="info-value">92%</div>
+        </div>
+        <div class="info-row">
+          <div class="info-label">İşletme Etkinliği (OEE)</div>
+          <div class="info-value">78%</div>
+        </div>
+      </div>
+
+      <!-- Kart 3 -->
+      <div class="info-card">
+        <div class="card-head">
+          <h3 class="card-title">Üretim Performansı</h3>
+        </div>
+        <div class="info-row">
+          <div class="info-label">Planlanan Üretim (Günlük)</div>
+          <div class="info-value">240 t</div>
+        </div>
+        <div class="info-row">
+          <div class="info-label">Gerçekleşen Üretim (Günlük)</div>
+          <div class="info-value">235 t</div>
+        </div>
+        <div class="info-row">
+          <div class="info-label">Ortalama Üretim Hızı</div>
+          <div class="info-value">9.8 t/saat</div>
+        </div>
+        <div class="info-row">
+          <div class="info-label">Üretilen Paket Adedi</div>
+          <div class="info-value">85 adet</div>
+        </div>
+        <div class="info-row">
+          <div class="info-label">Duruş Süresi (Günlük)</div>
+          <div class="info-value">2.5 saat</div>
+        </div>
+        <div class="info-row">
+          <div class="info-label">Duruş Oranı (Günlük)</div>
+          <div class="info-value">10.4%</div>
+        </div>
+      </div>
+
+      <!-- Kart 4 -->
+      <div class="info-card">
+        <div class="card-head">
+          <h3 class="card-title">Enerji Tüketimleri</h3>
+        </div>
+        <div class="info-row">
+          <div class="info-label">Doğalgaz (Günlük)</div>
+          <div class="info-value">1.250 Nm³/t</div>
+        </div>
+        <div class="info-row">
+          <div class="info-label">DoğalgAz (Aylık)</div>
+          <div class="info-value">35.000 Nm³</div>
+        </div>
+        <div class="divider"></div>
+        <div class="info-row">
+          <div class="info-label">Elektrik (Günlük)</div>
+          <div class="info-value">420 kWh/t</div>
+        </div>
+        <div class="info-row">
+          <div class="info-label">Elektrik (Aylık)</div>
+          <div class="info-value">12.500 kWh</div>
+        </div>
+      </div>
+    </div>
+    <!-- 🔹 Günlük Üretim Programı -->
+    <div class="table-section">
+      <h2 class="table-title">21.10.2025 Günlük Üretim Programı</h2>
+      <div style="overflow-x:auto;">
+        <table class="data-table" id="planlananTable">
+          <thead>
+            <tr>
+              <th style="min-width:140px;">Üretim Tarihi</th>
+              <th>İş Emri No</th>
+              <th>Malzeme Kodu</th>
+              <th>Ebat</th>
+              <th>Boy</th>
+              <th>Kalite</th>
+              <th style="min-width:180px;">Toplam Kampanya<br>Planlanan Üretim Miktarı</th>
+              <th style="min-width:180px;">Toplam Kampanya<br>Kalan Üretim Miktarı</th>
+              <th style="min-width:180px;">Toplam Kampanya<br>Planlanan Tüketim Miktarı</th>
+              <th style="min-width:180px;">Toplam Kampanya<br>Kalan Tüketim Miktarı</th>
+              <th>Planlanan Üretim Miktarı</th>
+              <th>Planlanan YM Tüketim Miktarı</th>
+              <th>Bağlanan YM Miktarı</th>
+              <th>Aktife Al</th>
+            </tr>
+          </thead>
+          <tbody id="planlananBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 🔹 RPH Üretim Programı -->
+    <div class="table-section">
+      <h2 class="table-title">RPH Üretim Programı</h2>
+      <div style="overflow-x:auto;">
+        <table class="data-table" id="uretimTable">
+          <thead>
+            <tr>
+              <th style="min-width:140px;">P.Üretim Tarihi</th>
+              <th>İş Emri No</th>
+              <th>Malzeme Kodu</th>
+              <th>Ebat</th>
+              <th>Boy</th>
+              <th>Kalite</th>
+              <th style="min-width:180px;">Toplam Kampanya<br>Planlanan Üretim Miktarı</th>
+              <th style="min-width:180px;">Toplam Kampanya<br>Kalan Üretim Miktarı</th>
+              <th style="min-width:180px;">Toplam Kampanya<br>Planlanan Tüketim Miktarı</th>
+              <th style="min-width:180px;">Toplam Kampanya<br>Kalan Tüketim Miktarı</th>
+              <th>Planlanan Üretim Miktarı</th>
+              <th>Planlanan YM Tüketim Miktarı</th>
+              <th>Bağlanan YM Miktarı</th>
+            </tr>
+          </thead>
+          <tbody id="uretimBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <style>
+      /* 🔹 Aktife Al anahtarı (switch) */
+      .switch {
+        position: relative;
+        display: inline-block;
+        width: 44px;
+        height: 24px;
+      }
+
+      .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
+
+      .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        transition: .4s;
+        border-radius: 24px;
+      }
+
+      .slider:before {
+        position: absolute;
+        content: "";
+        height: 18px;
+        width: 18px;
+        left: 3px;
+        bottom: 3px;
+        background-color: white;
+        transition: .4s;
+        border-radius: 50%;
+      }
+
+      /* 🔹 Mavi aktif renk */
+      input:checked+.slider {
+        background-color: #1976d2;
+        /* Kardemir mavisi */
+      }
+
+      input:checked+.slider:before {
+        transform: translateX(20px);
+      }
+    </style>
+
+    <script>
+      const planlananRows = [
+        { tarih: "21.10.2025", siparis: "300003661", kod: "80003909", ebat: "52,5", boy: "12", kalite: "S275JR_01", kampUret: "5000", kampKalan: "4800", kampTuket: "4600", kampTuketKalan: "4500", uret: "620", ymTuket: "710", bagliYm: "600" },
+        { tarih: "21.10.2025", siparis: "300003662", kod: "80004909", ebat: "52,5", boy: "12", kalite: "R260_02", kampUret: "5200", kampKalan: "4900", kampTuket: "4700", kampTuketKalan: "4600", uret: "630", ymTuket: "720", bagliYm: "610" },
+        { tarih: "21.10.2025", siparis: "300003567", kod: "80003509", ebat: "52,5", boy: "12", kalite: "R350HT_00", kampUret: "5400", kampKalan: "5000", kampTuket: "4800", kampTuketKalan: "4700", uret: "640", ymTuket: "730", bagliYm: "620" }
+      ];
+
+      const planlananBody = document.getElementById("planlananBody");
+
+      // Tablo satırlarını oluştur
+      planlananRows.forEach(r => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+      <td>${r.tarih}</td>
+      <td><b>${r.siparis}</b></td>
+      <td>${r.kod}</td>
+      <td>${r.ebat}</td>
+      <td>${r.boy}</td>
+      <td>${r.kalite}</td>
+      <td>${r.kampUret}</td>
+      <td>${r.kampKalan}</td>
+      <td>${r.kampTuket}</td>
+      <td>${r.kampTuketKalan}</td>
+      <td>${r.uret}</td>
+      <td>${r.ymTuket}</td>
+      <td>${r.bagliYm}</td>
+      <td>
+        <label class="switch">
+          <input type="checkbox" onchange="toggleActive(this)">
+          <span class="slider"></span>
+        </label>
+      </td>
+    `;
+        planlananBody.appendChild(tr);
+      });
+
+      // 🔹 Aktif satır vurgusu (yeşil zemin + beyaz yazı)
+      function toggleActive(el) {
+        // Önce tüm satırları pasif yap
+        document.querySelectorAll("#planlananBody tr").forEach(r => {
+          r.classList.remove("active-row");
+          const chk = r.querySelector("input[type='checkbox']");
+          if (chk && chk !== el) chk.checked = false;
+        });
+
+        // Seçilen satırı aktif yap
+        if (el.checked) {
+          el.closest("tr").classList.add("active-row");
+        }
+      }
+    </script>
+    <script>
+
+      // 🔹 Alt tablo (RPH Üretim Programı)
+      const rows = [
+        // Kampanya 1
+        {
+          tarih: "01/11/2025", siparis: "300003567", kod: "80000025", ebat: "14", boy: "12", kalite: "275JR_00",
+          kampUret: "9200", kampKalan: "10120", kampTuket: "9500", kampTuketKalan: "8800", uret: "1890", ymTuket: "2079", bagliYm: "2000"
+        },
+        {
+          tarih: "02/11/2025", siparis: "300003568", kod: "80000026", ebat: "14", boy: "12", kalite: "275JR_00",
+          kampUret: "9200", kampKalan: "10120", kampTuket: "9500", kampTuketKalan: "8800", uret: "1890", ymTuket: "2079", bagliYm: "2090"
+        },
+
+        // Kampanya 2
+        {
+          tarih: "03/11/2025", siparis: "300003570", kod: "80000027", ebat: "12", boy: "12", kalite: "275JR_00",
+          kampUret: "11000", kampKalan: "12100", kampTuket: "11500", kampTuketKalan: "11000", uret: "1890", ymTuket: "2079", bagliYm: "2078"
+        },
+
+        // Kampanya 3
+        {
+          tarih: "03/11/2025", siparis: "300003562", kod: "80000029", ebat: "18", boy: "12", kalite: "275JR_00",
+          kampUret: "9000", kampKalan: "9900", kampTuket: "9600", kampTuketKalan: "9400", uret: "1640", ymTuket: "1804", bagliYm: "1500"
+        }
+      ];
+
+      const body = document.getElementById("uretimBody");
+      const grouped = {};
+      rows.forEach(r => {
+        const key = r.kampUret + "_" + r.kampKalan;
+        if (!grouped[key]) grouped[key] = [];
+        grouped[key].push(r);
+      });
+
+      Object.values(grouped).forEach(group => {
+        const rowspan = group.length;
+        group.forEach((r, i) => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+        <td>${r.tarih}</td>
+        <td><b>${r.siparis}</b></td>
+        <td>${r.kod}</td>
+        <td>${r.ebat}</td>
+        <td>${r.boy}</td>
+        <td>${r.kalite}</td>
+        ${i === 0 ? `
+          <td rowspan="${rowspan}">${r.kampUret}</td>
+          <td rowspan="${rowspan}">${r.kampKalan}</td>
+          <td rowspan="${rowspan}">${r.kampTuket}</td>
+          <td rowspan="${rowspan}">${r.kampTuketKalan}</td>
+        ` : ""}
+        <td>${r.uret}</td>
+        <td>${r.ymTuket}</td>
+        <td>${r.bagliYm}</td>
+      `;
+          body.appendChild(tr);
+        });
+      });
+    </script>
+
+
+  </div>
+
+  <!-- Grafik Modal (opsiyonel) -->
+  <div id="chartModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title">Performans Grafikleri</h2>
+        <span class="close-btn" onclick="document.getElementById('chartModal').style.display='none'">&times;</span>
+      </div>
+      <div class="chart-grid"><!-- grafikleri burada kullanabilirsin --></div>
+    </div>
+  </div>
+
+  <script>
+    // RPH'ye uygun örnek plan verileri (iş emri 4 ile başlar)
+    document.addEventListener("DOMContentLoaded", function () {
+      const planOrders = [
+        {
+          isEmri: "40000001802",
+          malzemeKodu: "80003909",
+          ebat: "52,5",
+          boy: "12 m",
+          kalite: "S275JR_02",
+          kampUretim: "5000",
+          kampTuketim: "4800",
+          tarih: "01.10.2025",
+          planUretim: "1890",
+          planYmTuketim: "2000",
+          bagliYm: "1500",
+          aciklama: "Kalın Kangal"
+        },
+        {
+          isEmri: "40000001803",
+          malzemeKodu: "80003439",
+          ebat: "52,5",
+          boy: "12 m",
+          kalite: "S355JR_03",
+          kampUretim: "350",
+          kampTuketim: "324",
+          tarih: "01.10.2025",
+          planUretim: "291",
+          planYmTuketim: "300",
+          bagliYm: "260",
+          aciklama: "Kalın Kangal"
+        },
+        {
+          isEmri: "40000001806",
+          malzemeKodu: "80000666",
+          ebat: "9",
+          boy: "12 m",
+          kalite: "1008_00",
+          kampUretim: "5000",
+          kampTuketim: "5556",
+          tarih: "01.10.2025",
+          planUretim: "1450",
+          planYmTuketim: "1550",
+          bagliYm: "1200",
+          aciklama: "Kangal"
+        }
+      ];
+
+      const planTable = document.getElementById("plan-table-body");
+      planOrders.forEach(order => {
+        const row = planTable.insertRow();
+        row.innerHTML = `
+        <!-- Tarih ilk sütun -->
+        <td>${order.tarih}</td>
+        <td><a href="iş-emri-detay.html?no=${order.isEmri}" class="order-link">${order.isEmri}</a></td>
+        <td>${order.malzemeKodu}</td>
+        <td>${order.ebat}</td>
+        <td>${order.boy}</td>
+        <td>${order.kalite}</td>
+        <td>${order.kampUretim}</td>
+        <td>${order.kampTuketim}</td>
+        <td>${order.planUretim}</td>
+        <td>${order.planYmTuketim}</td>
+        <td>${order.bagliYm}</td>
+        <td>${order.aciklama || "-"}</td>
+      `;
+      });
+    });
+  </script>
+</body>
+
+</html>

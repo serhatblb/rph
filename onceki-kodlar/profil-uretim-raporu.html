@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Profil Üretim Raporu</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+  <div id="sidebar-placeholder"></div>
+
+  <div class="content-wrapper">
+    <div class="breadcrumbs">
+      <a href="index.html">Anasayfa</a> <span>›</span> <span>Profil Üretim Raporu</span>
+    </div>
+
+    <h1 class="report-title">📏 Profil Üretim Raporu</h1>
+
+    <!-- Filtre -->
+    <div class="filter-section">
+      <div class="filter-item">
+        <label>Başlangıç Tarihi</label>
+        <input type="date" />
+        <label>Bitiş Tarihi</label>
+        <input type="date" />
+      </div>
+
+      <div class="filter-item">
+        <label>Sipariş No</label>
+        <select>
+          <option value="">Seçiniz  </option>
+          <option>300003682</option>
+          <option>300003683</option>
+          <option>300003684</option>
+        </select>
+
+        <label>Döküm No</label>
+        <select>
+          <option value="">Seçiniz  </option>
+          <option>25123</option>
+          <option>25124</option>
+          <option>25125</option>
+        </select>
+      </div>
+
+      <div class="filter-item">
+        <label>Profil Tipi</label>
+        <select>
+          <option value="">Seçiniz  </option>
+          <option>Ray</option>
+          <option>Profil</option>
+          <option>Kutu</option>
+        </select>
+
+        <label>Kalite</label>
+        <select>
+          <option value="">Seçiniz </option>
+          <option>S235JR</option>
+          <option>S275JR</option>
+          <option>S355JR</option>
+        </select>
+      </div>
+
+      <div class="filter-item">
+        <label>Paket ID</label>
+        <select>
+          <option value="">Seçiniz  </option>
+          <option>PAKET-001</option>
+          <option>PAKET-002</option>
+          <option>PAKET-003</option>
+        </select>
+      </div>
+
+
+      <div class="action-buttons">
+            <button style="background-color: green; color: white;">Excel Rapor</button>
+          <button class="active-filter">Filtrele</button>
+          <button>Temizle</button>
+        </div>
+    </div>
+
+    <!-- Tablo -->
+<!-- Tablo -->
+<div class="table-wrapper">
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th><span>Üretim Tarihi</span></th>
+        <th><span>Paket ID</span></th>
+        <th><span>Profil Tipi</span></th>
+        <th><span>Sipariş No</span></th>
+        <th><span>Boy</span></th>
+        <th><span>Tahmini Ağırlık</span></th>
+        <th><span>Adet</span></th>
+        <th><span>Döküm No</span></th>
+        <th><span>Kütük ID</span></th>
+        <th><span>Yol No</span></th>
+        <th><span>Sıra No</span></th>
+        <th><span>Malzeme Kodu</span></th>
+        <th><span>Kalite</span></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>2025-06-18</td>
+        <td>PKT-001</td>
+        <td>Ray 46</td>
+        <td><a href="siparis-detay2.html">300003681</a></td>
+        <td>12.0 m</td>
+        <td>2550 kg</td>
+        <td>16</td>
+        <td>2512332101</td>
+        <td>25123321301</td>
+        <td>1</td>
+        <td>5</td>
+        <td>MZL-5001</td>
+        <td>S235JR</td>
+      </tr>
+      <tr>
+        <td>2025-06-18</td>
+        <td>PKT-001</td>
+        <td>Ray 46</td>
+        <td><a href="siparis-detay2.html">300003682</a></td>
+        <td>12.0 m</td>
+        <td>2550 kg</td>
+        <td>16</td>
+        <td>2512332101</td>
+        <td>25123321302</td>
+        <td>1</td>
+        <td>5</td>
+        <td>MZL-5001</td>
+        <td>S235JR</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+
+  <!-- Sidebar Script -->
+  <script>
+    fetch('sidebar.html')
+      .then(res => res.text())
+      .then(html => document.getElementById('sidebar-placeholder').innerHTML = html);
+  </script>
+
+</body>
+
+</html>

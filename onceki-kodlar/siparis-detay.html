@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sipariş Detayı - Kardemir</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="sidebar"></div>
+<script>
+  fetch('sidebar.html')
+    .then(res => res.text())
+    .then(data => document.getElementById('sidebar').innerHTML = data);
+</script>
+
+
+    <div class="content-wrapper">
+        <header class="header">
+            <div class="breadcrumbs">
+                <a href="siparisler.html">Sipariş Sayfası</a> <span>></span>
+                <span>Sipariş Detayı</span>
+            </div>
+        </header>
+
+        <div class="detail-container">
+            <h2 id="detay-baslik">Sipariş Detayı Yükleniyor...</h2>
+            <div id="detay-icerik" class="detail-info" style="display: none;">
+                <p><strong>Sipariş Numarası:</strong> <span id="detay-siparisNumarasi"></span></p>
+                <p><strong>Ürün Tanımı:</strong> <span id="detay-urunTanimi"></span></p>
+                <p><strong>Kalite:</strong> <span id="detay-kalite"></span></p>
+                <p><strong>Sipariş Miktarı:</strong> <span id="detay-siparisMiktari"></span></p>
+                <p><strong>Kalan Üretim Miktarı:</strong> <span id="detay-kalanUretimMiktari"></span></p>
+                <p><strong>Durum:</strong> <span id="detay-durum"></span></p>
+            </div>
+
+            <div class="production-tracking-section" style="margin-top: 40px;">
+                <h3 class="report-title">Üretim Takibi</h3>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Üretim Hızı</th>
+                            <th>Verim Planlama</th>
+                            <th>Başlangıç Tarihi</th>
+                            <th>Sipariş No</th>
+                            <th>Üretim No</th>
+                            <th>Ürün Tanımı</th>
+                            <th>Profil</th>
+                            <th>Boy / Kalite / Mm</th>
+                            <th>Döküm Tipi</th>
+                            <th>Sipariş Miktarı</th>
+                            <th>Kalan Üretim Miktarı</th>
+                            <th>Malzeme Numarası</th>
+                            <th>Yarı Mamul İhtiyaç Miktarı</th>
+                            <th>Paketteki Yarı Mamul Adedi</th>
+                            <th>Prob / Güncellenme Adedi</th>
+                            <th>Miktar / Termin (Angajman)</th>
+                            <th>Harmanlama / Malzeme Stok Durumu</th>
+                            <th>Durumu</th>
+                            <th>Beklenen Üretim Durumu</th>
+                            <th>Stok Bilgisi</th>
+                            <th>Tüketilen Kütük Miktarı</th>
+                            <th>Tüketilen Kütük Adedi</th>
+                            <th>Hadde Bozuğu Adedi</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="production-tracking-table-body">
+                        </tbody>
+                </table>
+            </div>
+            <a href="siparisler.html" class="back-button">Sipariş Listesine Geri Dön</a>
+        </div>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Ana sayfada kaydettiğimiz verileri tarayıcı hafızasından çekiyoruz
+        const selectedOrderId = localStorage.getItem('selectedOrderId');
+        const allOrders = JSON.parse(localStorage.getItem('kardemirSiparisler'));
+
+        const detayBaslik = document.getElementById('detay-baslik');
+        const detayIcerik = document.getElementById('detay-icerik');
+        const productionTrackingTableBody = document.getElementById('production-tracking-table-body');
+
+        // Örnek üretim takibi verileri (gerçek uygulamada bu veriler backend'den gelecektir)
+        // Bu veriler, seçili sipariş numarasına göre filtrelenmelidir.
+        const allProductionData = [
+            {
+                siparisNumarasi: '10255', // Bu, Sipariş Detay sayfasındaki sipariş numarası ile eşleşmeli
+                uretimHizi: 'Yüksek',
+                verimPlanlama: 'A',
+                pompaBaslangicTarihi: '01.06.2025',
+                uretimNo: 'ÜRT-001',
+                urunTanimi: 'Ø 12 MM NERVÜRLÜ ÇUBUK',
+                profil: 'Nervürlü',
+                boyKaliteMm: '12mm',
+                dokumTipi: 'Sürekli',
+                siparisMiktari: 2500,
+                kalanUretimMiktari: 1200,
+                malzemeNumarasi: 'MAT-1001',
+                yariMamulIhtiyacMiktari: 500,
+                pakettekiYariMamulAdedi: 10,
+                probGuncellenmeAdedi: 5,
+                miktarTermin: '1200 / 15.07',
+                harmanlamaStokDurumu: 'Yeterli',
+                durumu: 'Üretimde',
+                beklenenUretimDurumu: 'Devam Ediyor',
+                stokBilgisi: 'Mevcut',
+                tuketilenKutuk:'100 ton'
+            },
+            // {
+            //     siparisNumarasi: '10255', // Aynı siparişe ait ikinci bir üretim kaydı olabilir
+            //     uretimHizi: 'Orta',
+            //     verimPlanlama: 'B',
+            //     pompaBaslangicTarihi: '05.06.2025',
+            //     uretimNo: 'ÜRT-002',
+            //     urunTanimi: 'Ø 12 MM NERVÜRLÜ ÇUBUK',
+            //     profil: 'Nervürlü',
+            //     boyKaliteMm: '12mm',
+            //     dokumTipi: 'Kesintili',
+            //     siparisMiktari: 2500,
+            //     kalanUretimMiktari: 700,
+            //     malzemeNumarasi: 'MAT-1001',
+            //     yariMamulIhtiyacMiktari: 300,
+            //     pakettekiYariMamulAdedi: 6,
+            //     probGuncellenmeAdedi: 2,
+            //     miktarTermin: '700 / 20.07',
+            //     harmanlamaStokDurumu: 'Yeterli',
+            //     durumu: 'Devam ediyor',
+            //     beklenenUretimDurumu: 'Üretimde',
+            //     stokBilgisi: 'Mevcut'
+            // },
+            {
+                siparisNumarasi: '10256', // Farklı siparişe ait veri
+                uretimHizi: 'Düşük',
+                verimPlanlama: 'C',
+                pompaBaslangicTarihi: '10.06.2025',
+                uretimNo: 'ÜRT-003',
+                urunTanimi: 'IPE 200 ÇELİK PROFİL',
+                profil: 'Profil',
+                boyKaliteMm: 'IPE200',
+                dokumTipi: 'Sürekli',
+                siparisMiktari: 1800,
+                kalanUretimMiktari: 500,
+                malzemeNumarasi: 'MAT-1002',
+                yariMamulIhtiyacMiktari: 100,
+                pakettekiYariMamulAdedi: 2,
+                probGuncellenmeAdedi: 1,
+                miktarTermin: '500 / 25.07',
+                harmanlamaStokDurumu: 'Az',
+                durumu: 'Beklemede',
+                beklenenUretimDurumu: 'Beklemede',
+                stokBilgisi: 'Az'
+            }
+        ];
+
+        if (selectedOrderId && allOrders) {
+            // Gelen ID'ye uygun siparişi bul
+            const order = allOrders.find(o => o.siparisNumarasi === selectedOrderId);
+
+            if (order) {
+                // Ana sipariş detaylarını ekrana bas
+                detayBaslik.textContent = `Sipariş Detayı: ${order.siparisNumarasi}`;
+                document.getElementById('detay-siparisNumarasi').textContent = order.siparisNumarasi;
+                document.getElementById('detay-urunTanimi').textContent = order.urunTanimi;
+                document.getElementById('detay-kalite').textContent = order.kalite;
+                document.getElementById('detay-siparisMiktari').textContent = `${order.siparisMiktari} ton`;
+                document.getElementById('detay-kalanUretimMiktari').textContent = `${order.kalanUretimMiktari} ton`;
+
+                // Durum için CSS sınıfını ekle
+                const durumSpan = document.getElementById('detay-durum');
+                durumSpan.textContent = order.durum; // Metni ayarla
+                const durumClass = order.durum.toLowerCase().replace(' ', '-');
+                durumSpan.className = `status ${durumClass}`; // Sınıfı ata
+
+                detayIcerik.style.display = 'block';
+
+                // Üretim Takibi tablosunu doldur
+                const filteredProductionData = allProductionData.filter(
+                    prod => prod.siparisNumarasi === selectedOrderId
+                );
+                populateProductionTrackingTable(filteredProductionData);
+
+            } else {
+                detayBaslik.textContent = 'Sipariş Bulunamadı!';
+            }
+        } else {
+            detayBaslik.textContent = 'Görüntülenecek bir sipariş seçilmedi.';
+        }
+
+        // Üretim Takibi tablosunu dolduran fonksiyon
+        function populateProductionTrackingTable(data) {
+            productionTrackingTableBody.innerHTML = ''; // Önceki içeriği temizle
+            if (data.length === 0) {
+                const row = productionTrackingTableBody.insertRow();
+                const cell = row.insertCell();
+                cell.colSpan = 20; // Tüm sütunları kapla
+                cell.textContent = 'Bu sipariş için üretim takibi verisi bulunmamaktadır.';
+                cell.style.textAlign = 'center';
+                cell.style.padding = '20px';
+                cell.style.color = '#777';
+                return;
+            }
+
+            data.forEach(item => {
+                const row = productionTrackingTableBody.insertRow();
+                row.innerHTML = `
+                    <td>${item.uretimHizi}</td>
+                    <td>${item.verimPlanlama}</td>
+                    <td>${item.pompaBaslangicTarihi}</td>
+                    <td>${item.siparisNumarasi}</td>
+                    <td>${item.uretimNo}</td>
+                    <td>${item.urunTanimi}</td>
+                    <td>${item.profil}</td>
+                    <td>${item.boyKaliteMm}</td>
+                    <td>${item.dokumTipi}</td>
+                    <td>${item.siparisMiktari}</td>
+                    <td>${item.kalanUretimMiktari}</td>
+                    <td>${item.malzemeNumarasi}</td>
+                    <td>${item.yariMamulIhtiyacMiktari}</td>
+                    <td>${item.pakettekiYariMamulAdedi}</td>
+                    <td>${item.probGuncellenmeAdedi}</td>
+                    <td>${item.miktarTermin}</td>
+                    <td>${item.harmanlamaStokDurumu}</td>
+                    <td><span class="status ${item.durumu.toLowerCase().replace(' ', '-')}">${item.durumu}</span></td>
+                    <td><span class="status ${item.beklenenUretimDurumu.toLowerCase().replace(' ', '-')}">${item.beklenenUretimDurumu}</span></td>
+                    <td><span class="status ${item.stokBilgisi.toLowerCase().replace(' ', '-')}">${item.stokBilgisi}</span></td>
+                    <td>${item.tuketilenKutuk}</td>
+                `;
+            });
+        }
+    });
+    </script>
+</body>
+</html>

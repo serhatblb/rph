@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kardemir - Üretim Performans Tablosu</title>
+    <link rel="stylesheet" href="style.css" />
+    <style>
+        body {
+            margin: 0;
+            font-family: "Segoe UI", Roboto, sans-serif;
+            background: #f5f7fa
+        }
+
+        #sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 250px;
+            height: 100vh;
+            background: #1e293b;
+            color: #fff;
+            overflow-y: auto;
+            box-shadow: 2px 0 8px rgba(0, 0, 0, .1)
+        }
+
+        .content-wrapper {
+            margin-left: 250px;
+            padding: 30px
+        }
+
+        h1 {
+            color: #1e293b;
+            margin-bottom: 25px
+        }
+
+        h2 {
+            color: #334155;
+            font-size: 18px;
+            margin: 30px 0 10px
+        }
+
+        .filter-card {
+            background: #fff;
+            border: 1px solid #e3e6ea;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, .05);
+            padding: 20px;
+            margin-bottom: 20px
+        }
+
+        .filter-title {
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: #1e293b;
+            font-weight: 700
+        }
+
+        .filter-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+            align-items: end
+        }
+
+        .filter-item label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #334155;
+            display: block;
+            margin-bottom: 6px
+        }
+
+        .filter-item input,
+        .filter-item select {
+            width: 140%;
+            padding: 8px 10px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            font-size: 14px;
+            color: #1e293b;
+            background: #f8fafc
+        }
+
+        .filter-buttons {
+            display: flex;
+            gap: 10px
+        }
+
+        .filter-buttons button {
+            padding: 8px 14px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px
+        }
+
+        #filterBtn {
+            background: #1976d2;
+            color: #fff
+        }
+
+        #filterBtn:hover {
+            background: #125a9c
+        }
+
+        #clearBtn {
+            background: #e2e8f0;
+            color: #1e293b
+        }
+
+        #clearBtn:hover {
+            background: #cbd5e1
+        }
+
+        /* Tablo sarmalayıcı: yatay/dikey scroll burada */
+        .table-wrapper {
+            max-height: 400px;
+            overflow: auto;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, .05);
+            background: #fff;
+            margin-bottom: 20px
+        }
+
+        /* Tablo: genişliği içeriğe göre büyüsün -> yatay scroll devreye girer */
+        .data-table {
+            border-collapse: collapse;
+            width: max-content;
+            min-width: 100%;
+            background: #fff
+        }
+
+        .data-table th,
+        .data-table td {
+            border: 1px solid #e3e6ea;
+            text-align: center;
+            padding: 10px 12px;
+            font-size: 14px;
+            white-space: nowrap;
+            /* başlık ve sayılar tek satır kalsın */
+        }
+
+        .data-table th {
+            background: #f8f9fb;
+            color: #1e293b;
+            font-weight: 700;
+            position: sticky;
+            top: 0;
+            z-index: 2
+        }
+
+        .data-table tbody tr:nth-child(even) {
+            background: #f8fbff
+        }
+
+        .data-table tbody tr:hover {
+            background: #eef5ff
+        }
+
+        .date-cell {
+            font-weight: 600;
+            background: #f1f5f9
+        }
+
+        .total-row {
+            background: #e2e8f0;
+            font-weight: 700;
+            color: #0f172a
+        }
+
+        /* Scrollbar görünümü */
+        .table-wrapper::-webkit-scrollbar {
+            height: 10px;
+            width: 10px
+        }
+
+        .table-wrapper::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 6px
+        }
+
+        .table-wrapper::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8
+        }
+
+        .table-wrapper::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 6px
+        }
+    </style>
+</head>
+
+<body>
+    <aside id="sidebar">
+        <div id="sidebar-container"></div>
+        <script>
+            fetch("sidebar.html").then(r => r.text()).then(t => document.getElementById("sidebar-container").innerHTML = t);
+        </script>
+    </aside>
+
+    <div class="content-wrapper">
+        <h1>Üretim Performans Raporu</h1>
+
+        <!-- Filtre -->
+        <div class="filter-card">
+            <h2 class="filter-title">Filtreleme</h2>
+            <div class="filter-grid">
+                <div class="filter-item"><label>Başlangıç Tarihi</label><input type="date" id="startDate" /></div>
+                <div class="filter-item"><label>Bitiş Tarihi</label><input type="date" id="endDate" /></div>
+                <div class="filter-item">
+                    <label>Üretilen Çap</label>
+                    <select id="uretimCap">
+                        <option value="">Tümü</option>
+                        <option>130x130</option>
+                        <option>150x150</option>
+                    </select>
+                </div>
+                <div class="filter-item">
+                    <label>Filtre Seçeneği</label>
+                    <select id="yarimamulTip">
+                        <option value="">Tümü</option>
+                        <option>A1</option>
+                        <option>B1</option>
+                    </select>
+                </div>
+                <div class="filter-buttons"><button id="filterBtn">Filtrele</button><button
+                        id="clearBtn">Temizle</button></div>
+            </div>
+        </div>
+
+        <!-- TON TABLOSU -->
+        <h2>Ton ve Saat Değerleri</h2>
+        <div class="table-wrapper">
+            <table class="data-table" id="tonTable">
+                <thead>
+                    <tr>
+                        <th>TARİH</th>
+                        <th>Üretim Programı (TON)</th>
+                        <th>Fiili Üretim (TON)</th>
+                        <th>Günlük Ortalama Üretim (TON/GÜN)</th>
+                        <th>Ortalama Üretim Hızı (TON/SAAT)</th>
+                        <th>1. Kalite Miktarı (TON)</th>
+                        <th>2. Kalite Miktarı (TON)</th>
+                        <th>Muhtelif Boy Miktarı (TON)</th>
+                        <th>Hadde/Mamul Bozuk Miktarı (TON)</th>
+                        <th>Uç Baş Hurdası (TON)</th>
+                        <th>Hurda (TON)</th>
+                        <th>Tufal (TON)</th>
+                        <th>Şarj Adedi (ADET)</th>
+                        <th>Şarj Edilen Yarı Mamul (TON)</th>
+                        <th>130x130 Kütük (TON)</th>
+                        <th>150x150 Blum (TON)</th>
+                        <th>Kok Gazı Sarfiyatı (Nm3/TON)</th>
+                        <th>Elektrik Sarfiyatı (kWh/TON)</th>
+                        <th>Net Çalışma Süresi (SAAT)</th>
+                    </tr>
+                </thead>
+                <tbody id="tonBody"></tbody>
+            </table>
+        </div>
+
+        <!-- ORAN TABLOSU -->
+        <h2>Oran (%) Değerleri</h2>
+        <div class="table-wrapper">
+            <table class="data-table" id="oranTable">
+                <thead>
+                    <tr>
+                        <th>TARİH</th>
+                        <th>Üretim Programı Gerçekleştirme (%)</th>
+                        <th>Kapasite Kullanım Oranı (%)</th>
+                        <th>Tesis İşletme Etkinliği (OEE) (%)</th>
+                        <th>Performans Oranı (%)</th>
+                        <th>Net Çalışma Oranı (%)</th>
+                        <th>Kalite Oranı (%)</th>
+                        <th>2. Kalite Oranı (%)</th>
+                        <th>Muhtelif Üretim Oranı (%)</th>
+                        <th>Ünite Dışı Duruş Oranı (%)</th>
+                        <th>Planlı Duruş Oranı (%)</th>
+                        <th>Ünite İçi Duruş Oranı (%)</th>
+                        <th>Genel Çalışma Oranı (%)</th>
+                        <th>Malzeme Verimliliği (%)</th>
+                    </tr>
+                </thead>
+                <tbody id="oranBody"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        const tarihler = ["1.10.2025", "2.10.2025", "3.10.2025", "4.10.2025", "5.10.2025", "6.10.2025", "7.10.2025", "8.10.2025", "9.10.2025", "10.10.2025"];
+        const tonBody = document.getElementById("tonBody"); const oranBody = document.getElementById("oranBody");
+
+        const tonVeri = tarihler.map(() => { const r = Array.from({ length: 18 }, () => +(Math.random() * 2000 + 500).toFixed(2)); r[0] = "1.760,00"; r[17] = Math.floor(Math.random() * 19 + 6); return r; });
+        const oranVeri = tarihler.map(() => Array.from({ length: 13 }, () => +(Math.random() * 100).toFixed(1)));
+
+        const toplamlar = Array(18).fill(0);
+        tonVeri.forEach(row => row.forEach((v, i) => { const n = parseFloat(v.toString().replace(",", ".")); if (!isNaN(n)) toplamlar[i] += n; }));
+        toplamlar[0] = 1760 * tarihler.length;
+
+        const toplamRow = document.createElement("tr");
+        toplamRow.classList.add("total-row");
+        toplamRow.innerHTML = `<td>TOPLAM</td>` + toplamlar.map((v, i) => i === 0 ? `<td>${v.toLocaleString("tr-TR", { minimumFractionDigits: 2 })}</td>` : `<td>${v.toFixed(2)}</td>`).join("");
+        tonBody.appendChild(toplamRow);
+
+        tarihler.forEach((t, i) => {
+            const tr1 = document.createElement("tr"); const tr2 = document.createElement("tr");
+            tr1.innerHTML = `<td class="date-cell"><a href="vardiya-raporu.html?tarih=${t}" style="color:#1976d2;text-decoration:none;">${t}</a></td>` 
+  + tonVeri[i].map(v => `<td>${v}</td>`).join("");
+
+            tr2.innerHTML = `<td class="date-cell">${t}</td>` + oranVeri[i].map(v => `<td>${v}%</td>`).join("");
+            tonBody.appendChild(tr1); oranBody.appendChild(tr2);
+        });
+
+        document.getElementById("filterBtn").addEventListener("click", () => console.log("Filtre"));
+        document.getElementById("clearBtn").addEventListener("click", () => {
+            document.querySelectorAll(".filter-item input,.filter-item select").forEach(e => e.value = "");
+            console.log("Temizle");
+        });
+    </script>
+</body>
+
+</html>

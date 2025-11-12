@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kardemir - Üretim Raporu</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .table-scroll-wrapper {
+      overflow-x: auto;
+      width: 100%;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+    }
+
+    .data-table {
+      border-collapse: collapse;
+      width: max-content;
+      min-width: 100%;
+    }
+
+    .data-table th,
+    .data-table td {
+      padding: 8px 12px;
+      text-align: center;
+      white-space: nowrap;
+      font-size: 13px;
+    }
+
+    .data-table thead {
+      background-color: #f4f6f9;
+      font-weight: 600;
+      position: sticky;
+      top: 0;
+    }
+
+    .data-table tbody tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+
+    /* Sipariş No kolonu hem th hem td için */
+    .data-table th:nth-child(2),
+    .data-table td:nth-child(2) {
+      min-width: 130px;
+      white-space: nowrap;
+    }
+    .summary-buttons button {
+  padding: 6px 14px;
+  margin-right: 10px;
+  background-color: #2b7de9;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.summary-buttons button:hover {
+  background-color: #1e5db8;
+}
+
+.oran-sonuclari {
+  background-color: #f0f4ff;
+  border-left: 4px solid #2b7de9;
+  padding: 12px;
+  border-radius: 4px;
+}
+
+  </style>
+</head>
+
+<body>
+  <div id="sidebar"></div>
+  <script>
+    fetch('sidebar.html')
+      .then(res => res.text())
+      .then(data => document.getElementById('sidebar').innerHTML = data);
+  </script>
+
+  <div class="content-wrapper">
+    <header class="header">
+      <div class="breadcrumbs">
+        <a href="#">Ana Sayfa</a> <span>›</span>
+        <span>Üretim Raporu</span>
+      </div>
+    </header>
+
+    <div class="main-report-area">
+      <h1 class="report-title">Üretim Raporu</h1>
+
+      <div class="filter-section">
+        <div class="filter-item">
+          <label for="baslangicTarih">Başlangıç Tarihi</label>
+          <input type="date" id="baslangicTarih" />
+
+          <label for="bitisTarih">Bitiş Tarihi</label>
+          <input type="date" id="bitisTarih" />
+        </div>
+
+        <div class="filter-item">
+          <label for="vardiyaSec">Vardiya</label>
+          <select id="vardiyaSec">
+            <option value="">Tümü</option>
+            <option value="1">Vardiya 1</option>
+            <option value="2">Vardiya 2</option>
+            <option value="3">Vardiya 3</option>
+          </select>
+        </div>
+        <div class="filter-item">
+          <label for="vardiyaSec">Ürün Grubu</label>
+          <select id="vardiyaSec">
+            <option value="">Tümü</option>
+            <option value="1">Kütük</option>
+            <option value="2">Blum</option>
+            <option value="3">Ray</option>
+          </select>
+        </div>
+        <div class="right-buttons">
+          <button class="past-report">Günlük Rapor</button>
+          <button class="current-report">Aylık Rapor</button>
+          <button class="current-report">Yıllık Rapor</button>
+        </div>
+        <div class="action-buttons">
+          <button class="excel-button">Excel Rapor</button>
+          <button class="active-filter">Filtrele</button>
+          <button>Temizle</button>
+        </div>
+      </div>
+
+      <div class="table-scroll-wrapper">
+        <div class="summary-buttons" style="margin-top: 20px;">
+  <button onclick="hesaplaOranlar('gunluk')">Günlük Oran</button>
+  <button onclick="hesaplaOranlar('aylik')">Aylık Oran</button>
+</div>
+
+<div class="oran-sonuclari" style="margin-top: 10px; font-size: 14px; font-weight: 500;">
+  <p><strong>Kalite Oranı:</strong> <span id="kalite-orani">-</span></p>
+  <p><strong>Verimlilik Oranı:</strong> <span id="verimlilik-orani">-</span></p>
+</div>
+
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Tarih</th>
+              <th>Sipariş<br>No</th>
+              <th>Paket<br>Sayısı</th>
+              <th>1. Sınıf<br>Adet</th>
+              <th>1. Sınıf<br>Tonaj</th>
+              <th>2. Sınıf<br>Adet</th>
+              <th>2. Sınıf<br>Tonaj</th>
+              <th>2. Sınıf<br>Neden</th>
+              <th>Hold<br>Adet</th>
+              <th>Hold<br>Tonaj</th>
+              <th>Hold<br>Neden</th>
+              <th>Hurda<br>Adet</th>
+              <th>Hurda<br>Teorik Tonaj</th>
+              <th>Hurda<br>Tonaj</th>
+              <th>Hurda<br>Neden</th>
+              <th>Kütük<br>Adedi</th>
+              <th>Kütük<br>Teorik Tonaj</th>
+              <th>Kütük<br>Tonaj</th>
+              <th>Kok Gazı<br>Sarfiyatı</th>
+              <th>Verim<br>(Ölçülen)</th>
+              <th>Verim<br>(Teorik)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>10.06.2025</td>
+              <td>300003661</td>
+              <td>15</td>
+              <td>120</td>
+              <td>110t</td>
+              <td>10</td>
+              <td>8t</td>
+              <td>Boyut sapması</td>
+              <td>5</td>
+              <td>6t</td>
+              <td>Et kalınlığı sınırda</td>
+              <td>3</td>
+              <td>3t</td>
+              <td>2t</td>
+              <td>Yüzey hatası</td>
+              <td>180</td>
+              <td>150t</td>
+              <td>145t</td>
+              <td>950 Nm³</td>
+              <td>0,80</td>
+              <td>0,70</td>
+            </tr>
+            <tr>
+              <td>11.06.2025</td>
+              <td>300003662</td>
+              <td>12</td>
+              <td>100</td>
+              <td>98t</td>
+              <td>8</td>
+              <td>6t</td>
+              <td>Eğrilik</td>
+              <td>3</td>
+              <td>4t</td>
+              <td>Korozyon şüpesi</td>
+              <td>1</td>
+              <td>2t</td>
+              <td>1t</td>
+              <td>Ölçü dışı</td>
+              <td>150</td>
+              <td>130t</td>
+              <td>120t</td>
+              <td>880 Nm³</td>
+              <td>0,80</td>
+              <td>0,70</td>
+            </tr>
+            <tr>
+              <td>10.06.2025</td>
+              <td>300003661</td>
+              <td>15</td>
+              <td>120</td>
+              <td>110t</td>
+              <td>10</td>
+              <td>8t</td>
+              <td>Boyut sapması</td>
+              <td>5</td>
+              <td>6t</td>
+              <td>Et kalınlığı sınırda</td>
+              <td>3</td>
+              <td>3t</td>
+              <td>2t</td>
+              <td>Yüzey hatası</td>
+              <td>180</td>
+              <td>150t</td>
+              <td>145t</td>
+              <td>950 Nm³</td>
+              <td>0,80</td>
+              <td>0,70</td>
+            </tr>
+            <tr>
+              <td>11.06.2025</td>
+              <td>300003662</td>
+              <td>12</td>
+              <td>100</td>
+              <td>98t</td>
+              <td>8</td>
+              <td>6t</td>
+              <td>Eğrilik</td>
+              <td>3</td>
+              <td>4t</td>
+              <td>Korozyon şüpesi</td>
+              <td>1</td>
+              <td>2t</td>
+              <td>1t</td>
+              <td>Ölçü dışı</td>
+              <td>150</td>
+              <td>130t</td>
+              <td>120t</td>
+              <td>880 Nm³</td>
+              <td>0,80</td>
+              <td>0,70</td>
+            </tr>
+            
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</body>
+<script>
+  function hesaplaOranlar(tip) {
+    const rows = document.querySelectorAll(".data-table tbody tr");
+
+    let toplam1Kalite = 0;
+    let toplam2Kalite = 0;
+    let toplamHold = 0;
+    let toplamKutuk = 0;
+
+    rows.forEach(row => {
+      const tarih = row.children[0].textContent.trim();
+      const rowDate = new Date(tarih.split(".").reverse().join("-"));
+      const bugun = new Date();
+
+      if (tip === "gunluk" && rowDate.toDateString() !== bugun.toDateString()) return;
+      // Aylıkta filtreleme yapmıyoruz şimdilik
+
+      toplam1Kalite += parseInt(row.children[3].textContent);
+      toplam2Kalite += parseInt(row.children[5].textContent);
+      toplamHold += parseInt(row.children[8].textContent);
+      toplamKutuk += parseInt(row.children[15].textContent);
+    });
+
+    const toplamKontroleVerilen = toplam1Kalite + toplam2Kalite + toplamHold;
+
+    const kaliteOrani = toplamKontroleVerilen === 0
+      ? 0
+      : (toplam1Kalite / toplamKontroleVerilen * 100).toFixed(2);
+
+    const verimlilikOrani = toplamKutuk === 0
+      ? 0
+      : (toplamKontroleVerilen / toplamKutuk * 100).toFixed(2);
+
+    document.getElementById("kalite-orani").textContent = kaliteOrani + " %";
+    document.getElementById("verimlilik-orani").textContent = verimlilikOrani + " %";
+  }
+</script>
+
+
+</html>

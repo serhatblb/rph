@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Kontinü Haddane Takip Paneli</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            height: 100vh;
+            background-color: #f4f6f8;
+        }
+
+        .sidebar {
+            width: 220px;
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px;
+        }
+
+        .sidebar h2 {
+            font-size: 20px;
+            margin-bottom: 30px;
+        }
+
+        .sidebar a {
+            color: white;
+            display: block;
+            margin: 12px 0;
+            text-decoration: none;
+        }
+
+        .sidebar a:hover {
+            text-decoration: underline;
+        }
+
+        .main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            background-color: #34495e;
+            color: white;
+            padding: 15px 20px;
+            font-size: 18px;
+        }
+
+        .content {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .card-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            flex: 1;
+            min-width: 300px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .card h3 {
+            margin-bottom: 15px;
+        }
+
+        .card.full-width {
+            flex: 100%;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            text-align: center;
+            padding: 8px;
+        }
+
+        th {
+            background-color: #ecf0f1;
+        }
+
+        ul {
+            padding-left: 20px;
+        }
+
+        .status-ok {
+            color: green;
+        }
+
+        .status-stop {
+            color: red;
+        }
+
+        .status-warning {
+            color: orange;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="sidebar">
+        <h2>Haddane Paneli</h2>
+        <a href="#">Ana Sayfa</a>
+        <a href="#">Üretim Takibi</a>
+        <a href="#">Sıcaklık Eğrileri</a>
+        <a href="#">Raporlar</a>
+    </div>
+
+    <div class="main">
+        <div class="header">
+            Kontinü Haddane – Gelişmiş Takip Ekranı
+        </div>
+
+        <div class="content">
+            <div class="card-container">
+
+                <!-- 1. Rulo Bilgileri -->
+                <div class="card">
+                    <h3>Rulo Bilgileri</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Rulo No</th>
+                                <th>Çap</th>
+                                <th>Uzunluk</th>
+                                <th>Durum</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>R20255</td>
+                                <td>20</td>
+                                <td>12.4</td>
+                                <td>Haddeleniyor</td>
+                            </tr>
+                            <tr>
+                                <td>R20256</td>
+                                <td>18</td>
+                                <td>13.7</td>
+                                <td>Soğutuluyor</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- 2. Anlık Sıcaklıklar -->
+                <div class="card">
+                    <h3>Anlık Sıcaklıklar (°C)</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>İstasyon</th>
+                                <th>Sıcaklık</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Giriş</td>
+                                <td>890</td>
+                            </tr>
+                            <tr>
+                                <td>Hadde 1</td>
+                                <td>1010</td>
+                            </tr>
+                            <tr>
+                                <td>Hadde 2</td>
+                                <td>970</td>
+                            </tr>
+                            <tr>
+                                <td>Çıkış</td>
+                                <td>760</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+
+
+                <!-- 4. Üretim Durumu -->
+                <div class="card">
+                    <h3>Üretim Durumu</h3>
+                    <ul>
+                        <li>Hadde 1: <span class="status-ok">Çalışıyor</span></li>
+                        <li>Hadde 2: <span class="status-ok">Çalışıyor</span></li>
+                        <li>Soğutma Bandı: <span class="status-warning">Yavaşlatıldı</span></li>
+                        <li>Çıkış Rulosu: <span class="status-stop">Durdu</span></li>
+                    </ul>
+                </div>
+
+                <!-- 5. Üretim Özeti -->
+                <div class="card">
+                    <h3>Son 1 Saatlik Üretim Özeti</h3>
+                    <ul>
+                        <li>Toplam Rulo: 12</li>
+                        <li>Ortalama Uzunluk: 13.2 m</li>
+                        <li>Ortalama Çap: 19.5 mm</li>
+                        <li>Ortalama Sıcaklık: 980 °C</li>
+                    </ul>
+                </div>
+
+                <!-- 6. Uyarı Paneli -->
+                <div class="card">
+                    <h3>Uyarı & Alarmlar</h3>
+                    <ul>
+                        <li>🔔 Haddede ani sıcaklık düşüşü (10:42)</li>
+                        <li>⚠️ Çıkış bandı beklenmedik duruş (10:39)</li>
+                        <li>ℹ️ Operatör manuel giriş yaptı (10:35)</li>
+                    </ul>
+                </div>
+                <!-- 3. Sıcaklık Grafiği -->
+                <div class="card full-width">
+                    <h3>Sıcaklık Eğrisi (Anlık Güncellenen)</h3>
+                    <canvas id="tempChart" height="100"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Anlık güncellenen grafik -->
+    <script>
+        const ctx = document.getElementById('tempChart').getContext('2d');
+
+        const labels = ['10:35', '10:36', '10:37', '10:38', '10:39', '10:40'];
+        const data = [1010, 995, 980, 970, 965, 960];
+
+        const tempChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: [...labels],
+                datasets: [{
+                    label: 'Hadde 2 Sıcaklık (°C)',
+                    data: [...data],
+                    borderColor: '#e74c3c',
+                    borderWidth: 2,
+                    fill: false,
+                    pointRadius: 3,
+                }]
+            },
+            options: {
+                responsive: true,
+                animation: false,
+                scales: {
+                    y: {
+                        suggestedMin: 900,
+                        suggestedMax: 1100
+                    }
+                }
+            }
+        });
+
+        // Simülasyon: her 2 saniyede 1 yeni veri
+        setInterval(() => {
+            const now = new Date();
+            const label = now.toLocaleTimeString().slice(0, 5); // örn: "10:44"
+            const newValue = 950 + Math.floor(Math.random() * 100); // 950–1050 arası
+
+            tempChart.data.labels.push(label);
+            tempChart.data.datasets[0].data.push(newValue);
+
+            // sabit 6 veri tut
+            if (tempChart.data.labels.length > 6) {
+                tempChart.data.labels.shift();
+                tempChart.data.datasets[0].data.shift();
+            }
+
+            tempChart.update();
+        }, 2000);
+    </script>
+
+</body>
+
+</html>

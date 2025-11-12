@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalite Raporları | Kardemir</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<aside id="sidebar">
+        <div id="sidebar"></div>
+        <script>
+            fetch("sidebar.html")
+                .then((res) => res.text())
+                .then(
+                    (data) => (document.getElementById("sidebar").innerHTML = data)
+                );
+        </script>
+    </aside>
+
+<div class="content-wrapper">
+    <header class="header">
+        <div class="breadcrumbs">
+            <a href="#">Ana Sayfa</a> <span>/</span>
+            <span>Kalite Raporları</span>
+        </div>
+    </header>
+
+    <div class="vardiya-raporu-wrapper">
+        <h2>Profil Hadde Vardiya Raporu</h2>
+
+        <!-- Vardiya Bilgileri -->
+        <div class="info-row">
+            <div class="info-item">
+                <label for="tarih">Tarih:</label>
+                <input type="date" id="tarih">
+            </div>
+            <div class="info-item">
+                <label for="vardiya">Vardiya:</label>
+                <select id="vardiya">
+                    <option>1. Vardiya</option>
+                    <option>2. Vardiya</option>
+                    <option>3. Vardiya</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Ana Tablo -->
+        <div class="vardiya-table-wrapper">
+            <table border="1" cellspacing="0" cellpadding="0">
+                <thead>
+                <tr>
+                    <th colspan="3">IPE 300</th>
+                    <th colspan="3">YARI MAMUL</th>
+                    <th colspan="2">KONTROLE VERİLEN</th>
+                    <th colspan="2">HOLD</th>
+                    <th colspan="2">1. KALİTE</th>
+                    <th colspan="2">2. KALİTE</th>
+                    <th colspan="2">MAMUL BOZUK</th>
+                    <th colspan="2">HADDE BOZUK</th>
+                </tr>
+                <tr>
+                    <th>KALİTE</th>
+                    <th>DÖKÜM NO</th>
+                    <th>SDM</th>
+                    <th>EBAT</th>
+                    <th>BOYU</th>
+                    <th>ADET</th>
+                    <th>BOYU (mm)</th>
+                    <th>MİKTAR (ton)</th>
+                    <th>MİKTAR</th>
+                    <th>SEBEBİ</th>
+                    <th>MİKTAR</th>
+                    <th>SEBEBİ</th>
+                    <th>MİKTAR</th>
+                    <th>SEBEBİ</th>
+                    <th>MİKTAR</th>
+                    <th>SEBEBİ</th>
+                    <th>ADET</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr><td>S275JR</td><td>2511617</td><td>SDM 3</td><td>280*360</td><td>6120</td><td>34</td><td>12000</td><td>105,483</td><td></td><td></td><td>104,470</td><td></td><td>1,013</td><td>MEKİK EĞRİSİ</td><td></td><td></td><td></td></tr>
+                <tr><td>S275JR</td><td>2521691</td><td>SDM 3</td><td>280*360</td><td>6120</td><td>35</td><td>12000</td><td>109,820</td><td></td><td></td><td>109,820</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+                <tr><td>S275JR</td><td>2522939</td><td>SDM 3</td><td>280*360</td><td>6120</td><td>36</td><td>12000</td><td>110,656</td><td></td><td></td><td>110,150</td><td></td><td>0,506</td><td>WEBTE ÇAPAK</td><td></td><td></td><td></td></tr>
+                <tr><td>S275JR</td><td>2522942</td><td>SDM 3</td><td>280*360</td><td>6120</td><td>36</td><td>12000</td><td>115,494</td><td></td><td></td><td>115,494</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+                <tr><td>S275JR</td><td>2513145</td><td>SDM 3</td><td>280*360</td><td>6120</td><td>36</td><td>12000</td><td>107,337</td><td></td><td></td><td>105,818</td><td></td><td>1,013</td><td>AYAK DIŞI ÇAPAK</td><td>0,506</td><td>YMK AYAK UCU YARA</td><td></td></tr>
+                <tr><td>S275JR</td><td>2513145</td><td>SDM 3</td><td>280*360</td><td>6120</td><td>0</td><td>9500</td><td>3,608</td><td></td><td></td><td>3,608</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+                </tbody>
+                <tfoot>
+                <tr>
+                    <td colspan="6">TOPLAM</td>
+                    <td>552,398</td><td></td><td></td><td></td>
+                    <td>549,360</td><td></td>
+                    <td>2,532</td><td></td>
+                    <td>0,506</td><td></td>
+                    <td></td>
+                </tr>
+                </tfoot>
+            </table>
+        </div>
+
+        <!-- Alt Bilgi -->
+        <div class="info-row below-table">
+            <div class="info-item">
+                <label for="kgm">KG/M:</label>
+                <input type="text" id="kgm" value="42,2" />
+            </div>
+            <div class="info-item">
+                <label for="satilabilir">SATILABİLİR TONAJ:</label>
+                <input type="text" id="satilabilir" value="551,892" />
+            </div>
+        </div>
+
+        <!-- Açıklamalar -->
+        <div class="aciklama-alani">
+            <label for="aciklama">AÇIKLAMALAR:</label>
+            <textarea id="aciklama" name="aciklama">YAPILAN KONTROLLERDE  ARA ARA İLK BOYLARDA ÖLÇÜ TOLERANS DAHİLİ YAN EĞRİLİK, AYAK İÇLERİNDE KESME ÇAPAK İZİ, WERTİCALLERDE AŞINMA, AYAK DIŞLARINDA WERTİCAL KAYNAKLI TAM BOY ÇAPAK VE ÇAPAK İZLERİ, KILCAL ÇATLAKLAR OLDUĞU GÖRÜLDÜ. SOĞUK TESTERE KESİMİ SONRASI ARA ARA BOYLARIN TOLERANS DAHİLİ UZUN-KISA GELDİĞİ GÖRÜLDÜ. DOĞRULTMA SONRASI MALZEMELERİN WEBİNDE SU VE TUFAL OLMASI NEDENİYLE SAĞLIKLI YÜZEY KONTROLÜ YAPILAMADI. İŞLETME FORMENİ BİLGİLENDİRİLDİ. SAAT 12:30'DA TANDEM SET DEĞİŞİMİ YAPILDI.</textarea>
+        </div>
+
+        <div class="action-buttons">
+            <button>Excel Aktar</button>
+            <button>PDF Aktar</button>
+        </div>
+        <!-- Ölçü Kontrol Durumu - Buton ve Tablo -->
+        <button id="toggle-olcu-btn" class="toggle-btn">Ölçü Kontrol Durumu Göster</button>
+
+        <div id="olcu-kontrol-kapsayici" style="display: none;" class="vardiya-table-wrapper">
+            <h3>Ölçü Kontrol Durumu</h3>
+            <table>
+                <thead>
+                <tr>
+                    <th>DÖKÜM NO</th>
+                    <th>h (mm)<br>YÜKSEKLİK</th>
+                    <th>b (mm)<br>AYAK GENİŞLİĞİ</th>
+                    <th>e (mm)<br>SAC KALINLIĞI</th>
+                    <th>t/a (mm)<br>AYAK KALINLIĞI</th>
+                    <th>m (mm)<br>GÖVDE KAÇIKLIĞI</th>
+                    <th>k (mm)<br>TABANLARIN SAPMASI</th>
+                    <th>f (mm)<br>GÖVDE EĞRİLİĞİ</th>
+                    <th>q (mm)<br>DOĞRULUKTAN SAPMA</th>
+                    <th>BOY (mm)</th>
+                    <th>KG/M</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr><td>2511617</td><td>302,1</td><td>150,1 / 151</td><td>7,7</td><td>10 / 10,2</td><td>1,2</td><td>1</td><td>–</td><td>14</td><td>12030</td><td>42,56</td></tr>
+                <tr><td>2521691</td><td>302,2</td><td>150,1 / 150,9</td><td>7,8</td><td>10,1 / 10,3</td><td>1,1</td><td>1</td><td>–</td><td>14</td><td>12030</td><td>42,86</td></tr>
+                <tr><td>2522939</td><td>302,3</td><td>150,2 / 151</td><td>7,9</td><td>10,2 / 10,4</td><td>1,1</td><td>1,1</td><td>–</td><td>14</td><td>12030</td><td>43,18</td></tr>
+                <tr><td>2522942</td><td>302,2</td><td>150,2 / 150,8</td><td>7,8</td><td>10 / 10,4</td><td>0,8</td><td>0,9</td><td>–</td><td>12</td><td>12030</td><td>42,77</td></tr>
+                <tr><td>2513145</td><td>302,1</td><td>150 / 150,7</td><td>7,8</td><td>10,1 / 10,2</td><td>0,6</td><td>0,8</td><td>–</td><td>12</td><td>12030</td><td>42,74</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript: Butona tıklayınca tabloyu aç/kapat -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const toggleBtn = document.getElementById("toggle-olcu-btn");
+        const tablo = document.getElementById("olcu-kontrol-kapsayici");
+
+        toggleBtn.addEventListener("click", function () {
+            if (tablo.style.display === "none" || tablo.style.display === "") {
+                tablo.style.display = "block";
+                toggleBtn.textContent = "Ölçü Kontrol Durumu Gizle";
+            } else {
+                tablo.style.display = "none";
+                toggleBtn.textContent = "Ölçü Kontrol Durumu Göster";
+            }
+        });
+    });
+</script>
+
+</body>
+</html>
+

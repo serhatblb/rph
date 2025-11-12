@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Yeni Paket Oluştur</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .content-wrapper {
+      margin-left: 260px;
+      padding: 20px;
+    }
+
+    .form-box {
+      background: #fff;
+      padding: 20px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      max-width: 800px;
+    }
+
+    select,
+    input[type="number"] {
+      padding: 6px 10px;
+      font-size: 14px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      width: 100%;
+    }
+
+    /* 🎨 Döküm Numaraları Listesi */
+    .dokum-listesi h3 {
+      margin-bottom: 8px;
+      color: #003366;
+      font-size: 16px;
+    }
+
+    .dokum-listesi ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .dokum-listesi li {
+      background: #f9f9f9;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      margin-bottom: 6px;
+      padding: 8px 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 14px;
+    }
+
+    .dokum-listesi li button {
+      font-size: 13px;
+      padding: 4px 8px;
+      background: #004d99;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    /* 🔧 Kompakt Döküm Paneli */
+    .dokum-panel {
+  width: 300px;
+  flex-shrink: 0;
+  position: relative;
+  font-size: 13px;
+  padding: 10px;
+  margin-top: 12px;
+  background: #f6f9fc;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+}
+
+
+    .dokum-panel h4 {
+      margin: 0 0 6px;
+      color: #003366;
+      font-size: 15px;
+    }
+
+    .dokum-panel .close-btn {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      width: 20px;
+      height: 20px;
+      font-size: 14px;
+      line-height: 18px;
+    }
+
+    .dokum-panel table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+
+    .dokum-panel th,
+    .dokum-panel td {
+      border: 1px solid #ccc;
+      padding: 4px 6px;
+      text-align: center;
+    }
+
+    .dokum-panel td:first-child {
+      width: 40px;
+    }
+
+    .dokum-panel td:nth-child(2) {
+      width: 60px;
+    }
+
+    .dokum-panel td:nth-child(3) {
+      width: 80px;
+    }
+
+    .total-box {
+      margin-top: 15px;
+      text-align: right;
+      font-weight: bold;
+      font-size: 18px;
+      color: #003366;
+    }
+
+    /* 📦 Paket İçeriği Paneli ve Oluştur Butonu */
+    #paketIcerigiPanel {
+      position: absolute;
+      right: 20px;
+      top: 120px;
+      right: 20px;
+      width: 280px;
+      background: #f4f6fa;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      padding: 15px;
+      max-height: 600px;
+      overflow-y: auto;
+      font-size: 14px;
+    }
+
+    #paketIcerigiPanel h3 {
+      margin-top: 0;
+      font-size: 16px;
+      color: #003366;
+    }
+
+    #paketOzet,
+    #paketAgirlik {
+      margin-top: 10px;
+      font-weight: bold;
+      color: #003366;
+      font-size: 14px;
+    }
+
+    #paketOlusturBtn {
+      display: block;
+      width: 100%;
+      margin-top: 12px;
+      padding: 10px;
+      background: #004d99;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 15px;
+    }
+    #paketAlanlari {
+  display: flex;
+  flex-wrap: wrap; /* Taşarsa alt satıra geçsin */
+  gap: 15px;        /* Kartlar arası boşluk */
+  margin-top: 20px;
+}
+  </style>
+</head>
+
+<body>
+
+  <div id="sidebar"></div>
+  <script>
+    fetch('sidebar.html')
+      .then(res => res.text())
+      .then(data => document.getElementById('sidebar').innerHTML = data);
+  </script>
+
+  <div class="content-wrapper">
+    <div class="breadcrumbs">
+      <a href="#">Ana Sayfa</a> >
+      <a href="paket-takibi.html">Paket Takibi</a> >
+      <span>Yeni Paket</span>
+    </div>
+
+    <h1 class="report-title">Paket Oluştur/Güncelle</h1>
+
+    <div class="form-box">
+      <label for="siparisSec">Sipariş Numarası Seç</label>
+      <select id="siparisSec">
+        <option disabled selected>Sipariş Seçiniz</option>
+        <option value="300003682">300003682 (1.Kalite)</option>
+        <option value="300003683">300003683 (1.Kalite)</option>
+        <option value="300009999">300009999 (2.Kalite)</option>
+      </select>
+
+      <div id="dokumListeAlani" class="dokum-listesi"></div>
+      <div id="paketAlanlari"></div>
+      <div class="total-box">Toplam Profil Adedi: <span id="toplamAdet">0</span></div>
+    </div>
+  </div>
+
+  <!-- Paket İçeriği Paneli -->
+  <div id="paketIcerigiPanel">
+    <h3>📦 Paket İçeriği</h3>
+    <div id="paketOzet">Henüz içerik yok</div>
+    <div id="paketDetayListesi"></div>
+    <div id="paketAgirlik"></div>
+    <button id="paketOlusturBtn">Paketi Oluştur</button>
+  </div>
+  
+
+  <script>
+    const siparisDokumVerisi = {
+      "300003682": ["2512332", "2512333", "2512334", "2512335"],
+      "300003683": ["2512336", "2512337", "2512338"],
+      "300009999": ["2999999", "2888888", "2777777"]
+    };
+    const dokumKutukleri = {
+  "2512332": ["25123321301", "25123320102", "25123320405", "25123320304", "25123320203"],
+  "2512333": ["25123330104", "25123330201", "25123330403", "25123330305"],
+  "2512334": ["25123340102", "25123340401", "25123340304"],
+  "2512335": ["25123350205", "25123350403", "25123350302", "25123350501", "25123350103", "25123350404"],
+  "2512336": ["25123360201", "25123360303", "25123360402", "25123360104"],
+  "2512337": ["25123370301", "25123370402", "25123370105"],
+  "2512338": ["25123380201", "25123380403", "25123380302", "25123380105", "25123380401"],
+  "2999999": ["29999990203", "29999990301", "29999990402", "29999990105"],
+  "2888888": ["28888880104", "28888880301", "28888880202"],
+  "2777777": ["27777770201", "27777770404", "27777770303", "27777770102", "27777770401"]
+};
+
+    const aktifDökümler = new Set();
+    const kutukVerisi = new Map();
+
+    // Döküm listesi render
+    document.getElementById('siparisSec').addEventListener('change', function () {
+      const sec = this.value;
+      const area = document.getElementById('dokumListeAlani');
+      area.innerHTML = '<h3>📄 Döküm Numaraları</h3><ul>';
+      siparisDokumVerisi[sec]?.forEach(no => {
+        area.innerHTML += `<li><span>${no}</span><button onclick="dokumEkle('${no}')">Ekle</button></li>`;
+      });
+      area.innerHTML += '</ul>';
+    });
+
+    function dokumEkle(dokumNo) {
+      if (aktifDökümler.has(dokumNo)) return;
+      aktifDökümler.add(dokumNo);
+      const panel = document.createElement('div');
+      panel.className = 'dokum-panel';
+      panel.id = `panel-${dokumNo}`;
+      let html = `<h4>Döküm No: ${dokumNo}</h4>
+                  <button class="close-btn" onclick="kaldirPanel('${dokumNo}')">×</button>
+                  <table>
+                    <thead><tr><th>Aktifleştir ✓</th><th>KÜTÜK ID</th><th>Adet</th></tr></thead>
+                    <tbody>`;
+      dokumKutukleri[dokumNo].forEach(kid => {
+        kutukVerisi.set(kid, { aktif: false, adet: 0, dokum: dokumNo });
+        html += `<tr>
+                   <td><input type="checkbox" onchange="tikla(this,'${kid}')"/></td>
+                   <td>${kid}</td>
+                   <td>
+                     <button onclick="degistir('${kid}',-1)" disabled>-</button>
+                     <input type="number" id="adet-${kid}" value="0" min="0"
+                            style="width:50px" disabled oninput="manuelGiris('${kid}',this.value)"/>
+                     <button onclick="degistir('${kid}',1)" disabled>+</button>
+                   </td>
+                 </tr>`;
+      });
+      html += `</tbody></table>`;
+      panel.innerHTML = html;
+      document.getElementById('paketAlanlari').appendChild(panel);
+      guncelleToplam();
+    }
+
+    function kaldirPanel(dokumNo) {
+      document.getElementById(`panel-${dokumNo}`)?.remove();
+      aktifDökümler.delete(dokumNo);
+      dokumKutukleri[dokumNo].forEach(kid => kutukVerisi.delete(kid));
+      guncelleToplam();
+    }
+
+    function tikla(cb, kid) {
+      const aktif = cb.checked;
+      const input = document.getElementById(`adet-${kid}`);
+      input.disabled = !aktif;
+      input.parentElement.querySelectorAll('button').forEach(b => b.disabled = !aktif);
+      const k = kutukVerisi.get(kid);
+      k.aktif = aktif;
+      if (!aktif) { k.adet = 0; input.value = 0; }
+      guncelleToplam();
+    }
+
+    function degistir(kid, fark) {
+      const k = kutukVerisi.get(kid);
+      if (!k || !k.aktif) return;
+      k.adet = Math.max(0, k.adet + fark);
+      document.getElementById(`adet-${kid}`).value = k.adet;
+      guncelleToplam();
+    }
+
+    function manuelGiris(kid, val) {
+      const n = parseInt(val);
+      if (isNaN(n) || n < 0) return;
+      const k = kutukVerisi.get(kid);
+      if (k && k.aktif) { k.adet = n; guncelleToplam(); }
+    }
+
+    function guncelleToplam() {
+      let toplam = 0, gruplanan = {};
+      kutukVerisi.forEach((v, kid) => {
+        if (!v.aktif || v.adet === 0) return;
+        gruplanan[v.dokum] = gruplanan[v.dokum] || [];
+        gruplanan[v.dokum].push({ kutukId: kid, adet: v.adet });
+        toplam += v.adet;
+      });
+      const dokumlar = Object.keys(gruplanan);
+      document.getElementById('paketOzet').textContent = dokumlar.length
+        ? `Döküm: ${dokumlar.join(', ')} — Toplam ${toplam} Profil`
+        : 'Henüz içerik yok';
+      const detayDiv = document.getElementById('paketDetayListesi');
+      detayDiv.innerHTML = '';
+      dokumlar.forEach(d => {
+        const div = document.createElement('div');
+        div.innerHTML = `<strong>Döküm ${d}:</strong><ul style="padding-left:16px;">` +
+          gruplanan[d].map(o => `<li>${o.kutukId} → ${o.adet} adet</li>`).join('') +
+          `</ul>`;
+        detayDiv.appendChild(div);
+      });
+      document.getElementById('toplamAdet').textContent = toplam;
+      const ton = ((toplam * 450) / 1000).toFixed(2);
+      document.getElementById('paketAgirlik').textContent = `Tahmini Ağırlık: ${ton} ton`;
+    }
+
+    // Paketi Oluştur butonuna basıldığında paket verisi localStorage'a kaydet vb.
+    
+
+    document.getElementById('paketOlusturBtn').addEventListener('click', () => {
+  const siparisNo = document.getElementById('siparisSec').value;
+  if (!siparisNo || siparisNo === "Sipariş Seçiniz") {
+    alert("Lütfen sipariş seçiniz.");
+    return;
+  }
+
+  const tarihSaat = new Date();
+  const toplamAdet = parseInt(document.getElementById('toplamAdet').textContent);
+  const agirlikText = document.getElementById('paketAgirlik').textContent;
+  const agirlikMatch = agirlikText.match(/([\d.]+)/);
+  const agirlikKg = agirlikMatch ? parseFloat(agirlikMatch[1]) * 1000 : 0;
+
+  // Gruplu kutuk verisini döküm bazlı çıkar
+  const paketler = [];
+  const dokumMap = {};
+
+  kutukVerisi.forEach((v, kid) => {
+    if (v.aktif && v.adet > 0) {
+      if (!dokumMap[v.dokum]) dokumMap[v.dokum] = 0;
+      dokumMap[v.dokum] += v.adet;
+    }
+  });
+  
+
+  Object.entries(dokumMap).forEach(([dokumNo, adet]) => {
+    const yeniPaket = {
+      rayOrPaketId: 'PKT-' + Date.now() + '-' + dokumNo,
+      siparisNo: siparisNo,
+      dokumNo: dokumNo,
+      sinif: '1',
+      urunTipi: 'PROFİL',
+      kaliteStandardi: 'S275JR',
+      kalite: 'S275JR_01',
+      agirlik: Math.round(agirlikKg / Object.keys(dokumMap).length),
+      uzunluk: 6000,
+      urunAdedi: adet,
+      tarihSaat: tarihSaat.toLocaleString('tr-TR')
+    };
+    paketler.push(yeniPaket);
+  });
+
+  const eski = JSON.parse(localStorage.getItem('paketler') || '[]');
+  const yeni = [...eski, ...paketler];
+  localStorage.setItem('paketler', JSON.stringify(yeni));
+
+  alert("Paket başarıyla oluşturuldu.");
+});
+
+  </script>
+
+</body>
+
+</html>

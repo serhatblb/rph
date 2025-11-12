@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sipariş Detayı - Kardemir</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+  <style>
+   
+  </style>
+</head>
+
+<body>
+
+  <div id="sidebar"></div>
+  <script>
+    fetch('sidebar.html')
+      .then(res => res.text())
+      .then(data => document.getElementById('sidebar').innerHTML = data);
+  </script>
+
+
+  <div class="content-wrapper">
+    <header class="header">
+      <div class="breadcrumbs">
+        <a href="siparisler.html">Sipariş Sayfası</a> <span>></span>
+        <span>Sipariş Detayı</span>
+      </div>
+    </header>
+
+    <div class="detail-container">
+      <h2 class="report-title">Sipariş Detayı: <span id="siparis-no-title">Yükleniyor...</span></h2>
+
+      <!-- 1. Satır -->
+      <div class="flex-row">
+        <div class="info-box">
+          <h4>Genel Bilgiler</h4>
+          <p><strong>Sipariş No:</strong> <span id="siparisNo"></span></p>
+          <p><strong>Başlangıç Tarihi:</strong> <span id="baslangicTarihi"></span></p>
+          <p><strong>Bitiş Tarihi:</strong> <span id="bitisTarihi"></span></p>
+          <p><strong>Durum:</strong> <span id="durum"></span></p>
+          <p><strong>Müşteri Bilgisi:</strong> <span id="musteri"></span></p>
+          <p><strong>Paket Adedi:</strong> <span id="paketAdedi"></span></p>
+        </div>
+
+        <div class="info-box">
+          <h4>Ürün Bilgileri</h4>
+          <p><strong>Ürün Tanımı:</strong> <span id="urunTanimi"></span></p>
+          <p><strong>Ürün Tipi:</strong> <span id="urunTipi"></span></p>
+          <p><strong>Kalite Standardı:</strong> <span id="kaliteStandardi"></span></p>
+          <p><strong>Boy / Kalite:</strong> <span id="boyKalite"></span></p>
+          <p><strong>Malzeme Numarası:</strong>	80000185 <span id="boyKalite"></span></p>
+        </div>
+      </div>
+
+      <!-- 2. Satır -->
+      <div class="flex-row">
+        <div class="info-box">
+          <h4>Üretim Bilgileri</h4>
+          <p><strong>Sipariş Miktarı:</strong> <span id="siparisMiktari"></span></p>
+          <p><strong>Kalan Miktar:</strong> <span id="kalanMiktar"></span></p>
+          <p><strong>Planlanan Termin:</strong> <span id="termin"></span></p>
+          <p><strong>Hadde Bozuğu:</strong> <span id="hadde"></span></p>
+        </div>
+
+        <div class="info-box">
+          <h4>Yarı Mamul
+  <button class="modern-icon-button" onclick="window.location.href='yari-mamul-listesi.html'">
+    <span class="material-icons">analytics</span> Detay
+  </button>
+</h4>
+
+          <p><strong>Malzeme No:</strong> <span id="malzemeNo"></span></p>
+          <p><strong>Tüketilen Kütük Tonajı:</strong> <span id="kutukMiktari"></span></p>
+          <p><strong>Tüketilen Kütük Adedi:</strong> <span id="kutukAdedi"></span></p>
+          <p><strong>İhtiyaç Miktarı:</strong> <span id="ihtiyac"></span></p>
+          <!-- <p><strong>Kesit:</strong> <span id="kesit"></span></p>
+          <p><strong>Malzeme Tanımı:</strong> <span id="mazlemeTanimi"></span></p> -->
+        </div>
+      </div>
+
+      <!-- 3. Satır -->
+      <div class="flex-row">
+        <div class="info-box">
+          <h4>Paket Bilgileri</h4>
+          
+          <p><strong>Paketteki Profil Sayısı:</strong> <span id="paketProfilSayisi"></span></p>
+          <p><strong>Paketteki Sütun x Sıra :</strong> <span id="paketSutun"></span></p>
+        </div>
+      </div>
+      <a href="siparisler.html" class="back-button">Sipariş Listesine Geri Dön</a>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const siparis = {
+        siparisNo: '300003661',
+        baslangicTarihi: '01.06.2025',
+        bitisTarihi: '30.06.2025',
+        durum: 'Üretimde',
+        musteri: 'Müsteri 1',
+        urunTanimi: 'HEB 400 S275JR_00 12000 PROFIL',
+        urunTipi: 'Profil',
+        kaliteStandardi: 'S275JR',
+        boyKalite: '12m / S275JR_00',
+        siparisMiktari: '2500 ton',
+        kalanMiktar: '1200 ton',
+        termin: '15.07.2025',
+        paketAdedi: '10',
+        hadde: '3',
+        malzemeNo: '70000565 90x90 S235JR',
+        kutukMiktari: '100 ton',
+        kutukAdedi: '250',
+        ihtiyac: '500',
+        paketProfilSayisi: '21',
+        paketSutun: '3 x 7',
+        // kesit: '90 x 90',
+        // mazlemeTanimi: 'S235JR',
+      };
+
+      for (const key in siparis) {
+        const element = document.getElementById(key);
+        if (element) {
+          element.textContent = siparis[key];
+        }
+      }
+
+      document.getElementById("siparis-no-title").textContent = siparis.siparisNo;
+    });
+  </script>
+</body>
+
+</html>

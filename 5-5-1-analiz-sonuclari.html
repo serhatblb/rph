@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parti Sonuçlarının Görüntülenmesi</title>
+    <link href="style.css" rel="stylesheet" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a3d62 0%, #1e5f87 50%, #2c3e50 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 25px 80px rgba(0,0,0,0.4);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #0a3d62 0%, #1565c0 100%);
+            color: white;
+            padding: 28px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 4px solid #1976d2;
+        }
+
+        .header h1 {
+            font-size: 26px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .header-icon {
+            background: rgba(255,255,255,0.2);
+            padding: 8px;
+            border-radius: 8px;
+        }
+
+        .filter-section {
+            background: #f7f9fc;
+            padding: 32px 40px;
+            border-bottom: 3px solid #e1e8ed;
+        }
+
+        .filter-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .filter-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-bottom: 24px;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .filter-group label {
+            font-size: 13px;
+            font-weight: 700;
+            color: #34495e;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+        }
+
+        .filter-input {
+            padding: 12px 16px;
+            border: 2px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.3s;
+            background: white;
+        }
+
+        .filter-input:focus {
+            outline: none;
+            border-color: #1565c0;
+            box-shadow: 0 0 0 3px rgba(10, 61, 98, 0.1);
+        }
+
+        .filter-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+        }
+
+        .btn-filter {
+            background: linear-gradient(135deg, #0a3d62 0%, #1565c0 100%);
+            color: white;
+            border: none;
+            padding: 12px 32px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(10, 61, 98, 0.3);
+        }
+
+        .btn-filter:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(10, 61, 98, 0.4);
+        }
+
+        .btn-clear {
+            background: white;
+            color: #64748b;
+            border: 2px solid #cbd5e1;
+            padding: 12px 32px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn-clear:hover {
+            background: #f8fafc;
+            border-color: #94a3b8;
+        }
+
+        .result-count {
+            padding: 20px 40px;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            border-bottom: 2px solid #cbd5e1;
+            font-size: 14px;
+            font-weight: 600;
+            color: #475569;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            padding: 0 40px 40px 40px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin-top: 24px;
+            min-width: 1800px;
+        }
+
+        thead {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        th {
+            padding: 12px 10px;
+            text-align: center;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: none;
+            letter-spacing: 0.5px;
+            line-height: 1.3;
+            border: 1px solid #cbd5e1;
+        }
+
+        tbody tr {
+            transition: all 0.2s;
+            border-bottom: 1px solid #e2e8f0;
+            background: white;
+        }
+
+        tbody tr:nth-child(even) {
+            background: #f8fafc;
+        }
+
+        tbody tr:hover {
+            background: #e3f2fd;
+            transform: scale(1.002);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            cursor: pointer;
+        }
+
+        td {
+            padding: 16px 14px;
+            font-size: 14px;
+            color: #334155;
+            border-right: 1px solid #f1f5f9;
+            text-align: center;
+        }
+
+        td:last-child {
+            border-right: none;
+        }
+
+        .red-cell {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;
+            color: white !important;
+            font-weight: 700;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.2);
+        }
+
+        .no-data {
+            text-align: center;
+            padding: 60px;
+            color: #64748b;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        @media (max-width: 1200px) {
+            .filter-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+
+            .header h1 {
+                font-size: 20px;
+            }
+
+            .filter-section {
+                padding: 20px;
+            }
+
+            .filter-actions {
+                flex-direction: column;
+            }
+
+            .btn-filter,
+            .btn-clear {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+  <aside id="sidebar">
+    <div id="sidebar-container"></div>
+    <script>
+      fetch("sidebar.html")
+        .then(r=>r.text())
+        .then(html=>{document.getElementById("sidebar-container").innerHTML=html});
+    </script>
+  </aside>
+<div class="container" style="margin-left: 250px;">
+    <!-- Header -->
+    <div class="header"  >
+        <h1 style="color: white;">
+            <span class="header-icon">📋</span>
+            Parti Sonuçlarının Görüntülenmesi
+        </h1>
+    </div>
+
+    <!-- Filter Section -->
+    <div class="filter-section">
+        <div class="filter-title">
+            🔍 Filtreleme Seçenekleri
+        </div>
+        <div class="filter-grid">
+            <div class="filter-group">
+                <label for="dokumNo">Döküm No</label>
+                <input type="text" id="dokumNo" class="filter-input" placeholder="Döküm No girin...">
+            </div>
+            <div class="filter-group">
+                <label for="malzeme">Malzeme</label>
+                <input type="text" id="malzeme" class="filter-input" placeholder="Malzeme girin...">
+            </div>
+            <div class="filter-group">
+                <label for="partiNo">Parti No</label>
+                <input type="text" id="partiNo" class="filter-input" placeholder="Parti No girin...">
+            </div>
+            <div class="filter-group">
+                <label for="krdNo">KRD No</label>
+                <input type="text" id="krdNo" class="filter-input" placeholder="KRD No girin...">
+            </div>
+        </div>
+
+        <div class="filter-actions">
+            <button class="btn-clear" onclick="clearFilters()">🔄 Filtreleri Temizle</button>
+            <button class="btn-filter" onclick="filterTable()">🔍 Filtrele</button>
+        </div>
+    </div>
+
+    <!-- Result Count -->
+    <div class="result-count">
+        Toplam Kayıt: <span id="recordCount">4</span>
+    </div>
+
+    <!-- Table -->
+    <div class="table-container">
+        <table id="dataTable">
+            <thead>
+            <tr>
+                <th rowspan="2" style="background: #d3d3d3; color: #2c3e50; vertical-align: middle;">Döküm No</th>
+                <th rowspan="2" style="background: #d3d3d3; color: #2c3e50; vertical-align: middle;">Malzeme</th>
+                <th rowspan="2" style="background: #d3d3d3; color: #2c3e50; vertical-align: middle;">Malzeme Kısa Metni</th>
+                <th rowspan="2" style="background: #d3d3d3; color: #2c3e50; vertical-align: middle;">Sipariş</th>
+                <th rowspan="2" style="background: #d3d3d3; color: #2c3e50; vertical-align: middle;">Parti No</th>
+                <th rowspan="2" style="background: #d3d3d3; color: #2c3e50; vertical-align: middle;">KRD No</th>
+                <th style="background: #d3d3d3; color: #2c3e50;">Yükseklik(h)</th>
+                <th style="background: #d3d3d3; color: #2c3e50;">Ayak (Flanş)<br>Genişliği</th>
+                <th style="background: #d3d3d3; color: #2c3e50;">Web Kalınlığı</th>
+                <th style="background: #d3d3d3; color: #2c3e50;">Ayak (Flanş)<br>Kalınlığı</th>
+                <th style="background: #d3d3d3; color: #2c3e50;">Boy (L)</th>
+                <th style="background: #d3d3d3; color: #2c3e50;">Parallellikten<br>Sapma</th>
+                <th style="background: #d3d3d3; color: #2c3e50;">Gövde Eğriliği</th>
+                <th style="background: #d3d3d3; color: #2c3e50;">Doğruluktan<br>Sapma (Qx)</th>
+                <th style="background: #d3d3d3; color: #2c3e50;">Doğruluktan<br>Sapma (Qy)</th>
+                <th style="background: #d3d3d3; color: #2c3e50;">Birim Ağırlık</th>
+            </tr>
+            <tr>
+                <th style="background: #f4e4c1; color: #2c3e50;">198,00 - 202,00mm</th>
+                <th style="background: #f4e4c1; color: #2c3e50;">73,0 - 77,0mm</th>
+                <th style="background: #f4e4c1; color: #2c3e50;">8,0 - 9,0mm</th>
+                <th style="background: #f4e4c1; color: #2c3e50;">10,5 - 11,5mm</th>
+                <th style="background: #f4e4c1; color: #2c3e50;">12000 - 12100mm</th>
+                <th style="background: #f4e4c1; color: #2c3e50;">≤ 1,9mm</th>
+                <th style="background: #f4e4c1; color: #2c3e50;">(-1,00) - 1,0mm</th>
+                <th style="background: #f4e4c1; color: #2c3e50;">(-24,00) - 24,0mm</th>
+                <th style="background: #f4e4c1; color: #2c3e50;">≤ 36,0mm</th>
+                <th style="background: #f4e4c1; color: #2c3e50;">24,29 - 26,31kg/m</th>
+            </tr>
+            </thead>
+            <tbody id="tableBody">
+            <tr>
+                <td>2321005</td>
+                <td>80000084</td>
+                <td>60E1 RZ60_02 36000 RAY</td>
+                <td>300003801</td>
+                <td>0002929911</td>
+                <td>KRD10076493</td>
+                <td>201,00mm</td>
+                <td>75,00mm</td>
+                <td>8,5mm</td>
+                <td>11,1mm</td>
+                <td>12000mm</td>
+                <td>1,00mm</td>
+                <td>0,8mm</td>
+                <td>13,00mm</td>
+                <td>12,00mm</td>
+                <td>25,23kg/m</td>
+            </tr>
+            <tr>
+                <td>2321005</td>
+                <td>80000084</td>
+                <td>60E1 RZ60_02 36000 RAY</td>
+                <td>300003801</td>
+                <td>0002929911</td>
+                <td>KRD10076494</td>
+                <td>201,50mm</td>
+                <td>75,10mm</td>
+                <td>8,6mm</td>
+                <td>11,2mm</td>
+                <td>12020mm</td>
+                <td>1,10mm</td>
+                <td>0,9mm</td>
+                <td>13,10mm</td>
+                <td>12,10mm</td>
+                <td>25,26kg/m</td>
+            </tr>
+            <tr>
+                <td>2321005</td>
+                <td>80000084</td>
+                <td>60E1 RZ60_02 36000 RAY</td>
+                <td>300003801</td>
+                <td>0002929911</td>
+                <td>KRD10076495</td>
+                <td class="red-cell">205,00mm</td>
+                <td>74,50mm</td>
+                <td class="red-cell">7,2mm</td>
+                <td>11,4mm</td>
+                <td>12030mm</td>
+                <td>1,20mm</td>
+                <td>0,7mm</td>
+                <td>13,40mm</td>
+                <td>12,50mm</td>
+                <td>24,35kg/m</td>
+            </tr>
+            <tr>
+                <td>2321005</td>
+                <td>80000084</td>
+                <td>60E1 RZ60_02 36000 RAY</td>
+                <td>300003801</td>
+                <td>0002929911</td>
+                <td>KRD10076496</td>
+                <td>201,30mm</td>
+                <td>75,10mm</td>
+                <td>8,2mm</td>
+                <td class="red-cell">11,6mm</td>
+                <td>12000mm</td>
+                <td>1,10mm</td>
+                <td>0,8mm</td>
+                <td>13,00mm</td>
+                <td>12,00mm</td>
+                <td>24,99kg/m</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    // Tüm satırları sakla
+    let allRows = [];
+
+    // Sayfa yüklendiğinde satırları sakla
+    window.onload = function() {
+        const tbody = document.getElementById('tableBody');
+        allRows = Array.from(tbody.querySelectorAll('tr'));
+        updateRecordCount();
+    };
+
+    function filterTable() {
+        const dokumNo = document.getElementById('dokumNo').value.trim().toLowerCase();
+        const malzeme = document.getElementById('malzeme').value.trim().toLowerCase();
+        const partiNo = document.getElementById('partiNo').value.trim().toLowerCase();
+        const krdNo = document.getElementById('krdNo').value.trim().toLowerCase();
+
+        const tbody = document.getElementById('tableBody');
+        const rows = tbody.getElementsByTagName('tr');
+        let visibleCount = 0;
+
+        for (let i = 0; i < rows.length; i++) {
+            const cells = rows[i].getElementsByTagName('td');
+
+            const rowDokumNo = cells[0].textContent.toLowerCase();
+            const rowMalzeme = cells[1].textContent.toLowerCase();
+            const rowPartiNo = cells[4].textContent.toLowerCase();
+            const rowKrdNo = cells[5].textContent.toLowerCase();
+
+            let match = true;
+
+            if (dokumNo && !rowDokumNo.includes(dokumNo)) match = false;
+            if (malzeme && !rowMalzeme.includes(malzeme)) match = false;
+            if (partiNo && !rowPartiNo.includes(partiNo)) match = false;
+            if (krdNo && !rowKrdNo.includes(krdNo)) match = false;
+
+            if (match) {
+                rows[i].style.display = '';
+                visibleCount++;
+            } else {
+                rows[i].style.display = 'none';
+            }
+        }
+
+        document.getElementById('recordCount').textContent = visibleCount;
+
+        if (visibleCount === 0) {
+            if (!document.getElementById('noDataMessage')) {
+                const noDataRow = document.createElement('tr');
+                noDataRow.id = 'noDataMessage';
+                noDataRow.innerHTML = '<td colspan="16" class="no-data">🔍 Filtreleme sonucunda kayıt bulunamadı.</td>';
+                tbody.appendChild(noDataRow);
+            }
+        } else {
+            const noDataMsg = document.getElementById('noDataMessage');
+            if (noDataMsg) {
+                noDataMsg.remove();
+            }
+        }
+    }
+
+    function clearFilters() {
+        document.getElementById('dokumNo').value = '';
+        document.getElementById('malzeme').value = '';
+        document.getElementById('partiNo').value = '';
+        document.getElementById('krdNo').value = '';
+
+        const tbody = document.getElementById('tableBody');
+        const rows = tbody.getElementsByTagName('tr');
+
+        for (let i = 0; i < rows.length; i++) {
+            if (rows[i].id !== 'noDataMessage') {
+                rows[i].style.display = '';
+            }
+        }
+
+        const noDataMsg = document.getElementById('noDataMessage');
+        if (noDataMsg) {
+            noDataMsg.remove();
+        }
+
+        updateRecordCount();
+    }
+
+    function updateRecordCount() {
+        const tbody = document.getElementById('tableBody');
+        const visibleRows = Array.from(tbody.getElementsByTagName('tr')).filter(
+            row => row.style.display !== 'none' && row.id !== 'noDataMessage'
+        );
+        document.getElementById('recordCount').textContent = visibleRows.length;
+    }
+
+    // Enter tuşu ile filtreleme
+    document.addEventListener('DOMContentLoaded', function() {
+        const inputs = document.querySelectorAll('.filter-input');
+        inputs.forEach(input => {
+            input.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    filterTable();
+                }
+            });
+        });
+    });
+
+    // Satır tıklama eventi
+    document.addEventListener('DOMContentLoaded', function() {
+        const tbody = document.getElementById('tableBody');
+        tbody.addEventListener('click', function(e) {
+            const row = e.target.closest('tr');
+            if (row && row.id !== 'noDataMessage') {
+                const krdNo = row.cells[5].textContent;
+                console.log('Seçilen KRD No:', krdNo);
+            }
+        });
+    });
+</script>
+</body>
+</html>
