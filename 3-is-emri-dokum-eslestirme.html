@@ -1,103 +1,351 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Kardemir - Üretim Programı Görünümü</title>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>Kardemir - Üretim Programı Döküm Atama</title>
   <link href="style.css" rel="stylesheet" />
+
   <style>
-    :root {
-      --sidebar-bg: #001540;
-      --content-bg: #f4f6fa;
-      --panel-bg: #ffffff;
-      --shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-      --radius: 16px;
+    :root{
+      --k-blue:#1976d2;
+      --k-gray:#f5f7fa;
+      --k-border:#ddd;
+      --k-text:#333;
     }
 
-    body {
-      font-family: 'Segoe UI', Arial, sans-serif;
-      margin: 0;
-      background: var(--content-bg);
-      display: flex;
-      height: 100vh;
-      overflow: hidden;
+    /* Filtre Alanı */
+    .filters{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:flex-end;
+      background:#fff;
+      border:1px solid #ddd;
+      border-radius:6px;
+      padding:12px;
+      margin-bottom:10px;
+      box-shadow:0 1px 3px rgba(0,0,0,.08);
+    }
+    .field{
+      display:flex;
+      flex-direction:column;
+      gap:4px;
+      font-size:12px;
+    }
+    .field label{
+      font-weight:bold;
+      color:#444;
+    }
+    .field input,
+    .field select{
+      padding:6px;
+      border:1px solid #ccc;
+      border-radius:4px;
+      font-size:13px;
+    }
+    .btn-filter{
+      background:var(--k-blue);
+      color:#fff;
+      border:none;
+      padding:8px 14px;
+      border-radius:4px;
+      cursor:pointer;
+      font-size:13px;
+      font-weight:500;
     }
 
-    /* Sidebar */
-    aside {
-      width: 250px;
-      background: var(--sidebar-bg);
-      color: #fff;
-      box-shadow: 4px 0 15px rgba(0, 0, 0, 0.2);
-      z-index: 10;
-      position: fixed;
-      top: 0;
-      left: 0;
-      bottom: 0;
+    /* Tablo Alanı */
+    .main-report-area{
+      background:#fff;
+      border:1px solid #ddd;
+      border-radius:8px;
+      padding:16px;
+      box-shadow:0 1px 4px rgba(0,0,0,.08);
+    }
+    .report-title{
+      font-size:18px;
+      margin:0 0 10px 0;
+      text-align:center;
+      font-weight:600;
+      letter-spacing:.5px;
     }
 
-    .sidebar-container {
-      padding: 20px;
-      height: 100%;
-      overflow-y: auto;
+    .data-table{
+      width:100%;
+      border-collapse:collapse;
+      margin-top:8px;
+      table-layout:auto;
+    }
+    .data-table th,
+    .data-table td{
+      padding:8px 10px;
+      text-align:center;
+      border:1px solid var(--k-border);
+      font-size:12px;
+      word-wrap:break-word;
+      white-space:normal;
+    }
+    .data-table thead th{
+      background:#e1e7f0;
+      font-weight:700;
+      color:var(--k-text);
+      font-size:12px;
+    }
+    .data-table tbody tr:nth-child(even){
+      background:#fafbfc;
     }
 
-    /* İçerik Alanı */
-    .content-wrapper {
-      margin-left: 250px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      background: var(--content-bg);
-      padding: 20px;
-      box-sizing: border-box;
+    .col-siparis,
+    .col-malzemekodu,
+    .col-kesit{
+      font-weight:600;
+    }
+    .col-kalite{
+      font-weight:600;
+      color:#003366;
+    }
+    .col-plan-ym{
+      background:#ff7a00;
+      color:#fff;
+      font-weight:600;
     }
 
-    .panel {
-      background: var(--panel-bg);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 20px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    .btn-dokum{
+      padding:6px 14px;
+      border-radius:16px;
+      border:none;
+      background:#0064ff;
+      color:#fff;
+      font-size:12px;
+      cursor:pointer;
+      font-weight:500;
+      white-space:nowrap;
     }
+    .btn-dokum:hover{
+      background:#004bcc;
+    }
+    .header-x {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
 
-    .panel:hover {
-      transform: scale(1.01);
-      box-shadow: 0 14px 40px rgba(0, 0, 0, 0.18);
-    }
-
-    img {
-      max-width: 100%;
-      max-height: 85vh;
-      border-radius: 10px;
-      border: 1px solid #dfe3e8;
-      object-fit: contain;
-    }
   </style>
 </head>
 <body>
   <!-- Sidebar -->
   <aside id="sidebar">
-    <div id="sidebar-container" class="sidebar-container"></div>
+    <div id="sidebar-container"></div>
     <script>
       fetch("sidebar.html")
-        .then((res) => res.text())
-        .then((data) => (document.getElementById("sidebar-container").innerHTML = data));
+        .then(res => res.text())
+        .then(html => document.getElementById("sidebar-container").innerHTML = html);
     </script>
   </aside>
 
-  <!-- İçerik -->
   <div class="content-wrapper">
-    <div>
-      <h1>RPH İş Emri Döküm Eşleştirme Ekranı </h1>
-      <!-- <h1>Çubuk Kangal Haddehanesine Ait Örnek Ekran</h1></div> -->
-    <div class="panel">
-      <img src="resimler/dokum-eslestirme-2.png" alt="İş Emri Döküm Eşleştirme Ekranı">
+    <header class="header">
+      <div class="breadcrumbs">
+        <a href="#">Ana Sayfa</a> <span>&gt;</span>
+        <span>Üretim Programı</span> <span>&gt;</span>
+        <span>Döküm Atama</span>
+      </div>
+    </header>
+    <div class="header-x" style="text-align: center;" ><h1 >Çubuk Kangal Haddehanesine Ait Örnek Ekran</h1></div>
+
+    <!-- FİLTRE ALANI -->
+    <div class="filters">
+      <div class="field">
+        <label>Sipariş No</label>
+        <input type="text" id="fSiparis" placeholder="4000…">
+      </div>
+      <div class="field">
+        <label>Malzeme Kodu</label>
+        <input type="text" id="fMalzeme" placeholder="8000…">
+      </div>
+      <div class="field">
+        <label>Kalite</label>
+        <select id="fKalite">
+          <option value="">Tümü</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Başlangıç Tarihi</label>
+        <input type="date" id="fStart">
+      </div>
+      <div class="field">
+        <label>Bitiş Tarihi</label>
+        <input type="date" id="fEnd">
+      </div>
+      <button class="btn-filter" onclick="applyFilters()">Filtrele</button>
+    </div>
+
+    <!-- TABLO -->
+    <div class="main-report-area">
+      <h2 class="report-title">ÜRETİM PROGRAMI DÖKÜM ATAMA</h2>
+
+      <div style="overflow-x:auto; width:100%;">
+        <table class="data-table" style="min-width:1400px;">
+          <thead>
+            <tr>
+              <th>Sipariş No</th>
+              <th>Malzeme Kodu</th>
+              <th>Kesit</th>
+              <th>Kalite</th>
+              <th>Toplam Kampanya Planlanan Üretim Miktarı</th>
+              <th>Toplam Kampanya Planlanan Tüketim Miktarı</th>
+              <th>Planlanan Üretim Tarihi</th>
+              <th>Planlanan Üretim Miktarı</th>
+              <th>Planlanan YM Tüketim Miktarı</th>
+              <th>Bağlanan YM Miktarı</th>
+              <th>Açıklama</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="program-table-body"></tbody>
+        </table>
+      </div>
     </div>
   </div>
+
+<script>
+/* ÖRNEK VERİLER */
+const uretimProgrami = [
+  {
+    siparis:"400000001591",
+    malzeme:"80000025",
+    kesit:"140",
+    kalite:"B420C_00",
+    kampUretim:"1200",
+    kampTuketim:"1320",
+    planTarih:"25/10/2025",
+    planUretim:"1200",
+    planYM:"1320",
+    bagliYM:"498",
+    aciklama:""
+  },
+  {
+    siparis:"400000001592",
+    malzeme:"80000025",
+    kesit:"150",
+    kalite:"B420C_00",
+    kampUretim:"1600",
+    kampTuketim:"1760",
+    planTarih:"25/10/2025",
+    planUretim:"1600",
+    planYM:"1760",
+    bagliYM:"0",
+    aciklama:""
+  },
+  {
+    siparis:"400000001593",
+    malzeme:"80000025",
+    kesit:"170",
+    kalite:"B420C_01",
+    kampUretim:"1400",
+    kampTuketim:"1540",
+    planTarih:"25/10/2025",
+    planUretim:"1400",
+    planYM:"1540",
+    bagliYM:"0",
+    aciklama:""
+  },
+  {
+    siparis:"400000001594",
+    malzeme:"80000025",
+    kesit:"170",
+    kalite:"B420C_02",
+    kampUretim:"2500",
+    kampTuketim:"2750",
+    planTarih:"26/10/2025",
+    planUretim:"1300",
+    planYM:"1430",
+    bagliYM:"0",
+    aciklama:""
+  },
+  {
+    siparis:"400000001595",
+    malzeme:"80000025",
+    kesit:"170",
+    kalite:"B420C_02",
+    kampUretim:"1200",
+    kampTuketim:"1320",
+    planTarih:"26/10/2025",
+    planUretim:"1200",
+    planYM:"1320",
+    bagliYM:"0",
+    aciklama:""
+  }
+];
+
+/* dd/MM/yyyy -> yyyy-MM-dd */
+function toISO(dmy){
+  const [d,m,y] = dmy.split("/");
+  return `${y}-${m}-${d}`;
+}
+
+/* TABLOYU BAS */
+function renderTable(rows){
+  const tb = document.getElementById("program-table-body");
+  tb.innerHTML = "";
+  rows.forEach(r => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td class="col-siparis">${r.siparis}</td>
+      <td class="col-malzemekodu">${r.malzeme}</td>
+      <td class="col-kesit">${r.kesit}</td>
+      <td class="col-kalite">${r.kalite}</td>
+      <td>${r.kampUretim}</td>
+      <td>${r.kampTuketim}</td>
+      <td>${r.planTarih}</td>
+      <td>${r.planUretim}</td>
+      <td class="col-plan-ym">${r.planYM}</td>
+      <td>${r.bagliYM}</td>
+      <td>${r.aciklama || ""}</td>
+      <td><button class="btn-dokum">Döküm No Ata</button></td>
+    `;
+    tb.appendChild(tr);
+  });
+}
+
+/* KALİTE DROPDOWN DOLDUR */
+function initKalite(){
+  const set = [...new Set(uretimProgrami.map(r => r.kalite))];
+  const sel = document.getElementById("fKalite");
+  set.forEach(k => {
+    const opt = document.createElement("option");
+    opt.value = k;
+    opt.textContent = k;
+    sel.appendChild(opt);
+  });
+}
+
+/* FİLTRE UYGULA */
+function applyFilters(){
+  const qSip  = document.getElementById("fSiparis").value.trim();
+  const qMal  = document.getElementById("fMalzeme").value.trim();
+  const qKal  = document.getElementById("fKalite").value;
+  const qS    = document.getElementById("fStart").value;
+  const qE    = document.getElementById("fEnd").value;
+
+  let out = uretimProgrami.slice();
+
+  if (qSip) out = out.filter(r => r.siparis.includes(qSip));
+  if (qMal) out = out.filter(r => r.malzeme.includes(qMal));
+  if (qKal) out = out.filter(r => r.kalite === qKal);
+  if (qS)   out = out.filter(r => new Date(toISO(r.planTarih)) >= new Date(qS));
+  if (qE)   out = out.filter(r => new Date(toISO(r.planTarih)) <= new Date(qE));
+
+  renderTable(out);
+}
+
+/* INIT */
+document.addEventListener("DOMContentLoaded", () => {
+  renderTable(uretimProgrami);
+  initKalite();
+});
+</script>
 </body>
 </html>
