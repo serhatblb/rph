@@ -7,6 +7,74 @@
   <title> İş Emri Bilgileri</title>
   <link href="style.css" rel="stylesheet" />
   <style>
+    .page-signature {
+      /* Yerleşim */
+      margin-left: auto;
+      margin-top: 14px;
+      margin-right: 18px;
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+
+      /* PREMIUM KUTU TASARIMI */
+      background: linear-gradient(135deg, #ffffff 0%, #f0f4ff 100%);
+      border: 1px solid #c5d2e9;
+      border-left: 4px solid #e00f0f;
+      /* sol şerit: kurumsal MAVI */
+      padding: 10px 20px;
+      border-radius: 10px;
+
+      /* Gölgeli & yüksek kalite hissi */
+      box-shadow:
+        0 2px 4px rgba(255, 3, 3, 0.05),
+        0 6px 16px rgba(231, 15, 15, 0.1);
+      /* kardemir mavisiyle yumuşak gölge */
+
+      /* Animasyon */
+      animation: fadeInUp 0.6s ease-out;
+      cursor: default;
+      user-select: none;
+    }
+
+    /* İkon daha güçlü hale gelsin */
+    .signature-icon {
+      font-size: 22px;
+      color: #1976d2;
+      /* Kardemir mavisi */
+      text-shadow: 0 1px 2px rgb(234, 45, 45);
+    }
+
+    /* Yazı daha güçlü */
+    .signature-text {
+      font-size: 14.5px;
+      font-weight: 700;
+      color: #d10d0d;
+      /* koyu kurumsal mavi */
+      letter-spacing: .6px;
+    }
+
+    /* Hafif yukarıdan gelme animasyonu */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(-6px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Hover efekti (çok abartmadan) */
+    .page-signature:hover {
+      box-shadow:
+        0 3px 6px rgba(240, 44, 44, 0.925),
+        0 8px 20px rgba(210, 25, 25, 0.18);
+      transform: translateY(-1px);
+      transition: 0.25s ease;
+    }
     .page-header {
       background: #fff;
       padding: 20px 25px;
@@ -415,6 +483,11 @@
   </aside>
 
   <div class="content-wrapper">
+    <div class="page-signature">
+      <span class="signature-icon"></span>
+      <span class="signature-text">Üretim Yönetim Sistemleri Başmühendisliği Tarafından Prototip Olarak
+        Geliştirilmiştir.</span>
+    </div>
     <header class="header">
       <div class="breadcrumbs">
         <a href="#">Ana Sayfa</a><span>&gt;</span><span>RPH – İş Emri Sayfası</span>
