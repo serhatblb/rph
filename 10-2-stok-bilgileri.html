@@ -1,103 +1,767 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Kardemir - Üretim Programı Görünümü</title>
-  <link href="style.css" rel="stylesheet" />
-  <style>
-    :root {
-      --sidebar-bg: #001540;
-      --content-bg: #f4f6fa;
-      --panel-bg: #ffffff;
-      --shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-      --radius: 16px;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stok İzleme Ekranı</title>
+    <link href="sidebar.css" rel="stylesheet" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    body {
-      font-family: 'Segoe UI', Arial, sans-serif;
-      margin: 0;
-      background: var(--content-bg);
-      display: flex;
-      height: 100vh;
-      overflow: hidden;
-    }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #eeeff2 0%, #f6f6f6 50%, #f7f8f9 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
 
-    /* Sidebar */
-    aside {
-      width: 250px;
-      background: var(--sidebar-bg);
-      color: #fff;
-      box-shadow: 4px 0 15px rgba(0, 0, 0, 0.2);
-      z-index: 10;
-      position: fixed;
-      top: 0;
-      left: 0;
-      bottom: 0;
-    }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            margin-left: 240px;
+        }
 
-    .sidebar-container {
-      padding: 20px;
-      height: 100%;
-      overflow-y: auto;
-    }
+        .header {
+            background: linear-gradient(135deg, #25496f 0%, #1b263b 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            border-bottom: 4px solid #c1121f;
+        }
 
-    /* İçerik Alanı */
-    .content-wrapper {
-      margin-left: 250px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      background: var(--content-bg);
-      padding: 20px;
-      box-sizing: border-box;
-    }
+        .header h1 {
+            font-size: 32px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
 
-    .panel {
-      background: var(--panel-bg);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 20px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
+        .filter-section {
+            background: linear-gradient(135deg, #e8eaed 0%, #f5f5f5 100%);
+            padding: 25px 30px;
+            border-bottom: 4px solid #0d1b2a;
+        }
 
-    .panel:hover {
-      transform: scale(1.01);
-      box-shadow: 0 14px 40px rgba(0, 0, 0, 0.18);
-    }
+        .filter-row {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
 
-    img {
-      max-width: 100%;
-      max-height: 85vh;
-      border-radius: 10px;
-      border: 1px solid #dfe3e8;
-      object-fit: contain;
-    }
-  </style>
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            min-width: 200px;
+        }
+
+        .filter-group label {
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 14px;
+        }
+
+        .filter-group input,
+        .filter-group select {
+            padding: 12px 15px;
+            border: 2px solid #bdc3c7;
+            border-radius: 8px;
+            font-size: 15px;
+            transition: all 0.3s;
+            background: white;
+        }
+
+        .filter-group input:focus,
+        .filter-group select:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+        }
+
+        .btn-filter {
+            padding: 12px 30px;
+            background: linear-gradient(135deg, #0d1b2a 0%, #1b263b 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 600;
+            transition: all 0.3s;
+            margin-top: 22px;
+        }
+
+        .btn-filter:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(13, 27, 42, 0.4);
+            background: linear-gradient(135deg, #1b263b 0%, #2c3e50 100%);
+        }
+
+        .table-container {
+            padding: 30px;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+
+        thead {
+            background: linear-gradient(135deg, #0d1b2a 0%, #1b263b 100%);
+            color: white;
+        }
+
+        th {
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #ecf0f1;
+            font-size: 14px;
+            color: #2c3e50;
+        }
+
+        tbody tr {
+            transition: all 0.3s;
+        }
+
+        tbody tr:hover {
+            background: #e8eaed;
+            transform: scale(1.01);
+        }
+
+        .btn-detay {
+            padding: 8px 20px;
+            background: linear-gradient(135deg, #c1121f 0%, #9a0f19 100%);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            font-size: 13px;
+        }
+
+        .btn-detay:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(193, 18, 31, 0.4);
+            background: linear-gradient(135deg, #9a0f19 0%, #780c13 100%);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-content {
+            position: relative;
+            background: white;
+            margin: 3% auto;
+            width: 90%;
+            max-width: 600px;
+            border-radius: 20px;
+            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.4);
+            animation: slideUp 0.4s;
+            overflow: hidden;
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, #0d1b2a 0%, #1b263b 100%);
+            color: white;
+            padding: 25px;
+            border-bottom: 3px solid #c1121f;
+        }
+
+        .modal-header h2 {
+            font-size: 22px;
+            font-weight: 600;
+        }
+
+        .modal-info {
+            padding: 25px;
+            background: linear-gradient(135deg, #e8eaed 0%, #f5f5f5 100%);
+            border-bottom: 3px solid #0d1b2a;
+            flex-shrink: 0;
+        }
+
+        .info-item {
+            margin-bottom: 15px;
+            font-size: 15px;
+            color: #2c3e50;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .info-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .info-item strong {
+            color: #34495e;
+            font-weight: 600;
+        }
+
+        .modal-body {
+            padding: 0;
+            max-height: 450px;
+            overflow-y: auto;
+            background: white;
+        }
+
+        .kutuk-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .kutuk-table thead {
+            background: linear-gradient(135deg, #0d1b2a 0%, #1b263b 100%);
+            color: white;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .kutuk-table th {
+            padding: 15px;
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            text-align: center;
+        }
+
+        .kutuk-table td {
+            padding: 15px;
+            text-align: center;
+            border-bottom: 1px solid #ecf0f1;
+            background: white;
+            font-weight: 500;
+        }
+
+        .kutuk-table tbody tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .kutuk-table tbody tr:hover {
+            background: #e3f2fd;
+            transition: all 0.2s;
+        }
+
+        .modal-footer {
+            padding: 20px 25px;
+            background: linear-gradient(135deg, #ecf0f1 0%, #f8f9fa 100%);
+            text-align: right;
+            border-top: 1px solid #ddd;
+            flex-shrink: 0;
+        }
+
+        .btn-close {
+            padding: 10px 30px;
+            background: linear-gradient(135deg, #95a5a6 0%, #7f8c8d 100%);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn-close:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(127, 140, 141, 0.3);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #95a5a6;
+        }
+
+        .empty-state i {
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+
+        .empty-state p {
+            font-size: 18px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .badge-ton {
+            background: linear-gradient(135deg, #0d1b2a 0%, #1b263b 100%);
+            color: white;
+        }
+
+        .badge-adet {
+            background: linear-gradient(135deg, #c1121f 0%, #9a0f19 100%);
+            color: white;
+        }
+
+        /* Scrollbar styling */
+        .modal-body::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        .modal-body::-webkit-scrollbar-track {
+            background: #ecf0f1;
+        }
+
+        .modal-body::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #0d1b2a 0%, #1b263b 100%);
+            border-radius: 5px;
+        }
+
+        .modal-body::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #1b263b 0%, #2c3e50 100%);
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #ecf0f1;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #95a5a6;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #7f8c8d;
+        }
+
+        @media (max-width: 768px) {
+            .filter-row {
+                flex-direction: column;
+            }
+
+            .filter-group {
+                width: 100%;
+            }
+
+            .table-container {
+                padding: 15px;
+            }
+
+            th, td {
+                padding: 10px;
+                font-size: 13px;
+            }
+        }
+    </style>
 </head>
 <body>
   <!-- Sidebar -->
-  <aside id="sidebar">
-    <div id="sidebar-container" class="sidebar-container"></div>
+  <aside id="sidebar" >
+    <div id="sidebar-container"></div>
     <script>
       fetch("sidebar.html")
-        .then((res) => res.text())
-        .then((data) => (document.getElementById("sidebar-container").innerHTML = data));
+        .then(r=>r.text())
+        .then(html=>{document.getElementById("sidebar-container").innerHTML=html});
     </script>
   </aside>
+<div class="container">
+    <div class="header">
+        <h1> Stok İzleme Ekranı</h1>
 
-  <!-- İçerik -->
-  <div class="content-wrapper">
-    <div>
-      <h1>RPH Stok İzleme Ekranı </h1>
-      <!-- <h1>Çubuk Kangal Haddehanesine Ait Örnek Ekran</h1></div> -->
-    <div class="panel">
-      <img src="resimler/stok-izleme.png" alt="İş Emri Döküm Eşleştirme Ekranı">
     </div>
-  </div>
+
+    <div class="filter-section">
+        <div class="filter-row">
+            <div class="filter-group">
+                <label for="dokumNoFilter">Döküm No Seç</label>
+                <select id="dokumNoFilter">
+                    <option value="">Tümü</option>
+                    <option value="HEPSI">HEPSI</option>
+                    <option value="25100213">25100213</option>
+                    <option value="25200288">25200288</option>
+                    <option value="25300083">25300083</option>
+                    <option value="25100210">25100210</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label for="kaliteFilter">Kalite Seç</label>
+                <select id="kaliteFilter">
+                    <option value="">Tümü</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label for="kesitFilter">Kesit Seç</label>
+                <select id="kesitFilter">
+                    <option value="">Tümü</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label for="malzemeTanimiFilter">Malzeme Tanımı</label>
+                <select id="malzemeTanimiFilter">
+                    <option value="">Tümü</option>
+                </select>
+            </div>
+
+            <button class="btn-filter" onclick="filterTable()">🔍 Filtrele</button>
+            <button class="btn-filter" onclick="clearFilters()" style="background: linear-gradient(135deg, #c1121f 0%, #9a0f19 100%);">🔄 Temizle</button>
+        </div>
+    </div>
+
+    <div class="table-container">
+        <table id="mainTable">
+            <thead>
+            <tr>
+                <th>İşlem</th>
+                <th>Döküm No</th>
+                <th>Stok Yeri</th>
+                <th>Malzeme Tanımı</th>
+                <th>Had Sipariş No</th>
+                <th>Planlanan Sipariş No</th>
+                <th>Tonaj</th>
+                <th>Adet</th>
+                <th>Kalite</th>
+                <th>Kesit</th>
+            </tr>
+            </thead>
+            <tbody id="tableBody">
+            <!-- Data will be inserted here -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Detay Modal -->
+<div id="detayModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>📊 Kütük Detayları</h2>
+        </div>
+        <div class="modal-info">
+            <div class="info-item"><strong>Stok Yeri:</strong> <span id="modalStokYeri"></span></div>
+            <div class="info-item"><strong>Döküm No:</strong> <span id="modalDokumNo"></span></div>
+            <div class="info-item"><strong>Kütük Adedi:</strong> <span id="modalKutukAdet" class="badge badge-adet"></span></div>
+            <div class="info-item"><strong>Tonaj:</strong> <span id="modalTonaj" class="badge badge-ton"></span></div>
+        </div>
+        <div class="modal-body">
+            <table class="kutuk-table">
+                <thead>
+                <tr>
+                    <th>Kütük ID</th>
+                    <th>Tonaj</th>
+                </tr>
+                </thead>
+                <tbody id="kutukTableBody">
+                <!-- Kütük data will be inserted here -->
+                </tbody>
+            </table>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-close" onclick="closeModal()">✖ Kapat</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Sample data - Gerçek verilerinizi buraya ekleyebilirsiniz
+    const dokumData = [
+        {
+            dokum_no: "25100213",
+            stok_yeri: "RPH",
+            malzeme_tanimi: "HEB 400 S275JR_00 12000 PROFIL",
+            had_siparis_no: "-",
+            planlanan_siparis_no: "3XXXX27",
+            tonaj: 60,
+            adet: 24,
+            kalite: "S275JR_01",
+            kesit: 52.5
+        },
+        {
+            dokum_no: "25100214",
+            stok_yeri: "RPH",
+            malzeme_tanimi: "RAY 60E2 R260_02 36000",
+            had_siparis_no: "3XXXX66",
+            planlanan_siparis_no: "3XXXX27",
+            tonaj: 60,
+            adet: 24,
+            kalite: "S275JR_02",
+            kesit: 9
+        },
+        {
+            dokum_no: "25100215",
+            stok_yeri: "SDM",
+            malzeme_tanimi: "IPE 500 S275JR_00 12000 PROFIL",
+            had_siparis_no: "-",
+            planlanan_siparis_no: "3XXXX27",
+            tonaj: 60,
+            adet: 24,
+            kalite: "S275JR_00",
+            kesit: 9
+        },
+        {
+            dokum_no: "25100213",
+            stok_yeri: "RPH",
+            malzeme_tanimi: "HEB 400 S275JR_00 12000 PROFIL",
+            had_siparis_no: "-",
+            planlanan_siparis_no: "3XXXX27",
+            tonaj: 60,
+            adet: 24,
+            kalite: "S275JR_01",
+            kesit: 52.5
+        },
+        {
+            dokum_no: "25100215",
+            stok_yeri: "RPH",
+            malzeme_tanimi: "RAY 60E2 R260_02 36000",
+            had_siparis_no: "3XXXX66",
+            planlanan_siparis_no: "3XXXX27",
+            tonaj: 60,
+            adet: 24,
+            kalite: "S275JR_02",
+            kesit: 9
+        },
+        {
+            dokum_no: "25100213",
+            stok_yeri: "RPH",
+            malzeme_tanimi: "HEB 400 S275JR_00 12000 PROFIL",
+            had_siparis_no: "-",
+            planlanan_siparis_no: "3XXXX27",
+            tonaj: 60,
+            adet: 24,
+            kalite: "S275JR_01",
+            kesit: 52.5
+        },
+        {
+            dokum_no: "25100223",
+            stok_yeri: "RPH",
+            malzeme_tanimi: "HEB 400 S275JR_00 12000 PROFIL",
+            had_siparis_no: "-",
+            planlanan_siparis_no: "3XXXX27",
+            tonaj: 60,
+            adet: 24,
+            kalite: "S275JR_00",
+            kesit: 52.5
+        },
+    ];
+
+    let allData = [...dokumData];
+
+    // Initialize table
+    function renderTable(data) {
+        const tbody = document.getElementById('tableBody');
+        tbody.innerHTML = '';
+
+        if (data.length === 0) {
+            tbody.innerHTML = `
+                    <tr>
+                        <td colspan="10" class="empty-state">
+                            <p>📭 Gösterilecek kayıt bulunamadı</p>
+                        </td>
+                    </tr>
+                `;
+            return;
+        }
+
+        data.forEach((item, index) => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                    <td><button class="btn-detay" onclick="showDetails('${item.dokum_no}', '${item.stok_yeri}', ${item.tonaj}, ${item.adet})">Detay</button></td>
+                    <td>${item.dokum_no}</td>
+                    <td>${item.stok_yeri}</td>
+                    <td>${item.malzeme_tanimi}</td>
+                    <td>${item.had_siparis_no}</td>
+                    <td>${item.planlanan_siparis_no}</td>
+                    <td><span class="badge badge-ton">${item.tonaj} ton</span></td>
+                    <td><span class="badge badge-adet">${item.adet}</span></td>
+                    <td>${item.kalite}</td>
+                    <td>${item.kesit}</td>
+                `;
+            tbody.appendChild(row);
+        });
+    }
+
+    // Filter function
+    function filterTable() {
+        const dokumNo = document.getElementById('dokumNoFilter').value;
+        const kalite = document.getElementById('kaliteFilter').value;
+        const kesit = document.getElementById('kesitFilter').value;
+        const malzemeTanimi = document.getElementById('malzemeTanimiFilter').value;
+
+        let filtered = [...dokumData];
+
+        // Döküm No filtresi
+        if (dokumNo && dokumNo !== '' && dokumNo !== 'HEPSI') {
+            filtered = filtered.filter(item => item.dokum_no === dokumNo);
+        }
+
+        // Kalite filtresi
+        if (kalite && kalite !== '') {
+            filtered = filtered.filter(item => item.kalite === kalite);
+        }
+
+        // Kesit filtresi
+        if (kesit && kesit !== '') {
+            filtered = filtered.filter(item => item.kesit.toString() === kesit);
+        }
+
+        // Malzeme Tanımı filtresi
+        if (malzemeTanimi && malzemeTanimi !== '') {
+            filtered = filtered.filter(item => item.malzeme_tanimi === malzemeTanimi);
+        }
+
+        renderTable(filtered);
+    }
+
+    // Clear filters
+    function clearFilters() {
+        document.getElementById('dokumNoFilter').value = '';
+        document.getElementById('kaliteFilter').value = '';
+        document.getElementById('kesitFilter').value = '';
+        document.getElementById('malzemeTanimiFilter').value = '';
+        renderTable(dokumData);
+    }
+
+    // Show details modal
+    function showDetails(dokumNo, stokYeri, tonaj, adet) {
+        document.getElementById('modalDokumNo').textContent = dokumNo;
+        document.getElementById('modalStokYeri').textContent = stokYeri;
+        document.getElementById('modalTonaj').textContent = tonaj + ' ton';
+        document.getElementById('modalKutukAdet').textContent = adet;
+
+        // Generate kütük data
+        const kutukTableBody = document.getElementById('kutukTableBody');
+        kutukTableBody.innerHTML = '';
+
+        const tonPerKutuk = (tonaj / adet).toFixed(1);
+
+        for (let i = 1; i <= adet; i++) {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                    <td><strong>${dokumNo}_${i}</strong></td>
+                    <td><span class="badge badge-ton">${tonPerKutuk} ton</span></td>
+                `;
+            kutukTableBody.appendChild(row);
+        }
+
+        document.getElementById('detayModal').style.display = 'block';
+        document.body.style.overflow = 'hidden'; // Prevent background scroll
+    }
+
+    // Close modal
+    function closeModal() {
+        document.getElementById('detayModal').style.display = 'none';
+        document.body.style.overflow = 'auto'; // Restore background scroll
+    }
+
+    // Close modal when clicking outside
+    window.onclick = function(event) {
+        const modal = document.getElementById('detayModal');
+        if (event.target === modal) {
+            closeModal();
+        }
+    }
+
+    // Close with ESC key
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape') {
+            closeModal();
+        }
+    });
+
+    // Initialize table on load
+    renderTable(dokumData);
+
+    // Populate filter options dynamically
+    function populateFilters() {
+        // Kalite filtresini doldur
+        const kaliteSet = new Set(dokumData.map(item => item.kalite));
+        const kaliteFilter = document.getElementById('kaliteFilter');
+        kaliteSet.forEach(kalite => {
+            const option = document.createElement('option');
+            option.value = kalite;
+            option.textContent = kalite;
+            kaliteFilter.appendChild(option);
+        });
+
+        // Kesit filtresini doldur
+        const kesitSet = new Set(dokumData.map(item => item.kesit.toString()));
+        const kesitFilter = document.getElementById('kesitFilter');
+        Array.from(kesitSet).sort((a, b) => parseFloat(a) - parseFloat(b)).forEach(kesit => {
+            const option = document.createElement('option');
+            option.value = kesit;
+            option.textContent = kesit;
+            kesitFilter.appendChild(option);
+        });
+
+        // Malzeme Tanımı filtresini doldur
+        const malzemeSet = new Set(dokumData.map(item => item.malzeme_tanimi));
+        const malzemeFilter = document.getElementById('malzemeTanimiFilter');
+        malzemeSet.forEach(malzeme => {
+            const option = document.createElement('option');
+            option.value = malzeme;
+            option.textContent = malzeme;
+            malzemeFilter.appendChild(option);
+        });
+    }
+
+    // Initialize filters
+    populateFilters();
+</script>
 </body>
 </html>

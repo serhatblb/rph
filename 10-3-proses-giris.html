@@ -6,23 +6,113 @@
   <title>Kardemir - Proses Parametreleri Takip Ekranı</title>
   <link href="style.css" rel="stylesheet" />
   <style>
-    .card{background:#fff;border-radius:6px;box-shadow:0 1px 3px rgba(0,0,0,.1);margin-bottom:20px}
-    .card-header{display:flex;justify-content:space-between;align-items:center;padding:12px 15px;background:#f8f9fa;font-weight:700;border-bottom:1px solid #ddd;color:#2c3e50}
-    .card-body{padding:15px}
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
 
-    .data-table{width:100%;border-collapse:collapse}
-    .data-table th,.data-table td{border:1px solid #dee2e6;padding:8px;text-align:center;font-size:14px}
-    .data-table th{background:#f1f1f1;text-transform:uppercase;font-size:13px}
+    .data-table th, .data-table td {
+      border: 1px solid #e0e0e0;
+      padding: 10px 14px;
+      text-align: center;
+      font-size: 14px;
+      white-space: nowrap;
+    }
 
-    .btn-edit{background:#1976d2;color:#fff;border:0;padding:6px 12px;border-radius:4px;cursor:pointer}
-    .btn-save{background:#28a745;color:#fff;border:0;padding:6px 12px;border-radius:4px;cursor:pointer}
-    .btn-cancel{background:#dc3545;color:#fff;border:0;padding:6px 12px;border-radius:4px;cursor:pointer}
-    .btn-add{background:#ffc107;color:#000;border:0;padding:6px 12px;border-radius:4px;cursor:pointer;margin-top:10px}
+    .data-table th {
+      background: #f9fafb;
+      font-weight: 600;
+      color: #2c3e50;
+    }
 
-    /* Slit & Tekli, hiyerarşi hissini kaldır */
-    #table-slit .rowhead{background:#f1f1f1;font-weight:700;text-transform:none;width:160px;text-align:left}
-    #table-slit td{background:#fff}
-    #table-slit .value{font-weight:600}
+    .table-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+      margin-top: 24px;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,.1);
+      padding: 0;
+    }
+
+    .card-header {
+      font-size: 16px;
+      font-weight: 600;
+      background: #f6f7f8;
+      color: #37474f;
+      padding: 14px 18px;
+      border-bottom: 2px solid #ddd;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .card-body {
+      padding: 16px;
+    }
+
+    .btn-edit, .btn-save, .btn-cancel, .btn-add {
+      font-size: 13px;
+      padding: 6px 12px;
+      border-radius: 4px;
+      margin-left: 6px;
+      border: none;
+      cursor: pointer;
+      font-weight: 500;
+    }
+
+    .btn-edit {
+      background: #2b7de9;
+      color: white;
+    }
+
+    .btn-save {
+      background: #28a745;
+      color: white;
+    }
+
+    .btn-cancel {
+      background: #dc3545;
+      color: white;
+    }
+
+    .btn-add {
+      background: #6c757d;
+      color: white;
+    }
+
+    .btn-edit:hover { background: #1e5db8; }
+    .btn-save:hover { background: #218838; }
+    .btn-cancel:hover { background: #c82333; }
+    .btn-add:hover { background: #5a6268; }
+
+    .data-table input {
+      width: 100%;
+      padding: 6px 8px;
+      font-size: 14px;
+      text-align: center;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+
+    #table-slit td { background: #fff; }
+    #table-slit .value { font-weight: 600; }
+    #table-slit .rowhead {
+      background: #f9fafb;
+      font-weight: 600;
+      text-align: left;
+      padding-left: 14px;
+    }
+
+    @media (max-width: 1200px) {
+      .table-grid {
+        grid-template-columns: 1fr;
+      }
+    }
   </style>
 </head>
 <body>
@@ -46,202 +136,213 @@
 
     <h2 class="report-title">Proses Parametreleri Takip Ekranı</h2>
 
-    <!-- TABLO 1 -->
-    <div class="card">
-      <div class="card-header"><span>Ebat – Ton/Saat – Ton/Gün</span><div class="actions"></div></div>
-      <div class="card-body">
-        <table id="table-ebat" class="data-table">
-          <thead><tr><th>Ebat</th><th>Ton/Saat</th><th>Ton/Gün</th></tr></thead>
-          <tbody></tbody>
-        </table>
+    <div class="table-grid">
+      <!-- TABLO 1 -->
+      <div class="card">
+        <div class="card-header">
+          <span>Ebat – Ton/Saat – Ton/Gün</span>
+          <div class="actions"></div>
+        </div>
+        <div class="card-body">
+          <table id="table-ebat" class="data-table">
+            <thead>
+              <tr>
+                <th>Ebat</th>
+                <th>Ton/Saat</th>
+                <th>Ton/Gün</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
       </div>
-    </div>
 
-    <!-- TABLO 2 -->
-    <div class="card">
-      <div class="card-header"><span>Ortalama Üretim</span><div class="actions"></div></div>
-      <div class="card-body">
-        <table id="table-uretim" class="data-table">
-          <thead><tr><th>Ebat</th><th>Ortalama Üretim (Ton)</th></tr></thead>
-          <tbody></tbody>
-        </table>
+      <!-- TABLO 2 -->
+      <div class="card">
+        <div class="card-header">
+          <span>Ortalama Üretim</span>
+          <div class="actions"></div>
+        </div>
+        <div class="card-body">
+          <table id="table-uretim" class="data-table">
+            <thead>
+              <tr>
+                <th>Ebat</th>
+                <th>Ortalama Üretim (Ton)</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
       </div>
-    </div>
 
-    <!-- TABLO 3 - SLIT & TEKLİ (eşit düzeyde iki satır) -->
-    <div class="card">
-      <div class="card-header"><span>Slit & Tekli Grup</span><div class="actions"></div></div>
-      <div class="card-body">
-        <table id="table-slit" class="data-table">
-          <tbody></tbody>
-        </table>
+      <!-- TABLO 3 - SLIT & TEKLİ -->
+      <div class="card">
+        <div class="card-header">
+          <span>Slit & Tekli Grup</span>
+          <div class="actions"></div>
+        </div>
+        <div class="card-body">
+          <table id="table-slit" class="data-table">
+            <tbody></tbody>
+          </table>
+        </div>
       </div>
-    </div>
 
-    <!-- TABLO 4 -->
-    <div class="card">
-      <div class="card-header"><span>Kalite Kodları</span><div class="actions"></div></div>
-      <div class="card-body">
-        <table id="table-kalite" class="data-table">
-          <thead><tr><th>Çap</th><th>Kalite</th><th>Boy</th></tr></thead>
-          <tbody></tbody>
-        </table>
+      <!-- TABLO 4 -->
+      <div class="card">
+        <div class="card-header">
+          <span>Kalite Kodları</span>
+          <div class="actions"></div>
+        </div>
+        <div class="card-body">
+          <table id="table-kalite" class="data-table">
+            <thead>
+              <tr>
+                <th>Çap</th>
+                <th>Kalite</th>
+                <th>Boy</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
       </div>
     </div>
   </div>
 
   <script>
-    // --- Veri ---
     let data = {
       ebat: [
         { ebat: 12, saat: 61, gun: 1470 },
         { ebat: 14, saat: 82, gun: 1970 },
         { ebat: 16, saat: 84, gun: 2011 },
-        { ebat: 18, saat: 84, gun: 2011 },
-        { ebat: 20, saat: 83, gun: 1999 },
+        
         { ebat: 22, saat: 84, gun: 2011 },
-        { ebat: 25, saat: 84, gun: 2011 },
-        { ebat: 26, saat: 84, gun: 2011 },
-        { ebat: 28, saat: 84, gun: 2011 },
-        { ebat: 32, saat: 84, gun: 2011 },
-        { ebat: 36, saat: 84, gun: 2011 }
+    
       ],
       uretim: [
         { ebat: "ø12mm", ort: 1450 },
         { ebat: "ø14mm", ort: 1890 },
-        { ebat: "ø16mm", ort: 2180 },
-        { ebat: "ø18mm", ort: 2100 },
+        
         { ebat: "ø20mm", ort: 1950 },
         { ebat: "ø22mm", ort: 2100 },
-        { ebat: "ø25mm", ort: 2200 },
-        { ebat: "ø26mm", ort: 2200 },
-        { ebat: "ø28mm", ort: 2260 },
-        { ebat: "ø32mm", ort: 2200 }
+        
       ],
       slit: [{ tekli: "20 mm ve üzeri" }],
       kalite: [
-        { cap: 12, kalite: "b420_00", boy: "12 m" },
-        { cap: 14, kalite: "b420_00", boy: "12 m" },
-        { cap: 16, kalite: "b420_01", boy: "12 m" },
-        { cap: 18, kalite: "b420_01", boy: "12 m" },
-        { cap: 20, kalite: "b420_01", boy: "12 m" },
-        { cap: 22, kalite: "b420_01", boy: "12 m" },
-        { cap: 25, kalite: "b420_01", boy: "12 m" },
-        { cap: 26, kalite: "b420_01", boy: "12 m" },
-        { cap: 28, kalite: "b420_01", boy: "12 m" },
-        { cap: 30, kalite: "b420_01", boy: "12 m" },
-        { cap: 32, kalite: "b420_01", boy: "12 m" },
-        { cap: 36, kalite: "b420_01", boy: "12 m" },
-        { cap: 40, kalite: "b420_01", boy: "12 m" }
+        { cap: 12, kalite: "S275JR_01", boy: "12 m" },
+        { cap: 14, kalite: "S275JR_00", boy: "12 m" },
+        { cap: 16, kalite: "S275JR_01", boy: "12 m" },
+        { cap: 18, kalite: "S275JR_02", boy: "12 m" },
+        { cap: 25, kalite: "S275JR_00", boy: "12 m" }
       ]
     };
 
     const SLIT_SIZES = [12, 14, 16, 18];
-  let editMode = { ebat: false, uretim: false, slit: false, kalite: false };
+    let editMode = { ebat: false, uretim: false, slit: false, kalite: false };
 
-  // 🔹 Butonları render eden header alanı
-  function renderHeader(type, title) {
-    const card = document.querySelector(`#table-${type}`).closest(".card");
-    const actions = card.querySelector(".actions");
-    actions.innerHTML = `
-      ${!editMode[type] 
-        ? `<button class="btn-edit" onclick="toggleEdit('${type}')">✏️ Düzenle</button>` 
-        : `<button class="btn-save" onclick="saveEdit('${type}')">💾 Kaydet</button>
-           <button class="btn-cancel" onclick="cancelEdit('${type}')">❌ İptal</button>`}
-      <button class="btn-add" onclick="addRow('${type}')">➕ Ekle</button>`;
-  }
+    function renderHeader(type) {
+      const card = document.querySelector(`#table-${type}`).closest(".card");
+      const actions = card.querySelector(".actions");
+      actions.innerHTML = `
+        ${!editMode[type] 
+          ? `<button class="btn-edit" onclick="toggleEdit('${type}')">✏️ Düzenle</button>` 
+          : `<button class="btn-save" onclick="saveEdit('${type}')">💾 Kaydet</button>
+             <button class="btn-cancel" onclick="cancelEdit('${type}')">❌ İptal</button>`}
+        <button class="btn-add" onclick="addRow('${type}')">➕ Ekle</button>`;
+    }
 
-  function toggleEdit(type) {
-    editMode[type] = true;
-    renderTable(type);
-  }
+    function toggleEdit(type) {
+      editMode[type] = true;
+      renderTable(type);
+    }
 
-  function saveEdit(type) {
-    editMode[type] = false;
-    renderTable(type);
-  }
+    function saveEdit(type) {
+      editMode[type] = false;
+      renderTable(type);
+    }
 
-  function cancelEdit(type) {
-    editMode[type] = false;
-    renderTable(type);
-  }
+    function cancelEdit(type) {
+      editMode[type] = false;
+      renderTable(type);
+    }
 
-  function addRow(type) {
-    if (type === "ebat") data.ebat.push({ ebat: "", saat: "", gun: "" });
-    if (type === "uretim") data.uretim.push({ ebat: "", ort: "" });
-    if (type === "kalite") data.kalite.push({ cap: "", kalite: "", boy: "" });
-    if (type === "slit") data.slit.push({ tekli: "" });
-    editMode[type] = true;
-    renderTable(type);
-  }
+    function addRow(type) {
+      if (type === "ebat") data.ebat.push({ ebat: "", saat: "", gun: "" });
+      if (type === "uretim") data.uretim.push({ ebat: "", ort: "" });
+      if (type === "kalite") data.kalite.push({ cap: "", kalite: "", boy: "" });
+      if (type === "slit") data.slit.push({ tekli: "" });
+      editMode[type] = true;
+      renderTable(type);
+    }
 
-  function renderTable(type) {
-    if (type === "slit") return renderSlit();
+    function renderTable(type) {
+      if (type === "slit") return renderSlit();
 
-    renderHeader(type);
+      renderHeader(type);
 
-    const tbody = document.querySelector(`#table-${type} tbody`);
-    tbody.innerHTML = "";
+      const tbody = document.querySelector(`#table-${type} tbody`);
+      tbody.innerHTML = "";
 
-    data[type].forEach((row, i) => {
-      if (editMode[type]) {
-        if (type === "ebat") {
+      data[type].forEach((row, i) => {
+        if (editMode[type]) {
+          if (type === "ebat") {
+            tbody.innerHTML += `<tr>
+              <td><input value="${row.ebat}" onchange="data.ebat[${i}].ebat=this.value"></td>
+              <td><input value="${row.saat}" onchange="data.ebat[${i}].saat=this.value"></td>
+              <td><input value="${row.gun}" onchange="data.ebat[${i}].gun=this.value"></td>
+            </tr>`;
+          } else if (type === "uretim") {
+            tbody.innerHTML += `<tr>
+              <td><input value="${row.ebat}" onchange="data.uretim[${i}].ebat=this.value"></td>
+              <td><input value="${row.ort}" onchange="data.uretim[${i}].ort=this.value"></td>
+            </tr>`;
+          } else if (type === "kalite") {
+            tbody.innerHTML += `<tr>
+              <td><input value="${row.cap}" onchange="data.kalite[${i}].cap=this.value"></td>
+              <td><input value="${row.kalite}" onchange="data.kalite[${i}].kalite=this.value"></td>
+              <td><input value="${row.boy}" onchange="data.kalite[${i}].boy=this.value"></td>
+            </tr>`;
+          }
+        } else {
+          if (type === "ebat")
+            tbody.innerHTML += `<tr><td>${row.ebat}</td><td>${row.saat}</td><td>${row.gun}</td></tr>`;
+          else if (type === "uretim")
+            tbody.innerHTML += `<tr><td>${row.ebat}</td><td>${row.ort}</td></tr>`;
+          else if (type === "kalite")
+            tbody.innerHTML += `<tr><td>${row.cap}</td><td>${row.kalite}</td><td>${row.boy}</td></tr>`;
+        }
+      });
+    }
+
+    function renderSlit() {
+      renderHeader("slit");
+      const tbody = document.querySelector("#table-slit tbody");
+      tbody.innerHTML = "";
+
+      const sizeCells = SLIT_SIZES.map(s => `<td>${s}</td>`).join("");
+      tbody.innerHTML += `<tr><th class="rowhead">Slit Grubu</th>${sizeCells}</tr>`;
+
+      data.slit.forEach((row, i) => {
+        if (editMode.slit) {
           tbody.innerHTML += `<tr>
-            <td><input value="${row.ebat}" onchange="data.ebat[${i}].ebat=this.value"></td>
-            <td><input value="${row.saat}" onchange="data.ebat[${i}].saat=this.value"></td>
-            <td><input value="${row.gun}" onchange="data.ebat[${i}].gun=this.value"></td>
+            <th class="rowhead">Tekli Grup</th>
+            <td colspan="4"><input value="${row.tekli}" onchange="data.slit[${i}].tekli=this.value" style="width:100%"></td>
           </tr>`;
-        } else if (type === "uretim") {
+        } else {
           tbody.innerHTML += `<tr>
-            <td><input value="${row.ebat}" onchange="data.uretim[${i}].ebat=this.value"></td>
-            <td><input value="${row.ort}" onchange="data.uretim[${i}].ort=this.value"></td>
-          </tr>`;
-        } else if (type === "kalite") {
-          tbody.innerHTML += `<tr>
-            <td><input value="${row.cap}" onchange="data.kalite[${i}].cap=this.value"></td>
-            <td><input value="${row.kalite}" onchange="data.kalite[${i}].kalite=this.value"></td>
-            <td><input value="${row.boy}" onchange="data.kalite[${i}].boy=this.value"></td>
+            <th class="rowhead">Tekli Grup</th>
+            <td colspan="4">${row.tekli}</td>
           </tr>`;
         }
-      } else {
-        if (type === "ebat")
-          tbody.innerHTML += `<tr><td>${row.ebat}</td><td>${row.saat}</td><td>${row.gun}</td></tr>`;
-        else if (type === "uretim")
-          tbody.innerHTML += `<tr><td>${row.ebat}</td><td>${row.ort}</td></tr>`;
-        else if (type === "kalite")
-          tbody.innerHTML += `<tr><td>${row.cap}</td><td>${row.kalite}</td><td>${row.boy}</td></tr>`;
-      }
-    });
-  }
+      });
+    }
 
-  function renderSlit() {
-    renderHeader("slit");
-    const tbody = document.querySelector("#table-slit tbody");
-    tbody.innerHTML = "";
-
-    const sizeCells = SLIT_SIZES.map(s => `<td>${s}</td>`).join("");
-    tbody.innerHTML += `<tr><th class="rowhead">Slit Grubu</th>${sizeCells}</tr>`;
-
-    data.slit.forEach((row, i) => {
-      if (editMode.slit) {
-        tbody.innerHTML += `<tr>
-          <th class="rowhead">Tekli Grup</th>
-          <td colspan="4"><input value="${row.tekli}" onchange="data.slit[${i}].tekli=this.value" style="width:100%"></td>
-        </tr>`;
-      } else {
-        tbody.innerHTML += `<tr>
-          <th class="rowhead">Tekli Grup</th>
-          <td colspan="4">${row.tekli}</td>
-        </tr>`;
-      }
-    });
-  }
-
-  // 🔹 Başlangıçta tüm tabloları yükle
-  renderTable("ebat");
-  renderTable("uretim");
-  renderSlit();
-  renderTable("kalite");
-</script>
+    renderTable("ebat");
+    renderTable("uretim");
+    renderSlit();
+    renderTable("kalite");
+  </script>
 </body>
 </html>
