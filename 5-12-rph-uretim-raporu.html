@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RPH Üretim Raporu - Kardemir</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="sidebar.css" rel="stylesheet" />
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:linear-gradient(135deg,#f5f7fa 0%,#e8ecf1 100%);min-height:100vh;padding:20px}
+        .container{max-width:100%;background:#fff;padding:0;border-radius:20px;box-shadow:0 10px 40px rgba(0,0,0,0.08);overflow:hidden}
+        .header{background:linear-gradient(135deg, #1d1f46 0%, #2d3561 100%);color:#fff;padding:35px 30px;text-align:center;box-shadow:0 4px 12px rgba(76, 78, 151, 0.4);position:relative;overflow:hidden}
+        .header::before{content:'';position:absolute;top:-50%;right:-50%;width:200%;height:200%;background:radial-gradient(circle,rgba(255,255,255,0.08) 0%,transparent 70%);animation:pulse 15s ease-in-out infinite}
+        @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
+        .header h1{font-size:28px;font-weight:700;margin-bottom:8px;letter-spacing:2px;position:relative;z-index:1}
+        .header p{font-size:14px;opacity:0.95;font-weight:400;position:relative;z-index:1}
+        .filters{background:linear-gradient(to bottom,#f8f9fb 0%,#ffffff 100%);padding:30px;border-bottom:2px solid #e8ecf1}
+        .filter-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:18px;margin-bottom:18px}
+        .filter-group{display:flex;flex-direction:column}
+        .filter-group label{font-weight:600;margin-bottom:8px;color:#5a6785;font-size:12px;text-transform:uppercase;letter-spacing:0.5px}
+        .filter-group input,.filter-group select{padding:11px 14px;border:2px solid #e8ecf1;border-radius:10px;font-size:14px;background:#fff;transition:all 0.3s;color:#2c3e50}
+        .filter-group input:focus,.filter-group select:focus{outline:none;border-color: #3b4376;box-shadow:0 0 0 3px rgba(45,53,97,0.15)}
+        .filter-group input:hover,.filter-group select:hover{border-color:#4a5578}
+        .button-group{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:10px}
+        .btn{padding:12px 28px;border:none;border-radius:10px;cursor:pointer;font-size:14px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;transition:all 0.3s;box-shadow:0 3px 10px rgba(0,0,0,0.15);position:relative;overflow:hidden}
+        .btn::before{content:'';position:absolute;top:50%;left:50%;width:0;height:0;border-radius:50%;background:rgba(255,255,255,0.3);transform:translate(-50%,-50%);transition:width 0.6s,height 0.6s}
+        .btn:hover::before{width:300px;height:300px}
+        .btn:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,0.2)}
+        .btn:active{transform:translateY(0)}
+        .btn-primary{background:linear-gradient(135deg, #bf3131 0%, #af2121 100%);color:#fff}
+        .btn-success{background:linear-gradient(135deg, #4958cf 0%, #7385db 100%);color:#fff}
+        .btn-info{background:linear-gradient(135deg, #7088c9 0%,#4a5578 100%);color:#fff}
+        .content-area{padding:25px}
+        .table-wrapper{overflow-x:auto;border-radius:12px;box-shadow:0 2px 15px rgba(0,0,0,0.06);border:2px solid #e8ecf1}
+        table{width:max-content;border-collapse:separate;border-spacing:0;font-size:12px;background:#fff}
+        th{background:linear-gradient(to bottom, #60699b 0%, #7a83b6 100%);color:#fff;padding:14px 10px;text-align:center;border-right:1px solid rgba(255,255,255,0.1);border-bottom:2px solid #4a5578;font-weight:600;position:sticky;top:0;z-index:10;font-size:11px;white-space:nowrap;min-width:100px;letter-spacing:0.3px}
+        th:last-child{border-right:none}
+        .group-header{background:linear-gradient(to bottom, #4a5578 0%,#3d4663 100%);font-size:11px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase}
+        td{padding:12px 10px;border-right:1px solid #e8ecf1;border-bottom:1px solid #e8ecf1;text-align:center;background:#fff;white-space:nowrap;color:#2c3e50;font-size:12px;transition:all 0.2s}
+        td:last-child{border-right:none}
+        tr:hover td{background:#f0f4ff;color:#1a1f4d;font-weight:500}
+        tr:nth-child(even) td{background:#fafbfc}
+        tr:nth-child(even):hover td{background:#f0f4ff}
+        .modal{display:none;position:fixed;z-index:2000;left:0;top:0;width:100%;height:100%;overflow:auto;background-color:rgba(0,0,0,0.5);backdrop-filter:blur(5px);animation:fadeIn 0.3s}
+        @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+        .modal-content{background:#fff;margin:2% auto;width:95%;max-width:1800px;border-radius:16px;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,0.3);animation:slideDown 0.3s}
+        @keyframes slideDown{from{transform:translateY(-30px);opacity:0}to{transform:translateY(0);opacity:1}}
+        .modal-header{background:linear-gradient(135deg, #3b4384 0%,#2d3561 100%);color:#fff;padding:24px 30px;border-radius:16px 16px 0 0;display:flex;justify-content:space-between;align-items:center;box-shadow:0 2px 10px rgba(0,0,0,0.1)}
+        .modal-header h2{font-size:22px;font-weight:700;letter-spacing:1px}
+        .close{color:#fff;font-size:28px;font-weight:300;cursor:pointer;transition:all 0.3s;width:36px;height:36px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:rgba(255,255,255,0.1)}
+        .close:hover{background:rgba(255,255,255,0.3);transform:rotate(90deg)}
+        .tab-buttons{display:flex;gap:8px;padding:20px 20px 0 20px;border-bottom:2px solid #e8ecf1;flex-wrap:wrap;background:#f8f9fb}
+        .tab-btn{padding:12px 28px;border:none;background:#fff;cursor:pointer;font-weight:600;border-radius:10px 10px 0 0;font-size:13px;color:#2c3e50;transition:all 0.3s;letter-spacing:0.5px;border:2px solid #e8ecf1;border-bottom:none}
+        .tab-btn:hover{background:#f0f4ff;color:#2d3561;transform:translateY(-2px)}
+        .tab-btn.active{background:linear-gradient(135deg,#2d3561 0%,#1a1f4d 100%);color:#fff;box-shadow:0 -3px 10px rgba(45,53,97,0.3);border:2px solid #2d3561;border-bottom:none}
+        .tab-content{display:none;padding:30px;background:#fafbfc}
+        .tab-content.active{display:block;animation:fadeInTab 0.3s}
+        @keyframes fadeInTab{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+        .ray-type-header{background:linear-gradient(135deg,#2d3561 0%,#4a5578 100%);color:#fff;padding:18px;margin-bottom:30px;text-align:center;border-radius:12px;font-size:20px;font-weight:700;letter-spacing:1.5px;box-shadow:0 4px 15px rgba(45,53,97,0.3)}
+        .yield-summary-container{display:grid;grid-template-columns:repeat(2,1fr);gap:25px;margin-top:25px}
+        .yield-panel{border:2px solid #e8ecf1;border-radius:12px;overflow:hidden;box-shadow:0 4px 15px rgba(0,0,0,0.08);transition:all 0.3s;background:#fff}
+        .yield-panel:hover{transform:translateY(-5px);box-shadow:0 8px 25px rgba(45,53,97,0.2);border-color:#4a5578}
+        .yield-panel h3{background:linear-gradient(135deg,#2d3561 0%,#4a5578 100%);color:#fff;padding:18px;margin:0;text-align:center;font-size:16px;font-weight:700;letter-spacing:1px}
+        .yield-table{width:100%;border-collapse:collapse}
+        .yield-table th,.yield-table td{border-bottom:1px solid #f5f5f5;padding:14px 18px;font-size:14px}
+        .yield-table th{text-align:left;background:#f8f9fb;font-weight:600;color:#2d3561;letter-spacing:0.3px;width:55%}
+        .yield-table td{text-align:right;color:#2c3e50;font-weight:500}
+        .yield-table td:first-of-type{width:30%;font-weight:600}
+        .yield-table td:last-of-type{width:15%;font-weight:700;color:#1a1f4d}
+        .yield-table tr:last-child th,.yield-table tr:last-child td{border-bottom:none}
+        .yield-table tr:hover{background:#f0f4ff}
+        .color-yellow{background-color:#fff8e1!important;color:#f57f17!important;font-weight:700}
+        .color-lightblue{background-color:#e3f2fd!important;color:#1565c0!important;font-weight:700}
+        .color-cyan{background-color:#e0f7fa!important;color:#00838f!important;font-weight:700}
+        .color-orange{background-color:#fff3e0!important;color:#e65100!important;font-weight:700}
+        .color-red{background-color:#ffebee!important;color:#c62828!important;font-weight:700}
+        .empty-state{text-align:center;padding:50px 20px;color:#90a4ae}
+        .empty-state i{font-size:56px;color:#b0bec5;margin-bottom:16px;opacity:0.5}
+        .empty-state p:first-of-type{font-size:18px;font-weight:600;color:#546e7a;margin-bottom:8px}
+        .empty-state p:last-of-type{font-size:14px;color:#78909c}
+        @media (max-width:1400px){
+            .yield-summary-container{grid-template-columns:1fr}
+        }
+        @media (max-width:768px){
+            .filter-row{grid-template-columns:1fr}
+            .button-group{flex-direction:column}
+            .btn{width:100%}
+            .yield-summary-container{grid-template-columns:1fr}
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+  <aside id="sidebar">
+    <div id="sidebar-container" class="sidebar-container"></div>
+    <script>
+      fetch("sidebar.html")
+        .then((res) => res.text())
+        .then((data) => (document.getElementById("sidebar-container").innerHTML = data));
+    </script>
+  </aside>
+<div class="container" style="margin-left:240px;">
+    <div class="header">
+        <h1><i class="fas fa-industry"></i> RPH ÜRETİM RAPORU</h1>
+    </div>
+    <div class="filters">
+        <div class="filter-row">
+            <div class="filter-group"><label><i class="far fa-calendar-alt"></i> Başlangıç Tarihi</label><input type="date" id="baslangic-tarihi"></div>
+            <div class="filter-group"><label><i class="far fa-calendar-alt"></i> Bitiş Tarihi</label><input type="date" id="bitis-tarihi"></div>
+            <div class="filter-group"><label><i class="fas fa-layer-group"></i> Ürün Grubu</label><select id="urun-grubu"><option value="">Tümü</option><option value="Oluklu Ray">Oluklu Ray</option><option value="Ray">Ray</option></select></div>
+            <div class="filter-group"><label><i class="fas fa-barcode"></i> Döküm No</label><input type="text" id="dokum-no" placeholder=""></div>
+        </div>
+        <div class="filter-row">
+            <div class="filter-group"><label><i class="far fa-clock"></i> Vardiya</label><select id="vardiya"><option value="">Tümü</option><option value="1">1. Vardiya</option><option value="2">2. Vardiya</option><option value="3">3. Vardiya</option></select></div>
+            <div class="filter-group"><label><i class="fas fa-star"></i> Kalite</label><select id="kalite"><option value="">Tümü</option></select></div>
+        </div>
+        <div class="button-group">
+            <button class="btn btn-primary" onclick="filtrele()"><i class="fas fa-search"></i> Filtrele</button>
+            <button class="btn btn-success" onclick="excelAktar()"><i class="fas fa-file-excel"></i> Excel</button>
+            <button class="btn btn-info" onclick="showSummary()"><i class="fas fa-chart-line"></i> Ray Özet</button>
+        </div>
+    </div>
+    <div class="content-area">
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                <tr>
+                    <th rowspan="2">Üretim Tarihi</th>
+                    <th rowspan="2">Vardiya</th>
+                    <th rowspan="2">Kampanya</th>
+                    <th rowspan="2">Ray Tipi</th>
+                    <th rowspan="2">Ray (kg/m)</th>
+                    <th rowspan="2">Kalite</th>
+                    <th rowspan="2">Döküm No</th>
+                    <th rowspan="2">Şarj<br>(Adet)</th>
+                    <th rowspan="2">Yarı Mamul<br>Birim Ağırlığı</th>
+                    <th rowspan="2">Yarı Mamül<br>Boyu</th>
+                    <th rowspan="2">Hadde Bozuğu<br>(Adet)</th>
+                    <th colspan="2" class="group-header">Kontrole Verilen</th>
+                    <th rowspan="2">1. Kalite<br>(Adet)</th>
+                    <th colspan="3" class="group-header">Hold (Adet)</th>
+                    <th colspan="40" class="group-header">Hurda (Adet)</th>
+                    <th colspan="4" class="group-header">Ton Değerleri</th>
+                    <th colspan="3" class="group-header">Hold (Ton)</th>
+                    <th rowspan="2">Hurda<br>(Ton)</th>
+                    <th colspan="5" class="group-header">RPH Kaynaklı Verim Kaybı</th>
+                    <th colspan="4" class="group-header">ÇKH-SDM Kaynaklı Verim Kaybı</th>
+                    <th colspan="8" class="group-header">Siparişe Giden</th>
+                </tr>
+                <tr>
+                    <th>Boy/Metre</th>
+                    <th>Adet</th>
+                    <th>Mastar<br>Eğrisi</th>
+                    <th>Doğrultma<br>Eğrisi</th>
+                    <th>Karar<br>Bekleyen</th>
+                    <th>Toplam</th>
+                    <th>Mantarda<br>Fitil</th>
+                    <th>Sertlik</th>
+                    <th>Bobin<br>İzi</th>
+                    <th>Vinçten<br>Düşen</th>
+                    <th>Doğrultma<br>Eğrisi</th>
+                    <th>Buruk</th>
+                    <th>Gövdesel<br>Buruk</th>
+                    <th>Ayak Ucu<br>Ezik</th>
+                    <th>Boy Tol.<br>Harici</th>
+                    <th>Tel<br>Kesme</th>
+                    <th>Hadde<br>Kısa</th>
+                    <th>Hizalama<br>Çizgisi</th>
+                    <th>Mekik<br>Yarası</th>
+                    <th>Mantar Yanak<br>Çapak</th>
+                    <th>Ayak Tabanında<br>Çapak</th>
+                    <th>Ayakta<br>Çapak</th>
+                    <th>Kesim<br>Hatası</th>
+                    <th>Role<br>İzi</th>
+                    <th>Mantar<br>Çapak</th>
+                    <th>Olukta<br>Çatlak</th>
+                    <th>Olukta<br>Çapak</th>
+                    <th>Radius<br>Çapak</th>
+                    <th>Yolluk<br>Çizgisi</th>
+                    <th>Web<br>Çapak</th>
+                    <th>Mantarda<br>Çatlak</th>
+                    <th>Doğrultma<br>Kırığı</th>
+                    <th>YMK<br>Çapak</th>
+                    <th>B1 Ray<br>Yüksekliği</th>
+                    <th>B6 Mantar<br>Genişliği</th>
+                    <th>B8 Ayak<br>Genişliği</th>
+                    <th>B9 Web<br>Kalınlığı</th>
+                    <th>B11<br>Asimetri</th>
+                    <th>B17<br>Cebire</th>
+                    <th>B4 Oluk<br>Derinliği</th>
+                    <th>B5 Oluk Kanca<br>Yüksekliği</th>
+                    <th>B7 Oluk Kafa<br>Genişliği</th>
+                    <th>B3 Oluk<br>Genişliği</th>
+                    <th>EC<br>RED</th>
+                    <th>ULT<br>RED</th>
+                    <th>Şarj</th>
+                    <th>Kontrole<br>Verilen</th>
+                    <th>Sınıf</th>
+                    <th>Hadde<br>Bozuğu</th>
+                    <th>Mastar<br>Eğrisi</th>
+                    <th>Doğrultma<br>Eğrisi</th>
+                    <th>Sonuç<br>Bekleyen</th>
+                    <th>Doğrultma<br>Kaynaklı</th>
+                    <th>Ölçü Tolerans<br>Harici</th>
+                    <th>Delme-Kesme<br>Kaynaklı</th>
+                    <th>Yüzey<br>Kusuru</th>
+                    <th>Sertlik</th>
+                    <th>ULT<br>Ret</th>
+                    <th>EC<br>Ret</th>
+                    <th>Yarı Mamul<br>Çapak/Kat</th>
+                    <th>Mantar<br>Çatlak</th>
+                    <th>72mt</th>
+                    <th>60mt</th>
+                    <th>36mt</th>
+                    <th>24mt</th>
+                    <th>18mt</th>
+                    <th>12mt</th>
+                    <th>6mt</th>
+                    <th>Kontrol</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td colspan="84" class="empty-state">
+                        <div><i class="fas fa-database"></i></div>
+                        <p>Veri Bulunmuyor</p>
+                        <p>Lütfen filtreleme yaparak verileri görüntüleyin</p>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div id="rayOzetModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2><i class="fas fa-chart-bar"></i> RAY ÜRETİM ÖZET RAPORU</h2>
+            <span class="close" onclick="hideModal()">&times;</span>
+        </div>
+        <div class="tab-buttons">
+            <button class="tab-btn active" onclick="switchTab('ray')">RAY</button>
+            <button class="tab-btn" onclick="switchTab('oluklu')">OLUKLU RAY</button>
+            <button class="tab-btn" onclick="switchTab('toplam')">TOPLAM</button>
+        </div>
+        <div id="ray-tab" class="tab-content active">
+            <div class="ray-type-header">RAY TİPİ: RAY</div>
+            <div class="yield-summary-container">
+                <div class="yield-panel">
+                    <h3>Özet Verim Tablosu</h3>
+                    <table class="yield-table">
+                        <tr><th>Toplam Şarj</th><td>0,000 ton</td><td>100,00%</td></tr>
+                        <tr><th>Haddehane Proses Kaybı</th><td>0,000</td><td>0,00%</td></tr>
+                        <tr><th>Uç-Baş/Tufal</th><td>0,000</td><td>0,00%</td></tr>
+                        <tr><th>Hadde Bozuğu</th><td>0,000</td><td>0,00%</td></tr>
+                        <tr><th>Kontrole Verilen</th><td>0,000</td><td>0,00%</td></tr>
+                        <tr><th>RPH Kalite Kaybı</th><td>0,000</td><td>0,00%</td></tr>
+                        <tr><th>Çelikhane Kalite Kaybı</th><td>0,000</td><td>0,00%</td></tr>
+                        <tr><th>HOLD</th><td>0,000</td><td>0,00%</td></tr>
+                        <tr><th>TOPLAM SİPARİŞE GİDEN</th><td>0,000</td><td>0,00%</td></tr>
+                        <tr><th>SİPARİŞE GİDEN 72mt</th><td>0,000</td><td>0,00%</td></tr>
+                        <tr><th>SİPARİŞE GİDEN 60mt</th><td>0,000</td><td>0,00%</td></tr>
+                        <tr><th>SİPARİŞE GİDEN 36mt</th><td>0,000</td><td>0,00%</td></tr>
+                        <tr><th>SİPARİŞE GİDEN 24mt</th><td>0,000</td><td>0,00%</td></tr>
+                        <tr><th>SİPARİŞE GİDEN 18mt</th><td>0,000</td><td>0,00%</td></tr>
+                        <tr><th>SİPARİŞE GİDEN 12mt</th><td>0,000</td><td>0,00%</td></tr>
+                        <tr><th>SİPARİŞE GİDEN 6mt</th><td>0,000</td><td>0,00%</td></tr>
+                        <tr class="color-yellow"><th>Kalite Oranı (Kontrole Verilene Göre)</th><td colspan="2">0,00%</td></tr>
+                        <tr class="color-orange"><th>Kalite Oranı (Şarja Göre)</th><td colspan="2">0,00%</td></tr>
+                        <tr class="color-red"><th>Satılabilir Ürün Tonajı</th><td colspan="2">0,00</td></tr>
+                    </table>
+                </div>
+                <div class="yield-panel">
+                    <h3>RPH Kaynaklı Verim Kaybı</h3>
+                    <table class="yield-table">
+                        <tr><th class="color-yellow">Doğrultma Kaynaklı</th><td>0,000 ton</td><td>0,00%</td></tr>
+                        <tr><th class="color-lightblue">Ölçü Tolerans Harici</th><td>0,000</td><td>0,00%</td></tr>
+                        <tr><th class="color-yellow">Delme-Kesme Kaynaklı</th><td>0,000</td><td>0,00%</td></tr>
+                        <tr><th>Yüzey Kusuru</th><td>0,000</td><td>0,00%</td></tr>
+                        <tr><th class="color-cyan">Sertlik</th><td>0,000</td><td>0,00%</td></tr>
+                        <tr class="color-orange"><th>TOPLAM RPH VERİM KAYBI (Şarj), %</th><td colspan="2">0,00%</td></tr>
+                        <tr class="color-orange"><th>TOPLAM RPH VERİM KAYBI (Kont. Verilen), %</th><td colspan="2">0,00%</td></tr>
+                    </table>
+                </div>
+                <div class="yield-panel">
+                    <h3>ÇKH-SDM Kaynaklı Verim Kaybı</h3>
+                    <table class="yield-table">
+                        <tr><th>ULT Ret</th><td>0,000 ton</td><td>0,00%</td></tr>
+                        <tr><th>EC Ret</th><td>0,000</td><td>0,00%</td></tr>
+                        <tr><th>Yarı Mamul Kaynaklı Çapak/Kat</th><td>0,000</td><td>0,00%</td></tr>
+                        <tr><th class="color-orange">Mantar Çatlak</th><td>0,000</td><td>0,00%</td></tr>
+                        <tr class="color-orange"><th>TOPLAM ÇKH-SDM VERİM KAYBI (Şarj), %</th><td colspan="2">0,00%</td></tr>
+                        <tr class="color-orange"><th>TOPLAM ÇKH-SDM VERİM KAYBI (Kont. Verilen), %</th><td colspan="2">0,00%</td></tr>
+                    </table>
+                </div>
+                <div class="yield-panel">
+                    <h3>Toplam HOLD</h3>
+                    <table class="yield-table">
+                        <tr><th>MASTAR EĞRİSİ</th><td>0,000 ton</td><td>0,00%</td></tr>
+                        <tr><th>DOĞRULTMA EĞRİSİ</th><td>0,000</td><td>0,00%</td></tr>
+                        <tr><th>SONUÇ BEKLEYEN</th><td>0,000</td><td>0,00%</td></tr>
+                        <tr class="color-orange"><th>TOPLAM HOLD (Şarj), %</th><td colspan="2">0,00%</td></tr>
+                        <tr class="color-orange"><th>TOPLAM HOLD (Kont. Verilen), %</th><td colspan="2">0,00%</td></tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div id="oluklu-tab" class="tab-content">
+            <div class="ray-type-header">RAY TİPİ: OLUKLU RAY</div>
+            <div class="yield-summary-container">
+                <div class="yield-panel">
+                    <h3>Özet Verim Tablosu</h3>
+                    <table class="yield-table">
+                        <tr><th>Toplam Şarj</th><td>0,000 ton</td><td>100,00%</td></tr>
+                        <tr><th>Haddehane Proses Kaybı</th><td>0,000</td><td>0,00%</td></tr>
+                        <tr><th>Uç-Baş/Tufal</th><td>0,000</td><td>0,00%</td></tr>
+                        <tr><th>Hadde Bozuğu</th><td>0,000</td><td>0,00%</td></tr>
+                        <tr><th>Kontrole Verilen</th><td>0,000</td><td>0,00%</td></tr>
+                        <tr><th>RPH Kalite Kaybı</th><td>0,000</td><td>0,00%</td></tr>
+                        <tr><th>Çelikhane Kalite Kaybı</th><td>0,000</td><td>0,00%</td></tr>
+                        <tr><th>HOLD</th><td>0,000</td><td>0,00%</td></tr>
+                        <tr><th>TOPLAM SİPARİŞE GİDEN</th><td>0,000</td><td>0,00%</td></tr>
+                        <tr><th>SİPARİŞE GİDEN 72mt</th><td>0,000</td><td>0,00%</td></tr>
+                        <tr><th>SİPARİŞE GİDEN 60mt</th><td>0,000</td><td>0,00%</td></tr>
+                        <tr><th>SİPARİŞE GİDEN 36mt</th><td>0,000</td><td>0,00%</td></tr>
+                        <tr><th>SİPARİŞE GİDEN 24mt</th><td>0,000</td><td>0,00%</td></tr>
+                        <tr><th>SİPARİŞE GİDEN 18mt</th><td>0,000</td><td>0,00%</td></tr>
+                        <tr><th>SİPARİŞE GİDEN 12mt</th><td>0,000</td><td>0,00%</td></tr>
+                        <tr><th>SİPARİŞE GİDEN 6mt</th><td>0,000</td><td>0,00%</td></tr>
+                        <tr class="color-yellow"><th>Kalite Oranı (Kontrole Verilene Göre)</th><td colspan="2">0,00%</td></tr>
+                        <tr class="color-orange"><th>Kalite Oranı (Şarja Göre)</th><td colspan="2">0,00%</td></tr>
+                        <tr class="color-red"><th>Satılabilir Ürün Tonajı</th><td colspan="2">0,00</td></tr>
+                    </table>
+                </div>
+                <div class="yield-panel">
+                    <h3>RPH Kaynaklı Verim Kaybı</h3>
+                    <table class="yield-table">
+                        <tr><th class="color-yellow">Doğrultma Kaynaklı</th><td>0,000 ton</td><td>0,00%</td></tr>
+                        <tr><th class="color-lightblue">Ölçü Tolerans Harici</th><td>0,000</td><td>0,00%</td></tr>
+                        <tr><th class="color-yellow">Delme-Kesme Kaynaklı</th><td>0,000</td><td>0,00%</td></tr>
+                        <tr><th>Yüzey Kusuru</th><td>0,000</td><td>0,00%</td></tr>
+                        <tr><th class="color-cyan">Sertlik</th><td>0,000</td><td>0,00%</td></tr>
+                        <tr class="color-orange"><th>TOPLAM RPH VERİM KAYBI (Şarj), %</th><td colspan="2">0,00%</td></tr>
+                        <tr class="color-orange"><th>TOPLAM RPH VERİM KAYBI (Kont. Verilen), %</th><td colspan="2">0,00%</td></tr>
+                    </table>
+                </div>
+                <div class="yield-panel">
+                    <h3>ÇKH-SDM Kaynaklı Verim Kaybı</h3>
+                    <table class="yield-table">
+                        <tr><th>ULT Ret</th><td>0,000 ton</td><td>0,00%</td></tr>
+                        <tr><th>EC Ret</th><td>0,000</td><td>0,00%</td></tr>
+                        <tr><th>Yarı Mamul Kaynaklı Çapak/Kat</th><td>0,000</td><td>0,00%</td></tr>
+                        <tr><th class="color-orange">Mantar Çatlak</th><td>0,000</td><td>0,00%</td></tr>
+                        <tr class="color-orange"><th>TOPLAM ÇKH-SDM VERİM KAYBI (Şarj), %</th><td colspan="2">0,00%</td></tr>
+                        <tr class="color-orange"><th>TOPLAM ÇKH-SDM VERİM KAYBI (Kont. Verilen), %</th><td colspan="2">0,00%</td></tr>
+                    </table>
+                </div>
+                <div class="yield-panel">
+                    <h3>Toplam HOLD</h3>
+                    <table class="yield-table">
+                        <tr><th>MASTAR EĞRİSİ</th><td>0,000 ton</td><td>0,00%</td></tr>
+                        <tr><th>DOĞRULTMA EĞRİSİ</th><td>0,000</td><td>0,00%</td></tr>
+                        <tr><th>SONUÇ BEKLEYEN</th><td>0,000</td><td>0,00%</td></tr>
+                        <tr class="color-orange"><th>TOPLAM HOLD (Şarj), %</th><td colspan="2">0,00%</td></tr>
+                        <tr class="color-orange"><th>TOPLAM HOLD (Kont. Verilen), %</th><td colspan="2">0,00%</td></tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div id="toplam-tab" class="tab-content">
+            <div class="ray-type-header">RAY TİPİ: TOPLAM</div>
+            <div class="yield-summary-container">
+                <div class="yield-panel">
+                    <h3>Özet Verim Tablosu</h3>
+                    <table class="yield-table">
+                        <tr><th>Toplam Şarj</th><td>0,000 ton</td><td>100,00%</td></tr>
+                        <tr><th>Haddehane Proses Kaybı</th><td>0,000</td><td>0,00%</td></tr>
+                        <tr><th>Uç-Baş/Tufal</th><td>0,000</td><td>0,00%</td></tr>
+                        <tr><th>Hadde Bozuğu</th><td>0,000</td><td>0,00%</td></tr>
+                        <tr><th>Kontrole Verilen</th><td>0,000</td><td>0,00%</td></tr>
+                        <tr><th>RPH Kalite Kaybı</th><td>0,000</td><td>0,00%</td></tr>
+                        <tr><th>Çelikhane Kalite Kaybı</th><td>0,000</td><td>0,00%</td></tr>
+                        <tr><th>HOLD</th><td>0,000</td><td>0,00%</td></tr>
+                        <tr><th>TOPLAM SİPARİŞE GİDEN</th><td>0,000</td><td>0,00%</td></tr>
+                        <tr><th>SİPARİŞE GİDEN 72mt</th><td>0,000</td><td>0,00%</td></tr>
+                        <tr><th>SİPARİŞE GİDEN 60mt</th><td>0,000</td><td>0,00%</td></tr>
+                        <tr><th>SİPARİŞE GİDEN 36mt</th><td>0,000</td><td>0,00%</td></tr>
+                        <tr><th>SİPARİŞE GİDEN 24mt</th><td>0,000</td><td>0,00%</td></tr>
+                        <tr><th>SİPARİŞE GİDEN 18mt</th><td>0,000</td><td>0,00%</td></tr>
+                        <tr><th>SİPARİŞE GİDEN 12mt</th><td>0,000</td><td>0,00%</td></tr>
+                        <tr><th>SİPARİŞE GİDEN 6mt</th><td>0,000</td><td>0,00%</td></tr>
+                        <tr class="color-yellow"><th>Kalite Oranı (Kontrole Verilene Göre)</th><td colspan="2">0,00%</td></tr>
+                        <tr class="color-orange"><th>Kalite Oranı (Şarja Göre)</th><td colspan="2">0,00%</td></tr>
+                        <tr class="color-red"><th>Satılabilir Ürün Tonajı</th><td colspan="2">0,00</td></tr>
+                    </table>
+                </div>
+                <div class="yield-panel">
+                    <h3>RPH Kaynaklı Verim Kaybı</h3>
+                    <table class="yield-table">
+                        <tr><th class="color-yellow">Doğrultma Kaynaklı</th><td>0,000 ton</td><td>0,00%</td></tr>
+                        <tr><th class="color-lightblue">Ölçü Tolerans Harici</th><td>0,000</td><td>0,00%</td></tr>
+                        <tr><th class="color-yellow">Delme-Kesme Kaynaklı</th><td>0,000</td><td>0,00%</td></tr>
+                        <tr><th>Yüzey Kusuru</th><td>0,000</td><td>0,00%</td></tr>
+                        <tr><th class="color-cyan">Sertlik</th><td>0,000</td><td>0,00%</td></tr>
+                        <tr class="color-orange"><th>TOPLAM RPH VERİM KAYBI (Şarj), %</th><td colspan="2">0,00%</td></tr>
+                        <tr class="color-orange"><th>TOPLAM RPH VERİM KAYBI (Kont. Verilen), %</th><td colspan="2">0,00%</td></tr>
+                    </table>
+                </div>
+                <div class="yield-panel">
+                    <h3>ÇKH-SDM Kaynaklı Verim Kaybı</h3>
+                    <table class="yield-table">
+                        <tr><th>ULT Ret</th><td>0,000 ton</td><td>0,00%</td></tr>
+                        <tr><th>EC Ret</th><td>0,000</td><td>0,00%</td></tr>
+                        <tr><th>Yarı Mamul Kaynaklı Çapak/Kat</th><td>0,000</td><td>0,00%</td></tr>
+                        <tr><th class="color-orange">Mantar Çatlak</th><td>0,000</td><td>0,00%</td></tr>
+                        <tr class="color-orange"><th>TOPLAM ÇKH-SDM VERİM KAYBI (Şarj), %</th><td colspan="2">0,00%</td></tr>
+                        <tr class="color-orange"><th>TOPLAM ÇKH-SDM VERİM KAYBI (Kont. Verilen), %</th><td colspan="2">0,00%</td></tr>
+                    </table>
+                </div>
+                <div class="yield-panel">
+                    <h3>Toplam HOLD</h3>
+                    <table class="yield-table">
+                        <tr><th>MASTAR EĞRİSİ</th><td>0,000 ton</td><td>0,00%</td></tr>
+                        <tr><th>DOĞRULTMA EĞRİSİ</th><td>0,000</td><td>0,00%</td></tr>
+                        <tr><th>SONUÇ BEKLEYEN</th><td>0,000</td><td>0,00%</td></tr>
+                        <tr class="color-orange"><th>TOPLAM HOLD (Şarj), %</th><td colspan="2">0,00%</td></tr>
+                        <tr class="color-orange"><th>TOPLAM HOLD (Kont. Verilen), %</th><td colspan="2">0,00%</td></tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function filtrele(){const b=document.getElementById('baslangic-tarihi').value,e=document.getElementById('bitis-tarihi').value,u=document.getElementById('urun-grubu').value,d=document.getElementById('dokum-no').value,v=document.getElementById('vardiya').value,k=document.getElementById('kalite').value;let m='✅ Filtreleme uygulandı!\n\n';if(b&&e)m+=`📅 Tarih: ${b} - ${e}\n`;if(u)m+=`🔧 Ürün Grubu: ${u}\n`;if(v)m+=`⏰ Vardiya: ${v}. Vardiya\n`;if(k)m+=`⭐ Kalite: ${k}\n`;if(d)m+=`📋 Döküm No: ${d}`;alert(m||'✅ Tüm veriler listeleniyor!')}
+    function excelAktar(){const t=document.querySelector('table'),r=t.querySelectorAll('tr');let c='';r.forEach(row=>{const cells=row.querySelectorAll('th,td');c+=Array.from(cells).map(cell=>'"'+cell.textContent.replace(/\n/g,' ').trim()+'"').join(',')+'\n'});const b=new Blob(['\ufeff'+c],{type:'text/csv;charset=utf-8;'}),l=document.createElement('a');l.href=URL.createObjectURL(b);l.download='rph_uretim_raporu_'+new Date().toISOString().split('T')[0]+'.csv';l.click();alert('📊 Excel dosyası indirildi!')}
+    function showSummary(){document.getElementById('rayOzetModal').style.display='block';document.body.style.overflow='hidden'}
+    function hideModal(){document.getElementById('rayOzetModal').style.display='none';document.body.style.overflow='auto'}
+    function switchTab(t){document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));if(t==='ray'){document.getElementById('ray-tab').classList.add('active');document.querySelectorAll('.tab-btn')[0].classList.add('active')}else if(t==='oluklu'){document.getElementById('oluklu-tab').classList.add('active');document.querySelectorAll('.tab-btn')[1].classList.add('active')}else{document.getElementById('toplam-tab').classList.add('active');document.querySelectorAll('.tab-btn')[2].classList.add('active')}}
+    window.onclick=function(e){if(e.target==document.getElementById('rayOzetModal'))hideModal()}
+    window.addEventListener('keydown',e=>{if(e.key==='Escape')hideModal()})
+    window.onload=function(){const t=new Date(),today=t.toISOString().split('T')[0];document.getElementById('bitis-tarihi').value=today;const m=new Date();m.setMonth(m.getMonth()-1);document.getElementById('baslangic-tarihi').value=m.toISOString().split('T')[0]}
+    console.log('🏭 RPH Üretim Raporu Hazır - Kardemir A.Ş.')
+</script>
+</body>
+</html>
