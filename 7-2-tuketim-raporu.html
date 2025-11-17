@@ -298,8 +298,13 @@
         { id:`${rec.cast}_2`, ton: (rec.tonaj/rec.adet).toFixed(2), in:'08:31', out:'08:51', dur:'20 dk', speed:'—', fault:'—' }
       ];
       document.getElementById('movesBody').innerHTML = moves.map(m => `
-        <tr><td>${m.id}</td><td>${m.ton}</td><td>${m.in}</td><td>${m.out}</td><td>${m.dur}</td><td>${m.speed}</td><td>${m.fault}</td></tr>
+        <tr><td>${m.id}</td><td>${m.ton}</td><td>${m.in}</td><td>${m.out}</td><td>${m.dur}</td><td>${m.speed}</td><td>${m.fault}</td><td>
+      <button class="btn btn-blue" onclick="goToYarimamul('${m.id}')">Rapor</button>
+    </td></tr>
       `).join('');
+window.goToYarimamul = function(kutukId) {
+  window.location.href = `1-3-yari-mamul-detay.html`;
+};
 
       document.getElementById('mainTable').style.display = 'none';
       document.getElementById('detailView').style.display = 'block';
