@@ -1138,68 +1138,6 @@
             font-weight: 600;
         }
 
-        /* Kalite Dropdown Styles */
-        .kalite-dropdown {
-            border: 2px solid #e2e8f0;
-            border-radius: 10px;
-            overflow: hidden;
-            margin-bottom: 12px;
-        }
-
-        .kalite-dropdown-header {
-            padding: 14px 18px;
-            background: #f8fafc;
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-weight: 600;
-            color: #334155;
-            transition: all 0.3s;
-        }
-
-        .kalite-dropdown-header:hover {
-            background: #f1f5f9;
-        }
-
-        .kalite-dropdown-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease;
-            background: white;
-        }
-
-        .kalite-dropdown.expanded .kalite-dropdown-content {
-            max-height: 200px;
-        }
-
-        .kalite-dropdown.expanded .kalite-dropdown-header i {
-            transform: rotate(180deg);
-        }
-
-        .kalite-option {
-            padding: 12px 18px;
-            cursor: pointer;
-            transition: all 0.2s;
-            border-bottom: 1px solid #f1f5f9;
-        }
-
-        .kalite-option:last-child {
-            border-bottom: none;
-        }
-
-        .kalite-option:hover {
-            background: #f8fafc;
-            color: var(--primary);
-            font-weight: 600;
-        }
-
-        .kalite-option.selected {
-            background: #eff6ff;
-            color: var(--primary);
-            font-weight: 600;
-        }
-
         /* Kullanım Kararı List Styles */
         .kullanim-karari-list {
             display: flex;
@@ -1354,14 +1292,14 @@
 </head>
 <body>
 <!-- Sidebar -->
-  <aside id="sidebar">
+<aside id="sidebar">
     <div id="sidebar-container" class="sidebar-container"></div>
     <script>
-      fetch("sidebar.html")
-        .then((res) => res.text())
-        .then((data) => (document.getElementById("sidebar-container").innerHTML = data));
+        fetch("sidebar.html")
+            .then((res) => res.text())
+            .then((data) => (document.getElementById("sidebar-container").innerHTML = data));
     </script>
-  </aside>
+</aside>
 <div class="main-container" style="width: 1500px; margin-left: 250px;">
     <!-- Header -->
     <div class="page-header">
@@ -1472,7 +1410,7 @@
                     <i class="fa-solid fa-ruler-combined"></i>
                     Ebat
                 </label>
-                <input type="text" class="form-input" d>
+                <input type="text" class="form-input" >
             </div>
         </div>
 
@@ -1825,7 +1763,7 @@
                     <i class="fa-solid fa-check"></i>
                 </div>
                 <h4>Başarılı</h4>
-                <p>Partisi 89000000364 için kullanım kararı verildi</p>
+                <p>Partisi 89000000364 için sınıf değişikliği gerçekleşmiştir.</p>
                 <button class="btn-continue" onclick="closeSuccessModal()">
                     <i class="fa-solid fa-arrow-right"></i>
                     Devam
@@ -2040,7 +1978,7 @@
     </div>
 </div>
 
-<!-- Modal 5: Kalite Seçimi -->
+<!-- Modal 5: Kalite Seçimi (YENİ BASITLEŞTIRILMIŞ) -->
 <div class="modal-overlay" id="kaliteModal1">
     <div class="modal" style="max-width: 450px;">
         <div class="modal-header">
@@ -2055,17 +1993,17 @@
         <div class="modal-body" style="padding: 40px;">
             <div class="form-group" style="margin-bottom: 28px;">
                 <label class="form-label" style="font-size: 13px; margin-bottom: 12px;">
+                    <i class="fa-solid fa-barcode"></i>
+                    Malzeme Kodu:
+                </label>
+                <input type="text" class="form-input" id="kalite-malzeme-input" placeholder="Malzeme kodunu giriniz..." style="font-size: 16px; padding: 20px 24px;">
+            </div>
+            <div class="form-group" style="margin-bottom: 28px;">
+                <label class="form-label" style="font-size: 13px; margin-bottom: 12px;">
                     <i class="fa-solid fa-medal"></i>
                     Kalite:
                 </label>
                 <input type="text" class="form-input" id="kalite-input" value="S235JR_00" readonly style="font-size: 16px; padding: 20px 24px;">
-            </div>
-            <div class="form-group" style="margin-bottom: 28px;">
-                <label class="form-label" style="font-size: 13px; margin-bottom: 12px;">
-                    <i class="fa-solid fa-barcode"></i>
-                    Malzeme Kodu:
-                </label>
-                <input type="text" class="form-input" value="80000801" readonly style="font-size: 16px; padding: 20px 24px;">
             </div>
             <div class="form-group">
                 <label class="form-label" style="font-size: 13px; margin-bottom: 12px;">
@@ -2079,231 +2017,9 @@
             <button class="btn-modal btn-modal-back" onclick="closeKaliteModal()">
                 İptal
             </button>
-            <button class="btn-modal btn-modal-next" onclick="openKaliteListesi()">
+            <button class="btn-modal btn-modal-next" onclick="openKullanimKarariFromKalite()">
                 İleri
                 <i class="fa-solid fa-arrow-right"></i>
-            </button>
-        </div>
-    </div>
-</div>
-
-<!-- Modal 6: Kalite Listesi -->
-<div class="modal-overlay" id="kaliteModal2">
-    <div class="modal" style="max-width: 550px;">
-        <div class="modal-header">
-            <h3>
-                <i class="fa-solid fa-list"></i>
-                Kalite Listesi
-            </h3>
-            <button class="btn-close-modal" onclick="closeKaliteListesi()">
-                <i class="fa-solid fa-times"></i>
-            </button>
-        </div>
-        <div class="modal-body">
-            <div class="kalite-dropdown" onclick="toggleKaliteDropdown(this)">
-                <div class="kalite-dropdown-header">
-                    <span>S235</span>
-                    <i class="fa-solid fa-chevron-down"></i>
-                </div>
-                <div class="kalite-dropdown-content">
-                    <div class="kalite-option" onclick="selectKaliteOption(event, 'S235JR_00')">S235JR_00</div>
-                    <div class="kalite-option" onclick="selectKaliteOption(event, 'S235JR_01')">S235JR_01</div>
-                </div>
-            </div>
-        </div>
-        <div class="modal-footer">
-            <button class="btn-modal btn-modal-back" onclick="backToKaliteModal1()">
-                Geri
-            </button>
-            <button class="btn-modal btn-modal-next" onclick="openMalzemeListesi()">
-                İleri
-                <i class="fa-solid fa-arrow-right"></i>
-            </button>
-        </div>
-    </div>
-</div>
-
-<!-- Modal 7: Malzeme Listesi -->
-<div class="modal-overlay" id="malzemeModal">
-    <div class="modal">
-        <div class="modal-header">
-            <h3>
-                <i class="fa-solid fa-box"></i>
-                Malzeme Listesi
-            </h3>
-            <button class="btn-close-modal" onclick="closeMalzemeListesi()">
-                <i class="fa-solid fa-times"></i>
-            </button>
-        </div>
-        <div class="modal-body">
-            <div class="catalog-table-wrapper">
-                <table class="catalog-table">
-                    <tbody>
-                    <tr>
-                        <td><input type="text" value="80000801 - IPE 270 S235JR_00 12000 PROFIL" readonly style="width: 100%; border: none; background: transparent; padding: 8px;"></td>
-                        <td style="text-align: right; width: 100px;">
-                            <button class="btn-select-catalog" onclick="selectMalzeme('80000801')">İleri</button>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        <div class="modal-footer">
-            <button class="btn-modal btn-modal-back" onclick="backToKaliteListesi()">
-                İptal
-            </button>
-        </div>
-    </div>
-</div>
-
-<!-- Modal 8: Şartname Listesi -->
-<div class="modal-overlay" id="sartnameModal">
-    <div class="modal" style="max-width: 550px;">
-        <div class="modal-header">
-            <h3>
-                <i class="fa-solid fa-file-contract"></i>
-                Şartname Listesi
-            </h3>
-            <button class="btn-close-modal" onclick="closeSartnameModal()">
-                <i class="fa-solid fa-times"></i>
-            </button>
-        </div>
-        <div class="modal-body">
-            <div class="form-group">
-                <input type="text" class="form-input" value="0000000013 - Test" readonly>
-            </div>
-        </div>
-        <div class="modal-footer">
-            <button class="btn-modal btn-modal-back" onclick="closeSartnameModal()">
-                İptal
-            </button>
-            <button class="btn-modal btn-modal-next" onclick="openKalitePartileri()">
-                İleri
-                <i class="fa-solid fa-arrow-right"></i>
-            </button>
-        </div>
-    </div>
-</div>
-
-<!-- Modal 9: Kalite Değişimi Partiler -->
-<div class="modal-overlay" id="kalitePartiModal">
-    <div class="modal">
-        <div class="modal-header">
-            <h3>
-                <i class="fa-solid fa-exchange-alt"></i>
-                Haddehane - Kalite Değişimi
-            </h3>
-            <button class="btn-close-modal" onclick="closeKalitePartiModal()">
-                <i class="fa-solid fa-times"></i>
-            </button>
-        </div>
-        <div class="modal-body">
-            <div class="hata-table-wrapper">
-                <table class="hata-table">
-                    <thead>
-                    <tr>
-                        <th style="width: 40px;"><input type="checkbox" id="selectAllParti" onclick="toggleAllParti()"></th>
-                        <th>Şartname</th>
-                        <th>Parti</th>
-                        <th>Malzeme</th>
-                        <th>Malzeme kısa metni</th>
-                        <th>Döküm No</th>
-                        <th>Kalite</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td><input type="checkbox" class="parti-checkbox" checked></td>
-                        <td>0000000013</td>
-                        <td>890000000364</td>
-                        <td>80000621</td>
-                        <td>HEB 260 S275JR_00 12000 PROFIL</td>
-                        <td>TESTDOKUM4</td>
-                        <td>S235JR_00</td>
-
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox" class="parti-checkbox" checked></td>
-                        <td>0000000013</td>
-                        <td>890000000365</td>
-                        <td>80000621</td>
-                        <td>HEB 260 S275JR_00 12000 PROFIL</td>
-                        <td>TESTDOKUM4</td>
-                        <td>S235JR_00</td>
-
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox" class="parti-checkbox" checked></td>
-                        <td>0000000013</td>
-                        <td>890000000359</td>
-                        <td>80000621</td>
-                        <td>HEB 260 S275JR_00 12000 PROFIL</td>
-                        <td>TESTDOKUM4</td>
-                        <td>S235JR_00</td>
-
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox" class="parti-checkbox" checked></td>
-                        <td>0000000013</td>
-                        <td>890000000358</td>
-                        <td>80000621</td>
-                        <td>HEB 260 S275JR_00 12000 PROFIL</td>
-                        <td>TESTDOKUM4</td>
-                        <td>S235JR_00</td>
-
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox" class="parti-checkbox" checked></td>
-                        <td>0000000013</td>
-                        <td>890000000362</td>
-                        <td>80000621</td>
-                        <td>HEB 260 S275JR_00 12000 PROFIL</td>
-                        <td>TESTDOKUM4</td>
-                        <td>S235JR_00</td>
-
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        <div class="modal-footer">
-            <button class="btn-modal btn-modal-back" onclick="closeKalitePartiModal()">
-                İptal
-            </button>
-            <button class="btn-modal btn-modal-next" onclick="confirmKalitePartileri()">
-                Devam
-                <i class="fa-solid fa-arrow-right"></i>
-            </button>
-        </div>
-    </div>
-</div>
-
-<!-- Modal 10: Döküm Onayı -->
-<div class="modal-overlay" id="dokumOnayModal">
-    <div class="modal" style="max-width: 500px;">
-        <div class="modal-header">
-            <h3>
-                <i class="fa-solid fa-question-circle"></i>
-                Onay
-            </h3>
-            <button class="btn-close-modal" onclick="closeDokumOnayModal()">
-                <i class="fa-solid fa-times"></i>
-            </button>
-        </div>
-        <div class="modal-body">
-            <div class="confirmation-content">
-                <p style="text-align: center; font-size: 15px; color: #475569; margin-bottom: 24px;">
-                    TESTDOKUM4 Dökümü alt kimyasal sonuçları bulunamadı, devam etmek istiyor musunuz?
-                </p>
-            </div>
-        </div>
-        <div class="modal-footer">
-            <button class="btn-modal btn-modal-back" onclick="closeDokumOnayModal()">
-                Hayır
-            </button>
-            <button class="btn-modal btn-modal-next" style="background: #10b981;" onclick="confirmDokumOnay()">
-                Evet
             </button>
         </div>
     </div>
@@ -2718,7 +2434,6 @@
             <button class="btn-modal btn-modal-back" onclick="closeSartnameDegistirModal2()">
                 İptal
             </button>
-
             <button class="btn-modal btn-modal-next" onclick="openSartnamePartileri()">
                 İleri
                 <i class="fa-solid fa-arrow-right"></i>
@@ -2771,399 +2486,6 @@
                 <i class="fa-solid fa-check"></i>
             </button>
         </div>
-
-    </div>
-
-</div>
-<div class="modal-overlay" id="hurdaCatalogModal">
-    <div class="modal">
-        <div class="modal-header">
-            <h3>
-                <i class="fa-solid fa-book"></i>
-                Katalog Seçimi
-            </h3>
-            <button class="btn-close-modal" onclick="closeHurdaCatalogModal()">
-                <i class="fa-solid fa-times"></i>
-            </button>
-        </div>
-        <div class="modal-body">
-            <div class="catalog-table-wrapper">
-                <table class="catalog-table">
-                    <tbody>
-                    <tr onclick="toggleExpand(this)" class="expanded">
-                        <td class="code-cell">ZHHT09</td>
-                        <td>PROFIL HURDA ŞEKİL KUSURU</td>
-                        <td style="text-align: right; width: 40px;">
-                            <i class="fa-solid fa-chevron-up" style="color: #64748b;"></i>
-                        </td>
-                    </tr>
-                    <tr class="sub-row">
-                        <td class="code-cell">001</td>
-                        <td>ÖNDÜLE</td>
-                        <td style="text-align: right;">
-                            <button class="btn-select-catalog" onclick="selectHurdaCatalog('ZHHT09', '001', 'ÖNDÜLE')">Seç</button>
-                        </td>
-                    </tr>
-                    <tr class="sub-row">
-                        <td class="code-cell">002</td>
-                        <td>VERTİCAL KIRIŞI</td>
-                        <td style="text-align: right;">
-                            <button class="btn-select-catalog" onclick="selectHurdaCatalog('ZHHT09', '002', 'VERTİCAL KIRIŞI')">Seç</button>
-                        </td>
-                    </tr>
-                    <tr class="sub-row">
-                        <td class="code-cell">003</td>
-                        <td>FİTİLLİ</td>
-                        <td style="text-align: right;">
-                            <button class="btn-select-catalog" onclick="selectHurdaCatalog('ZHHT09', '003', 'FİTİLLİ')">Seç</button>
-                        </td>
-                    </tr>
-                    <tr class="sub-row">
-                        <td class="code-cell">004</td>
-                        <td>RADÜSDA ÇATLAK</td>
-                        <td style="text-align: right;">
-                            <button class="btn-select-catalog" onclick="selectHurdaCatalog('ZHHT09', '004', 'RADÜSDA ÇATLAK')">Seç</button>
-                        </td>
-                    </tr>
-                    <tr class="sub-row">
-                        <td class="code-cell">005</td>
-                        <td>RADÜSDA YARA</td>
-                        <td style="text-align: right;">
-                            <button class="btn-select-catalog" onclick="selectHurdaCatalog('ZHHT09', '005', 'RADÜSDA YARA')">Seç</button>
-                        </td>
-                    </tr>
-                    <tr class="sub-row">
-                        <td class="code-cell">006</td>
-                        <td>AYAK UCU YARA</td>
-                        <td style="text-align: right;">
-                            <button class="btn-select-catalog" onclick="selectHurdaCatalog('ZHHT09', '006', 'AYAK UCU YARA')">Seç</button>
-                        </td>
-                    </tr>
-                    <tr class="sub-row">
-                        <td class="code-cell">007</td>
-                        <td>YMK ÇAPAK</td>
-                        <td style="text-align: right;">
-                            <button class="btn-select-catalog" onclick="selectHurdaCatalog('ZHHT09', '007', 'YMK ÇAPAK')">Seç</button>
-                        </td>
-                    </tr>
-                    <tr class="sub-row">
-                        <td class="code-cell">008</td>
-                        <td>DOĞRULTMADA RADİUS ÇATLAĞI</td>
-                        <td style="text-align: right;">
-                            <button class="btn-select-catalog" onclick="selectHurdaCatalog('ZHHT09', '008', 'DOĞRULTMADA RADİUS ÇATLAĞI')">Seç</button>
-                        </td>
-                    </tr>
-                    <tr class="sub-row">
-                        <td class="code-cell">009</td>
-                        <td>ECSİK PASO</td>
-                        <td style="text-align: right;">
-                            <button class="btn-select-catalog" onclick="selectHurdaCatalog('ZHHT09', '009', 'ECSİK PASO')">Seç</button>
-                        </td>
-                    </tr>
-                    <tr class="sub-row">
-                        <td class="code-cell">010</td>
-                        <td>DALGALI İZ KALıNTıSı</td>
-                        <td style="text-align: right;">
-                            <button class="btn-select-catalog" onclick="selectHurdaCatalog('ZHHT09', '010', 'DALGALI İZ KALıNTıSı')">Seç</button>
-                        </td>
-                    </tr>
-                    <tr class="sub-row">
-                        <td class="code-cell">011</td>
-                        <td>YMK AYAK UCU ÇAPAK</td>
-                        <td style="text-align: right;">
-                            <button class="btn-select-catalog" onclick="selectHurdaCatalog('ZHHT09', '011', 'YMK AYAK UCU ÇAPAK')">Seç</button>
-                        </td>
-                    </tr>
-                    <tr onclick="toggleExpand(this)">
-                        <td class="code-cell">ZHHT11</td>
-                        <td>PROFIL HURDA KÜTLE KUSURU</td>
-                        <td style="text-align: right; width: 40px;">
-                            <i class="fa-solid fa-chevron-down" style="color: #64748b;"></i>
-                        </td>
-                    </tr>
-                    <tr onclick="toggleExpand(this)">
-                        <td class="code-cell">ZHHT12</td>
-                        <td>PROFIL HURDA HADDE BOZUK</td>
-                        <td style="text-align: right; width: 40px;">
-                            <i class="fa-solid fa-chevron-down" style="color: #64748b;"></i>
-                        </td>
-                    </tr>
-                    <tr onclick="toggleExpand(this)">
-                        <td class="code-cell">ZHHT13</td>
-                        <td>PROFIL HURDA MEKANİK TEST</td>
-                        <td style="text-align: right; width: 40px;">
-                            <i class="fa-solid fa-chevron-down" style="color: #64748b;"></i>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        <div class="modal-footer">
-            <button class="btn-modal btn-modal-back" onclick="closeHurdaCatalogModal()">
-                Geri
-            </button>
-        </div>
-    </div>
-</div>
-<div class="modal-overlay" id="kullanimKarariModal">
-    <div class="modal" style="max-width: 550px;">
-        <div class="modal-header">
-            <h3>
-                <i class="fa-solid fa-clipboard-check"></i>
-                Kullanım Kararı Kodu Seçimi
-            </h3>
-            <button class="btn-close-modal" onclick="closeKullanimKarariModal()">
-                <i class="fa-solid fa-times"></i>
-            </button>
-        </div>
-        <div class="modal-body">
-            <div class="kullanim-karari-list">
-                <div class="kullanim-karari-item" onclick="selectKullanimKarari('Z08', 'Kullanım kararları - Ray Profil')">
-                    <span class="kk-kod">Z08</span>
-                    <span class="kk-aciklama">Kullanım kararları - Ray Profil</span>
-                    <button class="btn-select-catalog">Seç</button>
-                </div>
-                <div class="kullanim-karari-item" onclick="selectKullanimKarari('Z91', '2. sınıfa dönüşüm')">
-                    <span class="kk-kod">Z91</span>
-                    <span class="kk-aciklama">2. sınıfa dönüşüm</span>
-                    <button class="btn-select-catalog">Seç</button>
-                </div>
-                <div class="kullanim-karari-item" onclick="selectKullanimKarari('Z92', '3. sınıfa dönüşüm')">
-                    <span class="kk-kod">Z92</span>
-                    <span class="kk-aciklama">3. sınıfa dönüşüm</span>
-                    <button class="btn-select-catalog">Seç</button>
-                </div>
-                <div class="kullanim-karari-item highlighted" onclick="selectKullanimKarari('Z03', 'Kalite dönüşümü')">
-                    <span class="kk-kod">Z03</span>
-                    <span class="kk-aciklama">Kalite dönüşümü</span>
-                    <button class="btn-select-catalog">Seç</button>
-                </div>
-                <div class="kullanim-karari-item" onclick="selectKullanimKarari('Z04', 'Hurda kararı')">
-                    <span class="kk-kod">Z04</span>
-                    <span class="kk-aciklama">Hurda kararı</span>
-                    <button class="btn-select-catalog">Seç</button>
-                </div>
-                <div class="kullanim-karari-item" onclick="selectKullanimKarari('Z05', 'Alt boy 1. sınıf')">
-                    <span class="kk-kod">Z05</span>
-                    <span class="kk-aciklama">Alt boy 1. sınıf</span>
-                    <button class="btn-select-catalog">Seç</button>
-                </div>
-                <div class="kullanim-karari-item" onclick="selectKullanimKarari('Z06', 'Alt boy 2. sınıf')">
-                    <span class="kk-kod">Z06</span>
-                    <span class="kk-aciklama">Alt boy 2. sınıf</span>
-                    <button class="btn-select-catalog">Seç</button>
-                </div>
-                <div class="kullanim-karari-item" onclick="selectKullanimKarari('Z07', '1. sınıf Kabul')">
-                    <span class="kk-kod">Z07</span>
-                    <span class="kk-aciklama">1. sınıf Kabul</span>
-                    <button class="btn-select-catalog">Seç</button>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="modal-overlay" id="holdModal">
-    <div class="modal">
-        <div class="modal-header">
-            <h3>
-                <i class="fa-solid fa-hand"></i>
-                Hold Nedenleri
-            </h3>
-            <button class="btn-close-modal" onclick="closeHoldModal()">
-                <i class="fa-solid fa-times"></i>
-            </button>
-        </div>
-        <div class="modal-body">
-            <!-- Mekanik Test Uygunsuzluğu -->
-            <div class="hold-section">
-                <div class="hold-section-header" onclick="toggleHoldSection(this)">
-                    <span class="hold-section-title">
-                        <i class="fa-solid fa-wrench"></i>
-                        1- Mekanik Test Uygunsuzluğu
-                    </span>
-                    <i class="fa-solid fa-chevron-down"></i>
-                </div>
-                <div class="hold-section-content">
-                    <div class="hold-options">
-                        <label class="hold-radio-option">
-                            <input type="radio" name="hold-reason" value="Mukavemet Düşük">
-                            <span>Mukavemet Düşük</span>
-                        </label>
-                        <label class="hold-radio-option">
-                            <input type="radio" name="hold-reason" value="Mukavemet Yüksek">
-                            <span>Mukavemet Yüksek</span>
-                        </label>
-                        <label class="hold-radio-option">
-                            <input type="radio" name="hold-reason" value="Çekme Darbe Direnci Düşük">
-                            <span>Çekme Darbe Direnci Düşük</span>
-                        </label>
-                        <label class="hold-radio-option">
-                            <input type="radio" name="hold-reason" value="Uzama Düşük">
-                            <span>Uzama Düşük</span>
-                        </label>
-                        <label class="hold-radio-option">
-                            <input type="radio" name="hold-reason" value="% Kesit Daralması Düşük">
-                            <span>% Kesit Daralması Düşük</span>
-                        </label>
-                        <label class="hold-radio-option">
-                            <input type="radio" name="hold-reason" value="Sertlik Yüksek">
-                            <span>Sertlik Yüksek</span>
-                        </label>
-                        <label class="hold-radio-option">
-                            <input type="radio" name="hold-reason" value="Sertlik Düşük">
-                            <span>Sertlik Düşük</span>
-                        </label>
-                        <label class="hold-radio-option">
-                            <input type="radio" name="hold-reason" value="Sertlik Dağılımı (Mekanik Test)">
-                            <span>Sertlik Dağılımı (Mekanik Test)</span>
-                        </label>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Boyutsal/Fiziksel Uygunsuzluk -->
-            <div class="hold-section">
-                <div class="hold-section-header" onclick="toggleHoldSection(this)">
-                    <span class="hold-section-title">
-                        <i class="fa-solid fa-ruler"></i>
-                        2- Boyutsal/Fiziksel Uygunsuzluk
-                    </span>
-                    <i class="fa-solid fa-chevron-down"></i>
-                </div>
-                <div class="hold-section-content">
-                    <div class="hold-options">
-                        <label class="hold-radio-option">
-                            <input type="radio" name="hold-reason" value="Kısa">
-                            <span>Kısa</span>
-                        </label>
-                        <label class="hold-radio-option">
-                            <input type="radio" name="hold-reason" value="Uzun">
-                            <span>Uzun</span>
-                        </label>
-                        <label class="hold-radio-option">
-                            <input type="radio" name="hold-reason" value="H (+) Tolerans Haricı">
-                            <span>H (+) Tolerans Haricı</span>
-                        </label>
-                        <label class="hold-radio-option">
-                            <input type="radio" name="hold-reason" value="E (-) Tolerans Haricı">
-                            <span>E (-) Tolerans Haricı</span>
-                        </label>
-                        <label class="hold-radio-option">
-                            <input type="radio" name="hold-reason" value="T (-) Tolerans Haricı">
-                            <span>T (-) Tolerans Haricı</span>
-                        </label>
-                        <label class="hold-radio-option">
-                            <input type="radio" name="hold-reason" value="T (+) Tolerans Haricı">
-                            <span>T (+) Tolerans Haricı</span>
-                        </label>
-                        <label class="hold-radio-option">
-                            <input type="radio" name="hold-reason" value="Boy Aşımı Kesit">
-                            <span>Boy Aşımı Kesit</span>
-                        </label>
-                        <label class="hold-radio-option">
-                            <input type="radio" name="hold-reason" value="Doğrusallık Eğrisi">
-                            <span>Doğrusallık Eğrisi</span>
-                        </label>
-                        <label class="hold-radio-option">
-                            <input type="radio" name="hold-reason" value="Sırt Merizi">
-                            <span>Sırt Merizi</span>
-                        </label>
-                        <label class="hold-radio-option">
-                            <input type="radio" name="hold-reason" value="Dökme Ucu">
-                            <span>Dökme Ucu</span>
-                        </label>
-                        <label class="hold-radio-option">
-                            <input type="radio" name="hold-reason" value="Kesit Beklenen (Boyutsal)">
-                            <span>Kesit Beklenen (Boyutsal)</span>
-                        </label>
-                        <label class="hold-radio-option">
-                            <input type="radio" name="hold-reason" value="Diğer Sebepler (Boyutsal)">
-                            <span>Diğer Sebepler (Boyutsal)</span>
-                        </label>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Yüzey Kusurları -->
-            <div class="hold-section">
-                <div class="hold-section-header" onclick="toggleHoldSection(this)">
-                    <span class="hold-section-title">
-                        <i class="fa-solid fa-layer-group"></i>
-                        3- Yüzey Kusurları
-                    </span>
-                    <i class="fa-solid fa-chevron-down"></i>
-                </div>
-                <div class="hold-section-content">
-                    <div class="hold-options">
-                        <label class="hold-radio-option">
-                            <input type="radio" name="hold-reason" value="Ream Blank (Katışık)">
-                            <span>Ream Blank (Katışık)</span>
-                        </label>
-                        <label class="hold-radio-option">
-                            <input type="radio" name="hold-reason" value="YMK Ayak Üçü Çıpak">
-                            <span>YMK Ayak Üçü Çıpak</span>
-                        </label>
-                        <label class="hold-radio-option">
-                            <input type="radio" name="hold-reason" value="YMK Ayak Dışı Çıpak">
-                            <span>YMK Ayak Dışı Çıpak</span>
-                        </label>
-                        <label class="hold-radio-option">
-                            <input type="radio" name="hold-reason" value="YMK Ayak İçi Çıpak">
-                            <span>YMK Ayak İçi Çıpak</span>
-                        </label>
-                        <label class="hold-radio-option">
-                            <input type="radio" name="hold-reason" value="Hadde Ayak İçi Çıpak">
-                            <span>Hadde Ayak İçi Çıpak</span>
-                        </label>
-                        <label class="hold-radio-option">
-                            <input type="radio" name="hold-reason" value="Merdane Kıragı">
-                            <span>Merdane Kıragı</span>
-                        </label>
-                        <label class="hold-radio-option">
-                            <input type="radio" name="hold-reason" value="Diğer Sebepler (Yüzey)">
-                            <span>Diğer Sebepler (Yüzey)</span>
-                        </label>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Proses Kusurları -->
-            <div class="hold-section">
-                <div class="hold-section-header" onclick="toggleHoldSection(this)">
-                    <span class="hold-section-title">
-                        <i class="fa-solid fa-gears"></i>
-                        4- Proses Kusurları
-                    </span>
-                    <i class="fa-solid fa-chevron-down"></i>
-                </div>
-                <div class="hold-section-content">
-                    <div class="hold-options">
-                        <label class="hold-radio-option">
-                            <input type="radio" name="hold-reason" value="Fırında Bekleme Süresi Uzun">
-                            <span>Fırında Bekleme Süresi Uzun</span>
-                        </label>
-                        <label class="hold-radio-option">
-                            <input type="radio" name="hold-reason" value="Uygun Olmayan Hadde Sıcaklığı">
-                            <span>Uygun Olmayan Hadde Sıcaklığı</span>
-                        </label>
-                        <label class="hold-radio-option">
-                            <input type="radio" name="hold-reason" value="Soğuk Haddeleme">
-                            <span>Soğuk Haddeleme</span>
-                        </label>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="modal-footer">
-            <button class="btn-modal btn-modal-back" onclick="closeHoldModal()">
-                İptal
-            </button>
-            <button class="btn-modal btn-modal-next" onclick="confirmHoldReason()">
-                Kaydet
-                <i class="fa-solid fa-check"></i>
-            </button>
-        </div>
     </div>
 </div>
 
@@ -3184,6 +2506,8 @@
     let selectedSinifTipi = '';
     let isReworkSelected = false;
     let selectedHoldReason = '';
+    let selectedKalite = '';
+    let selectedMalzeme = '';
 
     // Hold checkbox'a event listener ekle
     document.addEventListener('DOMContentLoaded', function() {
@@ -3405,14 +2729,6 @@
         });
     });
 
-    // Initialize sub-rows as hidden except expanded
-    document.addEventListener('DOMContentLoaded', function() {
-        document.querySelectorAll('.sub-row').forEach(row => {
-            if (!row.previousElementSibling.classList.contains('expanded')) {
-                row.style.display = 'none';
-            }
-        });
-    });
     function openHoldModal() {
         document.getElementById('holdModal').classList.add('active');
     }
@@ -3481,10 +2797,7 @@
         document.getElementById('aciklama').value = `[HOLD]: ${selectedHoldReason}`;
     }
 
-    // Kalite Değiştir Fonksiyonları
-    let selectedKalite = '';
-    let selectedMalzeme = '';
-
+    // YENİ BASITLEŞTIRILMIŞ KALİTE DEĞİŞTİR FONKSİYONLARI
     function openKaliteModal() {
         document.getElementById('kaliteModal1').classList.add('active');
     }
@@ -3493,122 +2806,24 @@
         document.getElementById('kaliteModal1').classList.remove('active');
     }
 
-    function openKaliteListesi() {
+    function openKullanimKarariFromKalite() {
+        const malzemeKodu = document.getElementById('kalite-malzeme-input').value.trim();
+
+        if (!malzemeKodu) {
+            alert('Lütfen malzeme kodunu giriniz!');
+            return;
+        }
+
+        // Kalite ve şartname değerlerini al
+        const kalite = document.getElementById('kalite-input').value;
+
+        // Kalite modalını kapat
         document.getElementById('kaliteModal1').classList.remove('active');
-        document.getElementById('kaliteModal2').classList.add('active');
-    }
 
-    function closeKaliteListesi() {
-        document.getElementById('kaliteModal2').classList.remove('active');
-    }
-
-    function backToKaliteModal1() {
-        document.getElementById('kaliteModal2').classList.remove('active');
-        document.getElementById('kaliteModal1').classList.add('active');
-    }
-
-    function toggleKaliteDropdown(dropdown) {
-        dropdown.classList.toggle('expanded');
-    }
-
-    function selectKaliteOption(event, kalite) {
-        event.stopPropagation();
-        selectedKalite = kalite;
-
-        // Seçili olanı işaretle
-        document.querySelectorAll('.kalite-option').forEach(opt => {
-            opt.classList.remove('selected');
-        });
-        event.target.classList.add('selected');
-
-        // Input'u güncelle
-        document.getElementById('kalite-input').value = kalite;
-    }
-
-    function openMalzemeListesi() {
-        document.getElementById('kaliteModal2').classList.remove('active');
-        document.getElementById('malzemeModal').classList.add('active');
-    }
-
-    function closeMalzemeListesi() {
-        document.getElementById('malzemeModal').classList.remove('active');
-    }
-
-    function backToKaliteListesi() {
-        document.getElementById('malzemeModal').classList.remove('active');
-        document.getElementById('kaliteModal2').classList.add('active');
-    }
-
-    function selectMalzeme(malzemeKodu) {
-        selectedMalzeme = malzemeKodu;
-        document.getElementById('malzemeModal').classList.remove('active');
-        document.getElementById('sartnameModal').classList.add('active');
-    }
-
-    function closeSartnameModal() {
-        document.getElementById('sartnameModal').classList.remove('active');
-    }
-
-    function openKalitePartileri() {
-        document.getElementById('sartnameModal').classList.remove('active');
-        document.getElementById('kalitePartiModal').classList.add('active');
-    }
-
-    function closeKalitePartiModal() {
-        document.getElementById('kalitePartiModal').classList.remove('active');
-    }
-
-    function toggleAllParti() {
-        const selectAll = document.getElementById('selectAllParti');
-        const checkboxes = document.querySelectorAll('.parti-checkbox');
-        checkboxes.forEach(cb => cb.checked = selectAll.checked);
-    }
-
-    function confirmKalitePartileri() {
-        document.getElementById('kalitePartiModal').classList.remove('active');
-        document.getElementById('dokumOnayModal').classList.add('active');
-    }
-
-    function closeDokumOnayModal() {
-        document.getElementById('dokumOnayModal').classList.remove('active');
-    }
-
-    function confirmDokumOnay() {
-        document.getElementById('dokumOnayModal').classList.remove('active');
-
-        // Başarı mesajını göster
-        showKaliteDegisimSuccess();
-    }
-
-    function showKaliteDegisimSuccess() {
-        const successModal = document.getElementById('successModal');
-        const successContent = successModal.querySelector('.success-content');
-
-        successContent.innerHTML = `
-            <div class="success-icon">
-                <i class="fa-solid fa-check"></i>
-            </div>
-            <h4>Başarılı</h4>
-            <p>Kalite değişikliği başarıyla devralınmıştır.</p>
-            <button class="btn-continue" onclick="closeKaliteDegisimSuccess()">
-                <i class="fa-solid fa-arrow-right"></i>
-                Devam
-            </button>
-        `;
-
-        successModal.classList.add('active');
-    }
-
-    function closeKaliteDegisimSuccess() {
-        document.getElementById('successModal').classList.remove('active');
-
-        // Kalite değerini güncelle
-        document.getElementById('kalite-value').value = selectedKalite || 'S235JR_00';
-
-        // Açıklama alanına yaz
-        document.getElementById('aciklama').value = 'Kalite dönüşümü yapılmıştır.';
-
-        // Kullanım kararı modalını otomatik açma - kullanıcı butona bassın
+        // Kullanım Kararı modalını aç
+        setTimeout(() => {
+            document.getElementById('kullanimKarariModal').classList.add('active');
+        }, 300);
     }
 
     function openKullanimKarariModal() {
@@ -3628,10 +2843,52 @@
         // Modalı kapat
         closeKullanimKarariModal();
 
+        // Kalite değişikliğinden geldiyse başarı mesajı göster
+        const malzemeKoduInput = document.getElementById('kalite-malzeme-input').value.trim();
+        if (malzemeKoduInput) {
+            showKaliteDegisimSuccessFromKK();
+        }
+
         // Eğer Z04 (Hurda kararı) seçildiyse özel işlem
         if (kod === 'Z04') {
             showHurdaKarariSuccess();
         }
+    }
+
+    function showKaliteDegisimSuccessFromKK() {
+        const successModal = document.getElementById('successModal');
+        const successContent = successModal.querySelector('.success-content');
+
+        const malzemeKodu = document.getElementById('kalite-malzeme-input').value;
+        const kalite = document.getElementById('kalite-input').value;
+
+        successContent.innerHTML = `
+            <div class="success-icon">
+                <i class="fa-solid fa-check"></i>
+            </div>
+            <h4>Başarılı</h4>
+            <p>Kalite değişikliği başarıyla gerçekleştirilmiştir.</p>
+            <button class="btn-continue" onclick="closeKaliteDegisimSuccessFromKK()">
+                <i class="fa-solid fa-arrow-right"></i>
+                Devam
+            </button>
+        `;
+
+        successModal.classList.add('active');
+    }
+
+    function closeKaliteDegisimSuccessFromKK() {
+        document.getElementById('successModal').classList.remove('active');
+
+        // Ana ekrandaki kalite değerini güncelle
+        const kalite = document.getElementById('kalite-input').value;
+        document.getElementById('kalite-value').value = kalite;
+
+        // Açıklama alanına yaz
+        document.getElementById('aciklama').value = 'Kalite dönüşümü yapılmıştır.';
+
+        // Malzeme kodu alanını temizle
+        document.getElementById('kalite-malzeme-input').value = '';
     }
 
     // Hurda Değişikliği Fonksiyonları
@@ -3645,11 +2902,6 @@
 
     function openHurdaMalzemeSecimModal() {
         // Hurda Değişikliği modalını gizle ama arka planda tut
-        document.getElementById('hurdaDegisikligiModal').classList.remove('active');
-        document.getElementById('hurdaMalzemeModal').classList.add('active');
-    }
-
-    function openMalzemeSecimi() {
         document.getElementById('hurdaDegisikligiModal').classList.remove('active');
         document.getElementById('hurdaMalzemeModal').classList.add('active');
     }
@@ -3826,7 +3078,7 @@
                 <i class="fa-solid fa-check"></i>
             </div>
             <h4>Başarılı</h4>
-            <p>Şartname değişikliği başarıyla devralınmıştır.</p>
+            <p>Şartname değişikliği başarıyla gerçekleştirilmiştir.</p>
             <button class="btn-continue" onclick="closeSartnameDegisikligiSuccess()">
                 <i class="fa-solid fa-arrow-right"></i>
                 Devam
