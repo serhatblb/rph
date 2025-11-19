@@ -251,8 +251,8 @@
                         <th>Tufal (TON)</th>
                         <th>Şarj Adedi (ADET)</th>
                         <th>Şarj Edilen Yarı Mamul (TON)</th>
-                        <th>130x130 Kütük (TON)</th>
-                        <th>150x150 Blum (TON)</th>
+                        <th style="background-color: red;">130x130 Kütük (TON)</th>
+                        <th style="background-color: red;">150x150 Blum (TON)</th>
                         <th>Kok Gazı Sarfiyatı (Nm3/TON)</th>
                         <th>Elektrik Sarfiyatı (kWh/TON)</th>
                         <th>Net Çalışma Süresi (SAAT)</th>
@@ -307,10 +307,10 @@
 
         tarihler.forEach((t, i) => {
             const tr1 = document.createElement("tr"); const tr2 = document.createElement("tr");
-            tr1.innerHTML = `<td class="date-cell"><a href="vardiya-raporu.html?tarih=${t}" style="color:#1976d2;text-decoration:none;">${t}</a></td>` 
+            tr1.innerHTML = `<td class="date-cell"><a href="7-6-1-vardiya-raporu.html?tarih=${t}" style="color:#1976d2;text-decoration:none;">${t}</a></td>` 
   + tonVeri[i].map(v => `<td>${v}</td>`).join("");
 
-            tr2.innerHTML = `<td class="date-cell">${t}</td>` + oranVeri[i].map(v => `<td>${v}%</td>`).join("");
+            tr2.innerHTML = `<td class="date-cell"><a href="7-6-1-vardiya-raporu.html?tarih=${t}" style="color:#1976d2;text-decoration:none;">${t}</td>` + oranVeri[i].map(v => `<td>${v}%</td>`).join("");
             tonBody.appendChild(tr1); oranBody.appendChild(tr2);
         });
 
