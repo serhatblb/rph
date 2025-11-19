@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Raporlar Paneli</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="sidebar.css" rel="stylesheet" />
+
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --bg-color: #f3f4f6;
+            --text-dark: #1f2937;
+            --text-light: #6b7280;
+            --card-bg: #ffffff;
+            --hover-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1),
+                            0 8px 10px -6px rgba(0, 0, 0, 0.1);
+            --base-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05),
+                           0 2px 4px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            margin: 0;
+            color: var(--text-dark);
+        }
+
+        .rapor-container {
+            padding: 40px;
+            max-width: 1600px;
+        }
+
+        /* Header */
+        .header-section {
+            margin-bottom: 30px;
+            border-bottom: 1px solid #e5e7eb;
+            padding-bottom: 20px;
+        }
+
+        .page-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #111827;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .page-subtitle {
+            font-size: 14px;
+            color: var(--text-light);
+            margin-top: 5px;
+        }
+
+        /* Grid */
+        .rapor-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 24px;
+        }
+
+        /* Kart */
+        .rapor-card {
+            background: var(--card-bg);
+            padding: 24px;
+            border-radius: 16px;
+            text-decoration: none;
+            box-shadow: var(--base-shadow);
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .rapor-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--hover-shadow);
+            border-color: #bfdbfe;
+        }
+
+        .rapor-card:hover .icon-box {
+            background-color: var(--primary-color);
+            color: white;
+            transform: scale(1.1) rotate(-5deg);
+        }
+
+        .icon-box {
+            width: 54px;
+            height: 54px;
+            background-color: #eff6ff;
+            color: var(--primary-color);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            margin-bottom: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .rapor-card h3 {
+            font-size: 17px;
+            margin: 0 0 8px 0;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .rapor-card p {
+            font-size: 13px;
+            color: var(--text-light);
+            margin: 0;
+        }
+
+        .arrow-icon {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            opacity: 0;
+            transform: translateX(-10px);
+            transition: all 0.3s ease;
+            color: var(--primary-color);
+        }
+
+        .rapor-card:hover .arrow-icon {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    </style>
+</head>
+
+<body>
+
+    <aside id="sidebar">
+        <div id="sidebar-container"></div>
+        <script>
+            fetch("sidebar.html")
+                .then(res => res.text())
+                .then(html => { document.getElementById("sidebar-container").innerHTML = html; });
+        </script>
+    </aside>
+
+    <div class="rapor-container" style="margin-left: 280px;">
+
+        <div class="header-section">
+            <h2 class="page-title">📊 Raporlar Paneli</h2>
+            <p class="page-subtitle">Üretim, enerji, proses ve tüketim raporlarını buradan görüntüleyebilirsiniz.</p>
+        </div>
+
+        <div class="rapor-grid">
+
+            <a class="rapor-card" href="7-1-uretim-izleme-raporu.html">
+                <div class="icon-box">📈</div>
+                <h3>Üretim İzleme Raporu</h3>
+                <p>Üretim süreçlerini anlık ve geçmiş veriler ile takip edin.</p>
+                <span class="arrow-icon">→</span>
+            </a>
+
+            <a class="rapor-card" href="7-2-tuketim-raporu.html">
+                <div class="icon-box">📉</div>
+                <h3>Tüketim Raporu</h3>
+                <p>Enerji, hammadde ve kaynak tüketim analizleri.</p>
+                <span class="arrow-icon">→</span>
+            </a>
+
+            <a class="rapor-card" href="7-6-uretim-performans-raporu.html">
+                <div class="icon-box">💼</div>
+                <h3>Üretim Performansı</h3>
+                <p>Genel üretim performansı ve değerleri.</p>
+                <span class="arrow-icon">→</span>
+            </a>
+
+            <a class="rapor-card" href="7-7-sicak-sarj.html">
+                <div class="icon-box">🔥</div>
+                <h3>Sıcak Şarj Gerçekleşme</h3>
+                <p>Sıcak şarj ile ilgili gerçekleşen değerler.</p>
+                <span class="arrow-icon">→</span>
+            </a>
+
+            <a class="rapor-card" href="7-5-proses-parametreleri.html">
+                <div class="icon-box">🔬</div>
+                <h3>Proses Parametreleri</h3>
+                <p>Proses analizleri ve üretim değişkenleri.</p>
+                <span class="arrow-icon">→</span>
+            </a>
+
+            <a class="rapor-card" href="7-11-ray-uretim-raporu.html">
+                <div class="icon-box">⚙️</div>
+                <h3>Ray Üretim Raporu</h3>
+                <p>Ray hattına ait üretim rapor detayları.</p>
+                <span class="arrow-icon">→</span>
+            </a>
+
+            <a class="rapor-card" href="7-12-profil-uretim-raporu.html">
+                <div class="icon-box">🏗️</div>
+                <h3>Profil Üretim Raporu</h3>
+                <p>Profil hattına ait üretim verileri.</p>
+                <span class="arrow-icon">→</span>
+            </a>
+
+            <a class="rapor-card" href="7-8-firin-sarj-sicaklik-takibi.html">
+                <div class="icon-box">📘</div>
+                <h3>Fırın Şarj Sıcaklık Takibi</h3>
+                <p>Fırın şarj sıcaklığı trend ve raporları.</p>
+                <span class="arrow-icon">→</span>
+            </a>
+
+            <a class="rapor-card" href="7-9-talep-2.html">
+                <div class="icon-box">🟩</div>
+                <h3>Talep 2</h3>
+                <p>Talep analiz raporu 2.</p>
+                <span class="arrow-icon">→</span>
+            </a>
+
+            <a class="rapor-card" href="7-10-talep-3.html">
+                <div class="icon-box">🟥</div>
+                <h3>Talep 3</h3>
+                <p>Talep analiz raporu 3.</p>
+                <span class="arrow-icon">→</span>
+            </a>
+
+        </div>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalite Kontrol Paneli</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="sidebar.css" rel="stylesheet" />
+    
+    <style>
+        /* --- Temel Ayarlar --- */
+        :root {
+            --primary-color: #2563eb; /* Profesyonel Mavi */
+            --bg-color: #f3f4f6;      /* Açık Gri Arkaplan */
+            --text-dark: #1f2937;     /* Koyu Gri Metin */
+            --text-light: #6b7280;    /* Açık Gri Metin */
+            --card-bg: #ffffff;
+            --hover-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+            --base-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif; /* Daha modern font */
+            background-color: var(--bg-color);
+            margin: 0;
+            color: var(--text-dark);
+        }
+
+        .kalite-container {
+            padding: 40px;
+            max-width: 1600px;
+        }
+
+        /* --- Başlık Alanı --- */
+        .header-section {
+            margin-bottom: 30px;
+            border-bottom: 1px solid #e5e7eb;
+            padding-bottom: 20px;
+        }
+
+        .page-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #111827;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .page-subtitle {
+            font-size: 14px;
+            color: var(--text-light);
+            margin-top: 5px;
+        }
+
+        /* --- Grid Yapısı --- */
+        .rapor-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); /* Kartlar biraz daha geniş */
+            gap: 24px;
+        }
+
+        /* --- Kart Tasarımı --- */
+        .rapor-card {
+            background: var(--card-bg);
+            padding: 24px;
+            border-radius: 16px; /* Daha yumuşak köşeler */
+            text-decoration: none;
+            box-shadow: var(--base-shadow);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid transparent;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            overflow: hidden;
+        }
+
+        /* Hover Durumu */
+        .rapor-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--hover-shadow);
+            border-color: #bfdbfe; /* Hoverda hafif mavi kenarlık */
+        }
+
+        .rapor-card:hover .icon-box {
+            background-color: var(--primary-color);
+            color: white;
+            transform: scale(1.1) rotate(-5deg);
+        }
+
+        /* --- İkon Kutusu --- */
+        .icon-box {
+            width: 54px;
+            height: 54px;
+            background-color: #eff6ff; /* Çok açık mavi */
+            color: var(--primary-color);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            margin-bottom: 16px;
+            transition: all 0.3s ease;
+        }
+
+        /* --- Kart Metinleri --- */
+        .rapor-card h3 {
+            font-size: 17px;
+            margin: 0 0 8px 0;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .rapor-card p {
+            font-size: 13px;
+            color: var(--text-light);
+            line-height: 1.5;
+            margin: 0;
+        }
+
+        /* --- Ok İşareti (Hoverda çıkar) --- */
+        .arrow-icon {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            opacity: 0;
+            transform: translateX(-10px);
+            transition: all 0.3s ease;
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        .rapor-card:hover .arrow-icon {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+    </style>
+</head>
+<body>
+
+    <aside id="sidebar">
+        <div id="sidebar-container"></div>
+        <script>
+          fetch("sidebar.html").then(res => res.text()).then(html => { document.getElementById("sidebar-container").innerHTML = html; });
+        </script>
+    </aside>
+
+    <div class="kalite-container" style="margin-left: 280px;">
+
+        <div class="header-section">
+            <h2 class="page-title">📘 Kalite Kontrol Raporları</h2>
+            <p class="page-subtitle">Tüm üretim ve kalite süreçlerini buradan takip edebilirsiniz.</p>
+        </div>
+
+        <div class="rapor-grid">
+
+            <a class="rapor-card" href="5-1-kalite-uygulamasi.html">
+                <div class="icon-box">⚙️</div>
+                <h3>Kullanım Kararı</h3>
+                <p>Ürün kalite kararları ve uygulama detaylarını inceleyin.</p>
+                <span class="arrow-icon">→</span>
+            </a>
+
+            <a class="rapor-card" href="5-4-kalite-vardiya-raporu.html">
+                <div class="icon-box">📋</div>
+                <h3>Profil Kalite Özeti</h3>
+                <p>Vardiya bazlı profil kalite özetleri ve istatistikler.</p>
+                <span class="arrow-icon">→</span>
+            </a>
+
+            <a class="rapor-card" href="5-9-ray-kalite-ozet-raporu.html">
+                <div class="icon-box">🚆</div>
+                <h3>Ray Kalite Özeti</h3>
+                <p>Ray üretim hattına ait detaylı kalite analizleri.</p>
+                <span class="arrow-icon">→</span>
+            </a>
+
+            <a class="rapor-card" href="5-8-kalite-kontrol-uretim-raporu.html">
+                <div class="icon-box">🧪</div>
+                <h3>Üretim Kontrol</h3>
+                <p>Üretim süreçlerine ait anlık kalite kontrolleri.</p>
+                <span class="arrow-icon">→</span>
+            </a>
+
+            <a class="rapor-card" href="5-5-parti-verileri-goruntuleme-ekrani.html">
+                <div class="icon-box">📊</div>
+                <h3>Parti Verileri</h3>
+                <p>Parti kalite analizleri ve detay görüntüleme ekranı.</p>
+                <span class="arrow-icon">→</span>
+            </a>
+
+            <a class="rapor-card" href="7-13-ray-vardiya-raporu.html">
+                <div class="icon-box">📄</div>
+                <h3>Ray Vardiya Raporu</h3>
+                <p>Ray üretimine ait vardiya bazlı raporlama.</p>
+                <span class="arrow-icon">→</span>
+            </a>
+
+            <a class="rapor-card" href="7-14-profil-vardiya-raporu.html">
+                <div class="icon-box">📑</div>
+                <h3>Profil Vardiya Raporu</h3>
+                <p>Profil üretimine ait vardiya kalite raporları.</p>
+                <span class="arrow-icon">→</span>
+            </a>
+
+            <a class="rapor-card" href="5-6-freze-takip-raporu.html">
+                <div class="icon-box">📐</div>
+                <h3>Freze Takip</h3>
+                <p>Freze işlemi performans takibi ve ölçümleri.</p>
+                <span class="arrow-icon">→</span>
+            </a>
+
+            <a class="rapor-card" href="5-7-mastar-raporu.html">
+                <div class="icon-box">📏</div>
+                <h3>Mastar Raporu</h3>
+                <p>Mastar ölçümleri ve kontrol kayıt arşivleri.</p>
+                <span class="arrow-icon">→</span>
+            </a>
+
+            <a class="rapor-card" href="5-12-rph-uretim-raporu.html">
+                <div class="icon-box">🏗️</div>
+                <h3>RPH Üretim</h3>
+                <p>RPH hattı kalite ve üretim rapor detayları.</p>
+                <span class="arrow-icon">→</span>
+            </a>
+
+            <a class="rapor-card" href="5-13-kalite-son-kontrol-formu.html">
+                <div class="icon-box">✔️</div>
+                <h3>Son Kontrol Formu</h3>
+                <p>Sevkiyat öncesi son kontrol ölçüm ve raporlama.</p>
+                <span class="arrow-icon">→</span>
+            </a>
+
+        </div>
+    </div>
+
+</body>
+</html>
