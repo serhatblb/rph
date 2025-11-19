@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>RPH Rapor</title>
+  <title>RPH-Yarı Mamul Listesi</title>
   <link rel="stylesheet" href="style.css">
   
 </head>
@@ -19,36 +19,31 @@
   <div class="content-wrapper">
     <header class="header">
       <div class="breadcrumbs">
-        <a href="siparisler.html">Sipariş Sayfası</a> <span>></span>
-        <span>YARI MAMUL LİSTESİ</span>
+        <a href="1-1-rph-izleme-ekrani.html">RPH İzleme Ekrani</a><span>></span>
+        <span>RPH- YARI MAMUL LİSTESİ</span>
       </div>
     </header>
-
+    
     <div class="main-report-area">
-      <h1 class="report-title">YARI MAMUL LİSTESİ</h1>
-
+      <h1 class="report-title">RPH-YARI MAMUL LİSTESİ</h1>
       <div class="filter-section">
+        <div>
+          <label>Döküm No<br>
+            <input type="text" placeholder="Örn: 25100213">
+          </label>
+        </div>
+
+        <div>
+          <label>Kütük ID<br>
+            <input type="text" placeholder="Örn: 2510021301">
+          </label>
+        </div>
+
         <div>
           <button class="primary-button">Liste Getir</button>
           <button class="excel-button">Excel Rapor</button>
         </div>
-        <div>
-          <label>Başlangıç Tarihi<br><input type="date"></label>
-        </div>
-        <div>
-          <label>Bitiş Tarihi<br><input type="date"></label>
-        </div>
-        <div>
-          <label>Ürün Mal Grubu<br>
-            <select>
-              <option value="">KÜTÜK</option>
-              <option value="ray">A2</option>
-              <option value="profil">BLUM</option>
-              <option value="platina">PLATİNA</option>
-            </select>
-          </label>
-        </div>
-      </div>
+    </div>
 
       <div class="table-wrapper">
         <table class="data-table">
@@ -67,7 +62,7 @@
               <th>TOPLAM  <br> İŞLEM  <BR> SÜRESİ</th>
               <th>SDM <br> ÇIKIŞ <BR>  AĞIRLIK</th>
               <th>FIRIN <br> GİRİŞ <BR>  AĞIRLIK</th>
-              <th>DETAY</th>
+              <!-- <th>DETAY</th> -->
             </tr>
           </thead>
           <tbody>
@@ -86,7 +81,7 @@
               <td>1800 kg</td>
               <td>1750 kg</td>
               
-              <td><button class="details-button" onclick="window.location.href='1-3-yari-mamul-detay.html'">RAPOR</button></td>
+              <!-- <td><button class="details-button" onclick="window.location.href='1-3-yari-mamul-detay.html'">RAPOR</button></td> -->
             </tr>
             <tr>
               <td ><a href="siparis-detay2.html">300003661</a> </td>
@@ -102,7 +97,7 @@
               <td>4 Saat 3 Dk</td>
               <td>1500 kg</td>
               <td>1450 kg</td>
-              <td><button class="details-button" onclick="window.location.href='1-3-yari-mamul-detay.html'">RAPOR</button></td>
+              <!-- <td><button class="details-button" onclick="window.location.href='1-3-yari-mamul-detay.html'">RAPOR</button></td> -->
             </tr>
           </tbody>
         </table>

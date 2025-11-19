@@ -488,7 +488,7 @@ h3 {
 /* Detay butonları (siparişler.html için) */
 .details-button {
     padding: 8px 15px;
-    background-color: var(--kardemir-blue);
+    background-color: var(--kardemir-red);
     color: white;
     border: none;
     border-radius: 4px;
