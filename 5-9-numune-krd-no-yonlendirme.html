@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Numune İşlemleri - KRD NO YÖNLENDİRME</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="sidebar.css" rel="stylesheet" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            height: 100%;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #ffffff;
+            min-height: 100vh;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1000px;
+        }
+
+        /* Main Card */
+        .main-card {
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 10px 50px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            border: 1px solid #e2e8f0;
+        }
+
+        /* Header */
+        .main-header {
+            background: linear-gradient(135deg, #0f2744 0%, #1a3a5c 100%);
+            padding: 16px 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .header-title h1 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .header-title h2 {
+            font-size: 0.75rem;
+            font-weight: 400;
+            color: rgba(255, 255, 255, 0.7);
+            margin-top: 2px;
+            letter-spacing: 1.5px;
+        }
+
+        .header-time {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 8px 18px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            color: #ffffff;
+            font-weight: 500;
+        }
+
+        /* Filter Section */
+        .filter-section {
+            padding: 14px 30px;
+            background: #f8fafc;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .filter-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 18px;
+            align-items: flex-end;
+        }
+
+        .filter-item {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .filter-item label {
+            font-size: 0.65rem;
+            font-weight: 600;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .filter-item input {
+            padding: 8px 12px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            background: #ffffff;
+            color: #1e293b;
+            font-size: 0.85rem;
+            font-weight: 500;
+            min-width: 180px;
+            transition: all 0.2s ease;
+        }
+
+        .filter-item input:focus {
+            outline: none;
+            border-color: #1a3a5c;
+            box-shadow: 0 0 0 3px rgba(26, 58, 92, 0.1);
+        }
+
+        .filter-buttons {
+            display: flex;
+            gap: 10px;
+            margin-left: auto;
+        }
+
+        .btn {
+            padding: 8px 20px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.8rem;
+        }
+
+        .btn-filter {
+            background: linear-gradient(135deg, #0f2744 0%, #1a3a5c 100%);
+            color: white;
+        }
+
+        .btn-filter:hover {
+            box-shadow: 0 4px 15px rgba(26, 58, 92, 0.3);
+        }
+
+        .btn-clear {
+            background: #e2e8f0;
+            color: #64748b;
+        }
+
+        .btn-clear:hover {
+            background: #cbd5e1;
+        }
+
+        /* Form Content */
+        .form-content {
+            padding: 20px 30px;
+        }
+
+        /* Form Table */
+        .form-table {
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px 30px;
+        }
+
+        .form-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-row.full {
+            grid-column: span 2;
+        }
+
+        .form-row label {
+            min-width: 130px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .form-control {
+            flex: 1;
+            padding: 10px 12px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            background: #f1f5f9;
+            color: #475569;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .form-control.editable {
+            background: #ecfdf5;
+            border: 2px solid #10b981;
+            color: #065f46;
+            cursor: pointer;
+        }
+
+        .form-control.editable:focus {
+            outline: none;
+            border-color: #059669;
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+        }
+
+        select.form-control {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23059669' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            background-size: 14px;
+            padding-right: 35px;
+        }
+
+        /* Section Divider */
+        .section-divider {
+            grid-column: span 2;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #e2e8f0, transparent);
+            margin: 8px 0;
+        }
+
+        /* Highlight row - Laboratuvar seçimi */
+        .form-row.highlight label {
+            color: #047857;
+            font-weight: 700;
+        }
+
+        .form-row.highlight .form-control {
+            border: 2px solid #10b981;
+            background: #ecfdf5;
+            color: #065f46;
+        }
+
+        .form-row.highlight .form-control:focus {
+            outline: none;
+            border-color: #059669;
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+        }
+
+        /* Submit Section */
+        .submit-section {
+            padding: 14px 30px;
+            background: #f8fafc;
+            border-top: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+
+        .btn-submit {
+            padding: 12px 40px;
+            background: linear-gradient(135deg, #059669 0%, #047857 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 15px rgba(5, 150, 105, 0.3);
+        }
+
+        .btn-submit:hover {
+            box-shadow: 0 6px 20px rgba(5, 150, 105, 0.4);
+        }
+
+        .btn-cancel {
+            padding: 12px 40px;
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+        }
+
+        .btn-cancel:hover {
+            box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
+        }
+
+        /* Responsive */
+        @media (max-width: 800px) {
+            .form-table {
+                grid-template-columns: 1fr;
+            }
+
+            .form-row.full {
+                grid-column: span 1;
+            }
+
+            .section-divider {
+                grid-column: span 1;
+            }
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+                align-items: flex-start;
+            }
+
+            .main-header {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+            }
+
+            .form-content {
+                padding: 15px;
+            }
+
+            .form-row {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 4px;
+            }
+
+            .form-row label {
+                min-width: auto;
+            }
+
+            .filter-row {
+                flex-direction: column;
+            }
+
+            .filter-item {
+                width: 100%;
+            }
+
+            .filter-item input {
+                min-width: 100%;
+            }
+
+            .filter-buttons {
+                margin-left: 0;
+                width: 100%;
+            }
+
+            .filter-buttons .btn {
+                flex: 1;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <aside id="sidebar">
+        <div id="sidebar-container"></div>
+        <script>
+            fetch("sidebar.html")
+                .then(r => r.text())
+                .then(html => { document.getElementById("sidebar-container").innerHTML = html });
+        </script>
+    </aside>
+    <div class="container" style="margin-left: 260px;">
+        <div class="main-card">
+            <!-- Header -->
+            <header class="main-header">
+                <div class="header-title">
+                    <h1>Numune İşlemleri</h1>
+                    <h2>KRD NO YÖNLENDİRME</h2>
+                </div>
+                <div class="header-time" id="currentDateTime">--.--.---- --:--</div>
+            </header>
+
+            <!-- Filter Section -->
+            <div class="filter-section">
+                <div class="filter-row">
+                    <div class="filter-item">
+                        <label>KRD No</label>
+                        <input type="text" value="KRD100677868">
+                    </div>
+                    <div class="filter-buttons">
+                        <button class="btn btn-filter">Filtrele</button>
+                        <button class="btn btn-clear">Temizle</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Form Content -->
+            <div class="form-content">
+                <div class="form-table">
+                    <div class="form-row">
+                        <label>Haddehane</label>
+                        <input type="text" class="form-control" value="ÇKH" readonly>
+                    </div>
+                    <div class="form-row">
+                        <label>Ürün ID</label>
+                        <input type="text" class="form-control" value="25N1734470" readonly>
+                    </div>
+
+                    <div class="form-row">
+                        <label>Parti No</label>
+                        <input type="text" class="form-control" value="0002934769" readonly>
+                    </div>
+                    <div class="form-row">
+                        <label>Döküm No</label>
+                        <input type="text" class="form-control" value="2535765" readonly>
+                    </div>
+
+                    <div class="form-row">
+                        <label>Malzeme No</label>
+                        <input type="text" class="form-control" value="80000014" readonly>
+                    </div>
+                    <div class="form-row">
+                        <label>Malzeme Kısa Metni</label>
+                        <input type="text" class="form-control" value="B420C_01 12000 NERVÜRLÜ" readonly>
+                    </div>
+
+                    <div class="form-row">
+                        <label>Sipariş No</label>
+                        <input type="text" class="form-control" value="" readonly>
+                    </div>
+                    <div class="form-row">
+                        <label>Kalite</label>
+                        <input type="text" class="form-control" value="B402C_01" readonly>
+                    </div>
+
+                    <div class="form-row">
+                        <label>Müşteri No</label>
+                        <input type="text" class="form-control" value="" readonly>
+                    </div>
+                    <div class="form-row">
+                        <label>Müşteri Adı</label>
+                        <input type="text" class="form-control" value="" readonly>
+                    </div>
+
+                    <div class="form-row">
+                        <label>Tarih / Saat</label>
+                        <input type="text" class="form-control" id="systemDateTime" readonly>
+                    </div>
+                    <div class="form-row">
+                        <label>Vardiya</label>
+                        <input type="text" class="form-control" value="" readonly>
+                    </div>
+
+                    <div class="form-row highlight">
+                        <label>Laboratuvar</label>
+                        <select class="form-control editable">
+                            <option value="">Seçiniz</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7" selected>7</option>
+                            <option value="8">8</option>
+                        </select>
+                    </div>
+                    <div class="form-row">
+                        <label>Numune Bölgesi</label>
+                        <input type="text" class="form-control" value="" readonly>
+                    </div>
+
+                    <div class="form-row">
+                        <label>Test Alma Methodu</label>
+                        <input type="text" class="form-control" value="" readonly>
+                    </div>
+                    <div class="form-row">
+                        <label>Ortam Şartları</label>
+                        <input type="text" class="form-control" value="" readonly>
+                    </div>
+
+                    <div class="form-row">
+                        <label>Alan Personel</label>
+                        <input type="text" class="form-control" value="" readonly>
+                    </div>
+                    <div class="form-row">
+                        <label>Miktar</label>
+                        <input type="text" class="form-control" value="" readonly>
+                    </div>
+
+                    <div class="form-row">
+                        <label>Açıklama</label>
+                        <input type="text" class="form-control" value="" readonly>
+                    </div>
+                    <div class="form-row">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Submit Section -->
+            <div class="submit-section">
+                <button class="btn-submit" id="submitBtn">Kaydet / Güncelle</button>
+                <button class="btn-cancel" id="cancelBtn">İptal</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function updateDateTime() {
+            const now = new Date();
+            const formatted = now.toLocaleString('tr-TR', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            });
+            document.getElementById('systemDateTime').value = formatted;
+            document.getElementById('currentDateTime').textContent = formatted;
+        }
+
+        updateDateTime();
+        setInterval(updateDateTime, 1000);
+
+        document.getElementById('submitBtn').addEventListener('click', function () {
+            const btn = this;
+            btn.textContent = '✓ Kaydedildi!';
+            btn.style.background = 'linear-gradient(135deg, #10b981 0%, #059669 100%)';
+
+            setTimeout(() => {
+                btn.textContent = 'Kaydet / Güncelle';
+                btn.style.background = 'linear-gradient(135deg, #059669 0%, #047857 100%)';
+            }, 2000);
+        });
+
+        document.getElementById('cancelBtn').addEventListener('click', function () {
+            // Laboratuvar seçimini sıfırla
+            document.querySelector('select.form-control.editable').value = '';
+        });
+    </script>
+</body>
+
+</html>
