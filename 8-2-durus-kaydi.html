@@ -1,83 +1,546 @@
 <!DOCTYPE html>
 <html lang="tr">
+
 <head>
-  <meta charset="utf-8" />
-  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-  <title>Paket İzleme Ekranı</title>
-  <link href="style.css" rel="stylesheet" />
-  <style>
-    :root{
-      --bg:#f6f7fb;
-      --card:#fff;
-      --text:#2c3e50;
-      --muted:#6b7a8c;
-      --border:#e6e9ef;
-      --primary:#1976d2;
-    }
-    body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,Arial,Helvetica,sans-serif}
-    .content-wrapper{
-      margin-left:250px; /* sidebar yerleşimi */
-      min-height:100vh;
-      display:grid;
-      place-items:center;
-      padding:24px;
-    }
-    .empty{
-      width:min(520px,92vw);
-      background:var(--card);
-      border:1px solid var(--border);
-      border-radius:12px;
-      padding:24px;
-      text-align:center;
-    }
-    .empty svg{width:56px;height:56px;margin-bottom:10px}
-    .empty h1{font-size:20px;margin:6px 0 6px}
-    .empty p{margin:0 0 16px;color:var(--muted);font-size:14px}
-    .actions{display:flex;justify-content:center;gap:8px;flex-wrap:wrap}
-    .btn{
-      border:1px solid var(--border);
-      background:#fff;
-      color:#2f3b4a;
-      padding:10px 14px;
-      border-radius:8px;
-      font-size:13px;
-      cursor:pointer;
-    }
-    .btn-primary{
-      background:var(--primary);
-      color:#fff;
-      border-color:var(--primary);
-    }
-  </style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Duruş Entegrasyonları</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <link rel="stylesheet" href="sidebar.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f2f4f9 0%, #f7f8f9 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1a2332 0%, #2c3e50 100%);
+            padding: 22px 35px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .header-icon {
+            font-size: 42px;
+            color: #e74c3c;
+        }
+
+        .header-text h1 {
+            color: #ffffff;
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .header-text p {
+            color: #95a5a6;
+            font-size: 14px;
+        }
+
+        .main-content {
+            background: #f8f9fa;
+            padding: 28px;
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+        }
+
+        .page-title {
+            color: #2c3e50;
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 22px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #e74c3c;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .form-card {
+            background: #ffffff;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            border: 1px solid #e9ecef;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .form-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-header {
+            background: linear-gradient(135deg, #34495e 0%, #2c3e50 100%);
+            color: #ffffff;
+            padding: 14px 20px;
+            font-weight: 600;
+            font-size: 15px;
+            border-bottom: 2px solid #e74c3c;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card-header i {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        .card-body {
+            padding: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .form-label {
+            display: block;
+            color: #495057;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .form-control,
+        .form-select {
+            width: 100%;
+            padding: 11px 14px;
+            border: 1.5px solid #dee2e6;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            background-color: #ffffff;
+            color: #495057;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.12);
+            background-color: #f8f9fa;
+        }
+
+        .form-control:hover:not(:focus),
+        .form-select:hover:not(:focus) {
+            border-color: #adb5bd;
+        }
+
+        .form-control:read-only {
+            background-color: #f8f9fa;
+            cursor: not-allowed;
+        }
+
+        textarea.form-control {
+            resize: vertical;
+            min-height: 100px;
+            font-family: inherit;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 2px solid #e9ecef;
+            justify-content: flex-end;
+        }
+
+        .btn {
+            padding: 10px 24px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            min-width: 120px;
+            justify-content: center;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            color: white;
+            box-shadow: 0 2px 8px rgba(52, 152, 219, 0.3);
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #2980b9 0%, #21618c 100%);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.4);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #95a5a6 0%, #7f8c8d 100%);
+            color: white;
+            box-shadow: 0 2px 8px rgba(149, 165, 166, 0.3);
+        }
+
+        .btn-secondary:hover {
+            background: linear-gradient(135deg, #7f8c8d 0%, #6c7a7b 100%);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(149, 165, 166, 0.4);
+        }
+
+        .required {
+            color: #e74c3c;
+            margin-left: 3px;
+        }
+
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header-text h1 {
+                font-size: 22px;
+            }
+
+            .btn-group {
+                flex-direction: column;
+            }
+
+            .main-content {
+                padding: 20px;
+            }
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+    </style>
 </head>
+
 <body>
-  <!-- Sidebar -->
   <aside id="sidebar">
-    <div id="sidebar-container"></div>
-    <script>
-      fetch("sidebar.html")
-        .then(r=>r.text())
-        .then(html=>{document.getElementById("sidebar-container").innerHTML=html});
-    </script>
-  </aside>
-
-  <!-- İçerik -->
-  <div class="content-wrapper">
-    <div class="empty" role="status" aria-live="polite">
-      <!-- Basit ikon -->
-      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-        <circle cx="12" cy="12" r="9" stroke="#1976d2" stroke-width="1.5"/>
-        <path d="M8 12h8M12 8v8" stroke="#1976d2" stroke-width="1.5" stroke-linecap="round"/>
-      </svg>
-
-      <h1>Bu ekran geliştirilecektir.</h1>
-      <p>Şu an için içerik hazır değil. Kısa süre içinde temel işlevler eklenecek.</p>
-
-      <div class="actions">
-        <button class="btn btn-primary" onclick="location.href='1-ckh-izleme-ekrani.html'">← Ana sayfaya dön</button>
-        
-      </div>
+        <div id="sidebar-container"></div>
+        <script>
+            fetch("sidebar.html").then(r => r.text()).then(t => document.getElementById("sidebar-container").innerHTML = t);
+        </script>
+    </aside>
+<div class="container">
+    <!-- Header -->
+    <div class="header">
+        <div class="header-content">
+            <i class="fas fa-industry header-icon"></i>
+            <div class="header-text">
+                <h1>Duruş Kayıt Sistemi</h1>
+            </div>
+        </div>
     </div>
-  </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <h3 class="page-title">Duruş Kayıt Formu</h3>
+
+        <form id="durusForm">
+            <div class="form-grid">
+                <!-- Genel Bilgiler -->
+                <div class="form-card">
+                    <div class="card-header">
+                        <i class="fas fa-info-circle"></i> Genel Bilgiler
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label class="form-label">Tarih <span class="required">*</span></label>
+                            <input type="date" class="form-control" id="tarih" required />
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Hat / Bölge <span class="required">*</span></label>
+                            <select class="form-select" id="hat" required>
+                                <option value="">Seçiniz</option>
+                                <option>Rph Bd1 Üretim Hattı</option>
+                                <option>Rph Bd2 Üretim Hattı</option>
+                                <option>Rph Fırın Üretim Hattı</option>
+                                <option>Rph Profil Tamamlama Hattı</option>
+                                <option>Rph Ray Sertleştirme Hattı</option>
+                                <option>Rph Ray Tamamlama Hattı</option>
+                                <option>Rph Doğrultma Üretim Hattı</option>
+                                <option>Rph Tandem Üretim Hattı</option>
+                                <option>Rph Kalın Yuvarlak Üretim Hattı</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Kaynak <span class="required">*</span></label>
+                            <select class="form-select" id="kaynak" required>
+                                <option value="">Seçiniz</option>
+                                <option>Operatör Girişi</option>
+                                <option>Seviye 2 Entegrasyonu</option>
+                                <option>ERP</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Duruş Bilgileri -->
+                <div class="form-card">
+                    <div class="card-header">
+                        <i class="fas fa-pause-circle"></i> Duruş Bilgileri
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label class="form-label">Duruş Tipi <span class="required">*</span></label>
+                            <select class="form-control" id="durusTipi" required>
+                                <option value="">Seçiniz</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Duruş Nedeni <span class="required">*</span></label>
+                            <select class="form-control" id="durusNedeni" required>
+                                <option value="">Önce duruş tipi seçiniz</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Zaman ve Açıklama -->
+                <div class="form-card">
+                    <div class="card-header">
+                        <i class="fas fa-clock"></i> Zaman ve Açıklama
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label class="form-label">Başlangıç Saati <span class="required">*</span></label>
+                            <input type="time" id="baslangic" class="form-control" onchange="hesaplaSure()" required />
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Bitiş Saati <span class="required">*</span></label>
+                            <input type="time" id="bitis" class="form-control" onchange="hesaplaSure()" required />
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Süre (dk)</label>
+                            <input type="number" id="sure" class="form-control" readonly />
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Açıklama</label>
+                            <textarea class="form-control" id="aciklama" rows="3" placeholder="Varsa açıklama girin..."></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+ <!-- Duruş Detayları -->
+<div class="form-card">
+    <div class="card-header">
+        <i class="fas fa-pause-circle"></i> Duruş Detayları (Bakım ekibi tarafından SAP de girilecek)
+    </div>
+    <div class="card-body">
+        <div class="form-group">
+            <label class="form-label">EKİPMAN <span class="required">*</span></label>
+            <input type="text" class="form-control" id="ekipman" value="Ekipman No - Ekipman Adı" readonly>
+        </div>
+        <div class="form-group">
+            <label class="form-label">HASAR <span class="required">*</span></label>
+            <input type="text" class="form-control" id="hasar" value="Mekanik Darbe" readonly>
+        </div>
+        <div class="form-group">
+            <label class="form-label">NEDEN <span class="required">*</span></label>
+            <input type="text" class="form-control" id="neden" value="Motor Güç Arızası" readonly>
+        </div>
+    </div>
+</div>
+
+            <!-- Action Buttons -->
+            <div class="btn-group">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save"></i> Kaydet
+                </button>
+                <button type="reset" class="btn btn-secondary">
+                    <i class="fas fa-redo"></i> Temizle
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    // Bugünün tarihini otomatik olarak ayarla
+    document.getElementById('tarih').valueAsDate = new Date();
+
+    function hesaplaSure() {
+        const bas = document.getElementById("baslangic").value;
+        const bit = document.getElementById("bitis").value;
+        if (bas && bit) {
+            const basT = new Date("2000-01-01T" + bas);
+            const bitT = new Date("2000-01-01T" + bit);
+            const dk = (bitT - basT) / 60000;
+            document.getElementById("sure").value = dk > 0 ? dk : 0;
+        }
+    }
+
+    const durusVerileri = {
+        "Planlı Duruş": [
+            "Yeni Ürün Geliştirme",
+            "Yönetim Kararı ile Duruş"
+        ],
+        "Planlı Bakım Duruşu": [
+            "Planlı Elektrik Bakım",
+            "Planlı Mekanik Bakım",
+            "Planlı Otonom Bakım"
+        ],
+        "Proses Gereği Duruşlar": [
+            "Kesit / Ebat Değişimi",
+            "Matkap Değişimi",
+            "Merdane değişimi",
+            "Ölçü ayarı",
+            "Paso Değişimi",
+            "Tandiş Değişimi",
+            "Testere değişimi",
+            "Walking beam boşluk verilmesi",
+            "Yolluk ve Kasa Değişimi"
+        ],
+        "İşletme Duruşu": [
+            "İşletme Ekibi Kaynaklı Duruş",
+            "Merdane Kırılması"
+        ],
+        "Elektrik - Otomasyon Duruşu": [
+            "Elektrik Arıza"
+        ],
+        "Mekanik Duruş": [
+            "Mekanik Arıza"
+        ],
+        "Yardımcı Tesisler-İşletmeler Nedeniyle Duruş": [
+            "HAT Gaz Kesılme",
+            "Elektrik Kesintisi",
+            "Kalite",
+            "Klima",
+            "Nakliyat",
+            "Planlama",
+            "Refrakter",
+            "Akıllı Çözümler",
+            "Su Borusu Patlaması",
+            "Su Kesintisi",
+            "Torpido Deray",
+            "Vinç Bakım",
+            "Operasyonel Teknolojiler"
+        ],
+        "Önceki Tesis Nedeniyle Duruş": [
+            "Çelıkhane Bekleme",
+            "Hammadde Bekleme",
+            "Katran Kesilmesi",
+            "Kok",
+            "Yüksek Fırın Gecikmeleri"
+        ],
+        "Sonraki Tesis Nedeniyle Duruş": [
+            "Cüruf Potası Gecikmesi",
+            "Çelıkhane Bekleme",
+            "Konverter Refrakter",
+            "Pota Fırını Bekleme",
+            "SDM Bekleme"
+        ]
+    };
+
+    // Sayfa yüklendiğinde duruş tiplerini yükle
+    document.addEventListener("DOMContentLoaded", () => {
+        const durusTipiSelect = document.getElementById("durusTipi");
+        Object.keys(durusVerileri).forEach(tip => {
+            const option = document.createElement("option");
+            option.value = tip;
+            option.textContent = tip;
+            durusTipiSelect.appendChild(option);
+        });
+    });
+
+    // Duruş tipi değiştiğinde duruş nedenlerini güncelle
+    document.getElementById("durusTipi").addEventListener("change", function () {
+        const secilenTip = this.value;
+        const nedenSelect = document.getElementById("durusNedeni");
+        nedenSelect.innerHTML = "";
+
+        if (durusVerileri[secilenTip]) {
+            // İlk seçenek
+            const defaultOption = document.createElement("option");
+            defaultOption.value = "";
+            defaultOption.textContent = "Seçiniz";
+            nedenSelect.appendChild(defaultOption);
+
+            // Nedenleri ekle
+            durusVerileri[secilenTip].forEach(neden => {
+                const option = document.createElement("option");
+                option.value = neden;
+                option.textContent = neden;
+                nedenSelect.appendChild(option);
+            });
+        } else {
+            const option = document.createElement("option");
+            option.value = "";
+            option.textContent = "Önce duruş tipi seçiniz";
+            nedenSelect.appendChild(option);
+        }
+    });
+
+    // Form gönderme
+    document.getElementById('durusForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        // Form verilerini topla
+        const formData = {
+            tarih: document.getElementById('tarih').value,
+            hat: document.getElementById('hat').value,
+            kaynak: document.getElementById('kaynak').value,
+            durusTipi: document.getElementById('durusTipi').value,
+            durusNedeni: document.getElementById('durusNedeni').value,
+            baslangic: document.getElementById('baslangic').value,
+            bitis: document.getElementById('bitis').value,
+            sure: document.getElementById('sure').value,
+            aciklama: document.getElementById('aciklama').value
+        };
+
+        console.log('Form Verileri:', formData);
+        alert('Duruş kaydı başarıyla oluşturuldu!\n\n' + JSON.stringify(formData, null, 2));
+    });
+</script>
 </body>
+
 </html>
