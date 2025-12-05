@@ -1,33 +1,27 @@
 :root {
-
-    /* Kardemir logosundaki koyu kırmızı */
-    --sidebar-bg-dark: #2c3e50;
-    /* Koyu lacivert/gri tonu */
-    --sidebar-text-light: #ecf0f1;
-    /* Sidebar içindeki açık metin */
-    --sidebar-hover-bg: #34495e;
-    /* Sidebar link hover rengi */
-    --sidebar-active-bg: #007bff;
-
+  /* Renk Paleti */
+  --sidebar-bg-dark: #2c3e50;
+  --sidebar-text-light: #ecf0f1;
+  --sidebar-hover-bg: #34495e;
+  --sidebar-active-bg: #007bff;
+  --shadow-light: rgba(0, 0, 0, 0.1);
 }
+
 body {
-    
-    /* Sidebar'ın taşmasını engellemek için */
-    overflow-x: hidden;
-    /* Yatay kaydırmayı genel olarak engeller */
+  overflow-x: hidden;
 }
-/* =========================
-   Sidebar (temiz, tek sürüm)
-   ========================= */
 
-/* Kapsayıcı */
+/* =========================
+   Sidebar Temel Yapı
+   ========================= */
 .sidebar {
   width: 240px;
   background-color: var(--sidebar-bg-dark);
   height: 100vh;
   padding: 20px;
   position: fixed;
-  top: 0; left: 0;
+  top: 0;
+  left: 0;
   box-shadow: 3px 0 10px var(--shadow-light);
   display: flex;
   flex-direction: column;
@@ -43,8 +37,9 @@ body {
   align-items: center;
   padding: 15px 0;
   margin-bottom: 30px;
-  border-bottom: 1px solid rgba(255,255,255,0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
+
 .sidebar .logo img {
   max-width: 80%;
   height: auto;
@@ -52,10 +47,17 @@ body {
 }
 
 /* Navigasyon */
-.sidebar nav { flex-grow: 1; }
-.sidebar nav ul { list-style: none; margin: 0; padding: 0; }
+.sidebar nav {
+  flex-grow: 1;
+}
 
-/* Link & Buton (ortak görünüm) */
+.sidebar nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* 1. Seviye Linkler & Butonlar */
 .sidebar nav ul li a,
 .sidebar nav ul li .dropbtn {
   width: 100%;
@@ -74,28 +76,32 @@ body {
   cursor: pointer;
   transition: background-color .3s, color .3s;
 }
+
 .sidebar nav ul li a:hover,
 .sidebar nav ul li .dropbtn:hover {
   background-color: var(--sidebar-hover-bg);
   color: #fff;
 }
 
-/* Aktif link (sayfa vurgusu için kullanıyorsan kalsın) */
+/* Aktif link durumu */
 .sidebar nav ul li.active > a {
   background-color: var(--sidebar-active-bg);
   color: #fff;
-  box-shadow: 0 2px 5px rgba(0,123,255,.3);
+  box-shadow: 0 2px 5px rgba(0, 123, 255, .3);
 }
 
-/* Dropdown kapsayıcı */
-.sidebar nav ul li.dropdown { position: relative; }
+/* Dropdown Genel Ayarlar */
+.sidebar nav ul li.dropdown {
+  position: relative;
+}
 
-/* Radio tabanlı akordeon: tetik gizli */
-.sidebar nav ul li.dropdown input[type="radio"] { display: none; }
+.sidebar nav ul li.dropdown input[type="radio"] {
+  display: none;
+}
 
-/* Panel (kapalı durum) */
+/* 2. Seviye Panel (Başlangıçta Kapalı) */
 .sidebar nav ul li.dropdown .dropdown-content {
-  display: block;            /* layout sabit kalsın */
+  display: block;
   background-color: var(--sidebar-hover-bg);
   min-width: 100%;
   border-radius: 0 0 6px 6px;
@@ -103,10 +109,10 @@ body {
   overflow: hidden;
   max-height: 0;
   padding: 0;
-  transition: max-height .25s ease, padding .2s ease;
+  transition: max-height .3s ease, padding .2s ease;
 }
 
-/* Panel linkleri */
+/* 2. Seviye Linkler */
 .sidebar nav .dropdown-content a {
   display: block;
   text-decoration: none;
@@ -115,50 +121,131 @@ body {
   font-weight: 400;
   transition: background-color .2s, color .2s;
 }
+
 .sidebar nav .dropdown-content a:hover {
   background-color: var(--sidebar-active-bg);
   color: #fff;
 }
 
-/* Panel (açık durum) → sadece checked iken */
+/* Panel Açılınca (Radio Checked) */
 .sidebar nav ul li.dropdown input[type="radio"]:checked ~ .dropdown-content {
-  max-height: 800px;
+  max-height: 1000px; /* Yeterince büyük bir değer */
   padding: 5px 0;
 }
 
-/* Açık başlığın vurgusu */
+/* Panel Açıkken Ana Başlık Rengi */
 .sidebar nav ul li.dropdown input[type="radio"]:checked ~ .dropbtn {
   background-color: var(--sidebar-active-bg);
   color: #fff;
-  box-shadow: 0 2px 5px rgba(0,123,255,.3);
+  box-shadow: 0 2px 5px rgba(0, 123, 255, .3);
 }
 
-/* Başlık önündeki noktacık */
-.sidebar nav ul li a::before {
+/* 1. Seviye Linkler için Bullet (Nokta) */
+.sidebar nav ul li > a::before {
   content: "•";
   margin-right: 10px;
   color: var(--sidebar-text-light);
   font-weight: bold;
   transition: color .3s;
 }
-.sidebar nav ul li a:hover::before,
-.sidebar nav ul li.active a::before {
+
+.sidebar nav ul li > a:hover::before,
+.sidebar nav ul li.active > a::before {
   color: var(--sidebar-active-bg);
 }
 
-/* Scrollbar (opsiyonel) */
-.sidebar::-webkit-scrollbar { width: 6px; }
+/* =========================
+   🔥 ALT MENÜ (NESTED DROPDOWN) 🔥
+   ========================= */
+
+.sub-group {
+  position: relative;
+  width: 100%;
+}
+
+/* Alt menü başlığı (Label) */
+.sub-dropbtn {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  text-decoration: none;
+  color: var(--sidebar-text-light);
+  padding: 10px 15px 10px 30px; /* 2. seviye ile aynı hizalama */
+  font-weight: 400;
+  cursor: pointer;
+  background: transparent;
+  transition: background-color .2s, color .2s;
+  font-size: inherit;
+  user-select: none;
+}
+
+.sub-dropbtn:hover {
+  background-color: var(--sidebar-active-bg);
+  color: #fff;
+}
+
+/* Ok işareti animasyonu */
+.sub-dropbtn .arrow {
+  font-size: 10px;
+  opacity: 0.7;
+  transition: transform 0.3s ease;
+}
+
+/* Checkbox seçilince ok dönsün */
+input.sub-trigger:checked ~ .sub-dropbtn .arrow {
+  transform: rotate(180deg);
+}
+
+/* Alt Menü İçeriği (3. Seviye) */
+.sub-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease-out;
+  background-color: rgba(0, 0, 0, 0.2); /* Arkaplanı biraz koyulaştır */
+}
+
+/* Checkbox seçilince içerik açılsın */
+input.sub-trigger:checked ~ .sub-content {
+  max-height: 500px;
+}
+
+/* 3. Seviye Linkler (En içtekiler) */
+.sub-content a {
+  padding-left: 50px !important; /* Daha fazla girinti */
+  font-size: 0.95em;
+  border-left: 3px solid transparent;
+}
+
+/* 3. Seviye Linklerdeki Noktayı (Bullet) Kaldır */
+/* Not: Yukarıdaki genel kurallardan miras kalan noktayı kaldırıyoruz */
+.sub-content a::before {
+  content: none !important; 
+}
+
+/* 3. Seviye Hover Efekti */
+.sub-content a:hover {
+  background-color: rgba(255, 255, 255, 0.05); /* Hafif açılma */
+  border-left-color: var(--sidebar-active-bg); /* Sol çizgi efekti */
+}
+
+/* Scrollbar Tasarımı */
+.sidebar::-webkit-scrollbar {
+  width: 6px;
+}
 .sidebar::-webkit-scrollbar-thumb {
-  background-color: rgba(255,255,255,.3);
+  background-color: rgba(255, 255, 255, .3);
   border-radius: 10px;
 }
 .sidebar::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(255,255,255,.6);
+  background-color: rgba(255, 255, 255, .6);
 }
+
 @media (max-width: 768px) {
-    .sidebar {
-        width: 100%;
-        height: auto;
-        position: relative;
-        box-shadow: none;
-    }}
+  .sidebar {
+    width: 100%;
+    height: auto;
+    position: relative;
+    box-shadow: none;
+  }
+}
